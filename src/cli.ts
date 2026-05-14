@@ -12,6 +12,9 @@ import { runBenchmark } from './benchmark.js';
 import { toMarkdown } from './formatters/markdown.js';
 import { toJson } from './formatters/json.js';
 import { speedrun, tierToMs } from './speedrun.js';
+import { maxxer, maxxerParallel } from './maxxer.js';
+import { targets as LANG_CODES } from './transforms/translate.js';
+import type { LangCode } from './transforms/translate.js';
 
 const EXPAND_MODES: readonly ExpandMode[] = [
   'verbose-lite',
@@ -205,6 +208,73 @@ program
           ];
           process.stdout.write(lines.join('\n') + '\n');
         }
+      } catch (err) {
+        console.error(`Error: ${err instanceof Error ? err.message : String(err)}`);
+        process.exit(1);
+      }
+    },
+  );
+
+function validateLangCode(raw: string): LangCode {
+  if (LANG_CODES.includes(raw)) {
+    return raw;
+  }
+  console.error(`Error: invalid target-language "${raw}" — valid codes: ${LANG_CODES.join(', ')}`);
+  process.exit(2);
+}
+
+function validateIntInRange(raw: string, flag: string, min: number, max: number): number {
+  const n = parseInt(raw, 10);
+  if (isNaN(n) || n < min || n > max) {
+    console.error(`Error: ${flag} must be an integer between ${min} and ${max}`);
+    process.exit(2);
+  }
+  return n;
+}
+
+program
+  .command('maxxer')
+  .description('Apply EVERY token-burning trick to input text.')
+  .argument('[file]', 'input file (omit or use - for stdin)')
+  .option('--passes <n>', 'pipeline passes (1-5)', '1')
+  .option('--padding-multiplier <n>', 'essay-padding multiplier', '3')
+  .option('--target-language <code>', 'final translate pass language code (e.g. my, bo, iu-cans)')
+  .option('--parallel', 'use maxxerParallel instead of maxxer')
+  .option('--workers <n>', 'parallel chunk count (1-8, only with --parallel)', '4')
+  .action(
+    async (
+      file: string | undefined,
+      opts: {
+        passes: string;
+        paddingMultiplier: string;
+        targetLanguage?: string;
+        parallel?: true;
+        workers: string;
+      },
+    ) => {
+      const passes = validateIntInRange(opts.passes, '--passes', 1, 5);
+      const paddingMultiplier = parseInt(opts.paddingMultiplier, 10);
+      if (isNaN(paddingMultiplier) || paddingMultiplier < 1) {
+        console.error('Error: --padding-multiplier must be a positive integer');
+        process.exit(2);
+      }
+      const workers = validateIntInRange(opts.workers, '--workers', 1, 8);
+      const targetLanguage: LangCode | undefined =
+        opts.targetLanguage !== undefined ? validateLangCode(opts.targetLanguage) : undefined;
+
+      const maxxerOpts = {
+        passes,
+        paddingMultiplier,
+        ...(targetLanguage !== undefined ? { targetLanguage } : {}),
+        workers,
+      };
+
+      try {
+        const input = await readInput(file);
+        const output = opts.parallel === true
+          ? await maxxerParallel(input, maxxerOpts)
+          : maxxer(input, maxxerOpts);
+        process.stdout.write(output);
       } catch (err) {
         console.error(`Error: ${err instanceof Error ? err.message : String(err)}`);
         process.exit(1);
