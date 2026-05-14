@@ -1,0 +1,81 @@
+import type { Corpus, LangCode } from './corpus-types.js';
+import type { EncodingName } from './tokenizer.js';
+import { countTokens } from './tokenizer.js';
+
+export interface BenchmarkRow {
+  code: LangCode;
+  name: string;
+  family: 'natural' | 'register';
+  script: string;
+  totalTokens: number;
+  totalCharacters: number;
+  totalBytes: number;
+  sentenceCount: number;
+  tokensPerCharacter: number;
+  tokensPerSentence: number;
+  rank: number;
+}
+
+export interface BenchmarkResult {
+  encoding: EncodingName;
+  corpusVersion: string;
+  rows: BenchmarkRow[];
+  generatedAt: string;
+}
+
+export function runBenchmark(corpus: Corpus, encoding: EncodingName): BenchmarkResult {
+  const unranked = corpus.languages.map((lang) => {
+    let totalTokens = 0;
+    let totalCharacters = 0;
+    let totalBytes = 0;
+
+    for (const sentence of corpus.sentences) {
+      const text = sentence.translations[lang.code];
+      if (text === undefined) continue;
+      const counted = countTokens(text, encoding);
+      totalTokens += counted.tokens;
+      totalCharacters += counted.characters;
+      totalBytes += counted.bytes;
+    }
+
+    const sentenceCount = corpus.sentences.length;
+    const tokensPerCharacter = totalCharacters === 0 ? 0 : totalTokens / totalCharacters;
+    const tokensPerSentence = sentenceCount === 0 ? 0 : totalTokens / sentenceCount;
+
+    return {
+      code: lang.code,
+      name: lang.name,
+      family: lang.family,
+      script: lang.script,
+      totalTokens,
+      totalCharacters,
+      totalBytes,
+      sentenceCount,
+      tokensPerCharacter,
+      tokensPerSentence,
+      rank: 0,
+    };
+  });
+
+  const sorted = [...unranked].sort((a, b) => {
+    if (b.tokensPerCharacter !== a.tokensPerCharacter) {
+      return b.tokensPerCharacter - a.tokensPerCharacter;
+    }
+    if (b.tokensPerSentence !== a.tokensPerSentence) {
+      return b.tokensPerSentence - a.tokensPerSentence;
+    }
+    return a.code.localeCompare(b.code);
+  });
+
+  const rows: BenchmarkRow[] = sorted.map((row, index) => ({
+    ...row,
+    rank: index + 1,
+  }));
+
+  return {
+    encoding,
+    corpusVersion: corpus.version,
+    rows,
+    generatedAt: new Date().toISOString(),
+  };
+}
