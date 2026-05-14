@@ -25,11 +25,11 @@
   "engines": {
     "node": ">=22"
   },
-  "author": "samuelwaiweng.yong@accenture.com",
+  "author": "KangaZero",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/samuelwaiweng-yong/tokenmaxxingman"
+    "url": "https://github.com/KangaZero/tokenmaxxingman"
   },
   "dependencies": {
     "commander": "14.0.3",
