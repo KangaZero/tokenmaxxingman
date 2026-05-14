@@ -1,0 +1,326 @@
+{
+  "version": "1",
+  "description": "A benchmark corpus of 8 sentences rendered in 18 language/register variants for tokenization analysis. CAVEATS: Several non-English entries are public-domain script samples rather than literal translations of the English source sentence. In particular: (1) some Classical Chinese, Tibetan, Khmer, Amharic, Inuktitut, and Cherokee entries are well-known proverbs, UDHR phrases, or common phrasebook expressions in the target script — chosen to faithfully sample the script's tokenization characteristics, not for translation fidelity; (2) legalese and Victorian-prose register variants are original renderings of the meaning, not translations. The metric under study is tokenization behaviour of each script/language pair, not semantic equivalence.",
+  "languages": [
+    {
+      "code": "en",
+      "name": "English",
+      "family": "natural",
+      "script": "Latin",
+      "notes": "Baseline; cl100k_base and o200k_base were trained primarily on English text"
+    },
+    {
+      "code": "zh-classical",
+      "name": "Classical Chinese (wenyan)",
+      "family": "natural",
+      "script": "Han",
+      "notes": "Expected champion for token efficiency — dense Han ideographs map to very few BPE tokens per character"
+    },
+    {
+      "code": "zh-modern",
+      "name": "Modern Chinese (Mandarin)",
+      "family": "natural",
+      "script": "Han",
+      "notes": "Contrast with Classical Chinese; more characters per concept than wenyan"
+    },
+    {
+      "code": "my",
+      "name": "Burmese",
+      "family": "natural",
+      "script": "Myanmar",
+      "notes": "Non-Latin script, low-resource in BPE vocabulary — expected high tokens/char ratio"
+    },
+    {
+      "code": "bo",
+      "name": "Tibetan",
+      "family": "natural",
+      "script": "Tibetan",
+      "notes": "Non-Latin abugida with complex stacking characters; very underrepresented in GPT vocabularies"
+    },
+    {
+      "code": "km",
+      "name": "Khmer",
+      "family": "natural",
+      "script": "Khmer",
+      "notes": "Non-Latin script with dense consonant clusters; expected poor tokenization compression"
+    },
+    {
+      "code": "am",
+      "name": "Amharic",
+      "family": "natural",
+      "script": "Ethiopic",
+      "notes": "Ge'ez abugida; each glyph encodes consonant+vowel — interesting byte-to-token ratio"
+    },
+    {
+      "code": "te",
+      "name": "Telugu",
+      "family": "natural",
+      "script": "Telugu",
+      "notes": "Agglutinative Dravidian; long compound words expected to fragment heavily under BPE"
+    },
+    {
+      "code": "ta",
+      "name": "Tamil",
+      "family": "natural",
+      "script": "Tamil",
+      "notes": "Agglutinative Dravidian; classical literary tradition with separate script from Telugu"
+    },
+    {
+      "code": "ml",
+      "name": "Malayalam",
+      "family": "natural",
+      "script": "Malayalam",
+      "notes": "Agglutinative Dravidian; script has the most glyphs of any Indic script — high byte cost"
+    },
+    {
+      "code": "si",
+      "name": "Sinhala",
+      "family": "natural",
+      "script": "Sinhala",
+      "notes": "Abugida spoken in Sri Lanka; very low BPE vocabulary coverage expected"
+    },
+    {
+      "code": "ka",
+      "name": "Georgian",
+      "family": "natural",
+      "script": "Georgian",
+      "notes": "Agglutinative; unique script (Mkhedruli) with no Latin cognates — clean script-effect signal"
+    },
+    {
+      "code": "iu-cans",
+      "name": "Inuktitut (Unified Canadian Aboriginal Syllabics)",
+      "family": "natural",
+      "script": "Canadian Aboriginal Syllabics",
+      "notes": "Polysynthetic language; entire clauses can be one word — extreme agglutination test"
+    },
+    {
+      "code": "chr",
+      "name": "Cherokee",
+      "family": "natural",
+      "script": "Cherokee",
+      "notes": "Syllabary invented by Sequoyah; unique Unicode block, near-zero BPE coverage expected"
+    },
+    {
+      "code": "fi",
+      "name": "Finnish",
+      "family": "natural",
+      "script": "Latin",
+      "notes": "Agglutinative but Latin-script control; isolates agglutination cost from script exoticism"
+    },
+    {
+      "code": "tr",
+      "name": "Turkish",
+      "family": "natural",
+      "script": "Latin",
+      "notes": "Agglutinative Latin-script control; regular vowel harmony produces long but predictable words"
+    },
+    {
+      "code": "en-legalese",
+      "name": "Legalese",
+      "family": "register",
+      "script": "Latin",
+      "notes": "English register variant; low-frequency vocabulary expected to stress the tokenizer"
+    },
+    {
+      "code": "en-victorian",
+      "name": "Victorian prose",
+      "family": "register",
+      "script": "Latin",
+      "notes": "English register variant; archaic vocabulary and long nominal phrases for contrast"
+    }
+  ],
+  "sentences": [
+    {
+      "id": "s01",
+      "english": "Hello, world.",
+      "translations": {
+        "en": "Hello, world.",
+        "zh-classical": "你好，世界。",
+        "zh-modern": "你好，世界。",
+        "my": "မင်္ဂလာပါ၊ ကမ္ဘာလောက။",
+        "bo": "བཀྲ་ཤིས་བདེ་ལེགས། འཇིག་རྟེན།",
+        "km": "សួស្តី ពិភពលោក។",
+        "am": "ሰላም፣ ዓለም።",
+        "te": "హలో, ప్రపంచం.",
+        "ta": "வணக்கம், உலகம்.",
+        "ml": "ഹലോ, ലോകം.",
+        "si": "හෙලෝ, ලෝකය.",
+        "ka": "გამარჯობა, სამყარო.",
+        "iu-cans": "ᐊᐃ, ᓄᓇᕐᔪᐊᖅ.",
+        "chr": "ᎣᏏᏲ, ᎡᎶᎯ.",
+        "fi": "Hei, maailma.",
+        "tr": "Merhaba, dünya.",
+        "en-legalese": "Greetings are hereby extended to the world at large.",
+        "en-victorian": "Salutations, thou boundless and magnificent world."
+      }
+    },
+    {
+      "id": "s02",
+      "english": "The cat sat on the mat.",
+      "translations": {
+        "en": "The cat sat on the mat.",
+        "zh-classical": "猫坐于席上。",
+        "zh-modern": "猫坐在垫子上。",
+        "my": "ကြောင်သည် ကြမ်းဖျာပေါ်တွင် ထိုင်သည်။",
+        "bo": "ཞིང་མིང་དེ་གདན་སྟེང་ན་འདུག",
+        "km": "ឆ្មានោះអង្គុយនៅលើកំណាត់ព្រំ។",
+        "am": "ድመቱ በምንጣፉ ላይ ተቀምጧል።",
+        "te": "పిల్లి చాపమీద కూర్చుంది.",
+        "ta": "பூனை பாயின் மேல் அமர்ந்தது.",
+        "ml": "പൂച്ച പായയിൽ ഇരുന്നു.",
+        "si": "බළලා පතුරු මත සිටියා.",
+        "ka": "კატა ხალიჩაზე იჯდა.",
+        "iu-cans": "ᕿᑦᑐᖅ ᐃᓐᓇᖅᑑᑎᒥ ᐊᑐᖅᑐᖅ.",
+        "chr": "ᏪᏌ ᎠᏛᏛᏅᎥ ᎾᎾᎢ.",
+        "fi": "Kissa istui matolla.",
+        "tr": "Kedi paspasın üzerinde oturdu.",
+        "en-legalese": "The aforementioned feline party did occupy and remain seated upon the textile floor covering hereinafter referred to as the mat.",
+        "en-victorian": "The cat, a most contemplative creature of domestic habit, had reposed itself upon the mat with serene and unhurried composure."
+      }
+    },
+    {
+      "id": "s03",
+      "english": "Knowledge is power.",
+      "translations": {
+        "en": "Knowledge is power.",
+        "zh-classical": "知識即力量。",
+        "zh-modern": "知识就是力量。",
+        "my": "အသိပညာသည် အာဏာဖြစ်သည်။",
+        "bo": "ཤེས་རབ་ནི་སྟོབས་ཤུགས་ཡིན།",
+        "km": "ចំណេះដឹងគឺជាអំណាច។",
+        "am": "እውቀት ኃይል ነው።",
+        "te": "జ్ఞానమే శక్తి.",
+        "ta": "அறிவே சக்தி.",
+        "ml": "അറിവ് ശക്തിയാണ്.",
+        "si": "දැනුම බලයයි.",
+        "ka": "ცოდნა ძალაა.",
+        "iu-cans": "ᖃᐅᔨᒪᓂᖅ ᐆᒃᑐᕋᐃᓂᖅ ᐱᔪᓐᓇᐅᑎᐅᒻᒪᑦ.",
+        "chr": "ᎪᎱᏍᏗ ᎠᏰᎸ ᎤᎾᎵᎮᎢ.",
+        "fi": "Tieto on valtaa.",
+        "tr": "Bilgi güçtür.",
+        "en-legalese": "Herein it is affirmed that the possession and application of knowledge constitutes, in law and in fact, a form of power.",
+        "en-victorian": "It has long been held as an incontrovertible maxim that the acquisition of knowledge doth confer upon its possessor a power most formidable."
+      }
+    },
+    {
+      "id": "s04",
+      "english": "I would like a cup of tea, please.",
+      "translations": {
+        "en": "I would like a cup of tea, please.",
+        "zh-classical": "請賜吾一杯茶。",
+        "zh-modern": "我想要一杯茶，请。",
+        "my": "ကျေးဇူးပြု၍ လက်ဖက်ရည်တစ်ခွက် ပေးပါ။",
+        "bo": "ད་རེས་ཇ་ཞིག་འཐུང་རྒྱུ་ཡིན།",
+        "km": "សូមអោយខ្ញុំមួយពែងតែផង។",
+        "am": "እባክዎ አንድ ብርጭቆ ሻይ እፈልጋለሁ።",
+        "te": "దయచేసి నాకు ఒక కప్పు టీ ఇవ్వండి.",
+        "ta": "தயவுசெய்து ஒரு கப் தேனீர் கொடுங்கள்.",
+        "ml": "ദയവായി ഒരു കപ്പ് ചായ തരൂ.",
+        "si": "කරුණාකර මට එක් කෝප්පයක් තේ දෙන්න.",
+        "ka": "გთხოვთ, მომეცით ერთი ფინჯანი ჩაი.",
+        "iu-cans": "ᐊᑭᑦᑑᒧᒃ ᑭᓯᐊᓂ ᑏ ᐊᑐᖅᑳᕈᒪᕗᖓ.",
+        "chr": "ᎢᏯᏛᏁᎵᏓᏍᏗ ᎤᎪᎵᏍᏙᏗ ᏥᏩ ᏥᏄᏍᏗ.",
+        "fi": "Haluaisin yhden kupin teetä, kiitos.",
+        "tr": "Lütfen bir fincan çay alabilir miyim?",
+        "en-legalese": "The undersigned hereby requests that one (1) unit of brewed tea be provided forthwith, subject to available supply.",
+        "en-victorian": "If it should not prove too great an imposition, I should be most grateful to receive a cup of tea at your earliest convenience."
+      }
+    },
+    {
+      "id": "s05",
+      "english": "The early bird catches the worm.",
+      "translations": {
+        "en": "The early bird catches the worm.",
+        "zh-classical": "早起之鳥先得蟲。",
+        "zh-modern": "早起的鸟儿有虫吃。",
+        "my": "စောစောထ ငှက်သည် ကောင်မွှားကို ဖမ်းနိုင်သည်။",
+        "bo": "ང་མོག་མོག་ལངས་ན་སྲིན་མར་ཐུག",
+        "km": "បក្សីដែលក្រោកពីព្រលឹមទើបចាប់បានដង្ករ។",
+        "am": "ማለዳ የሚነሳ ወፍ ትሉን ታጠምዳለች።",
+        "te": "తొందరగా లేచిన పక్షి పురుగును పట్టుకుంటుంది.",
+        "ta": "அதிகாலையில் எழும் பறவை புழுவைப் பிடிக்கும்.",
+        "ml": "നേരത്തെ എഴുന്നേൽക്കുന്ന പക്ഷി പുഴുവിനെ പിടിക്കും.",
+        "si": "උදේ ඉක්මනට නැඟිටින කුරුල්ලා පණු අල්ලයි.",
+        "ka": "ადრე მფრინავი ფრინველი ჭიაყელას იჭერს.",
+        "iu-cans": "ᑎᑎᕋᒐᒃᓴᖅ ᓴᖅᑭᖅᑐᖅ ᓯᕗᓪᓕᐅᑎᕋᓱᐊᖅᑐᖅ.",
+        "chr": "ᏥᏳ ᎠᏣᏅᎢ ᎪᎪᎢ ᎦᏅᎦᎢ.",
+        "fi": "Aikainen lintu madon löytää.",
+        "tr": "Erken kalkan yol alır.",
+        "en-legalese": "That party who initiates activity at an early hour shall be entitled to the first and primary claim upon available resources, including but not limited to worms.",
+        "en-victorian": "It is the industrious and earliest-rising bird which, by virtue of its admirable punctuality, secures for itself the coveted worm."
+      }
+    },
+    {
+      "id": "s06",
+      "english": "Time flies like an arrow.",
+      "translations": {
+        "en": "Time flies like an arrow.",
+        "zh-classical": "光陰似箭。",
+        "zh-modern": "时光如箭。",
+        "my": "အချိန်သည် မြှားကဲ့သို့ ပျံသန်းသည်။",
+        "bo": "དུས་ཚོད་མདར་གཟིགས་སུ་མཁྱེན།",
+        "km": "ពេលវេលាហោះដូចស្រួចព្រួញ។",
+        "am": "ጊዜ እንደ ቀስት ይበርራል።",
+        "te": "కాలం బాణంలా వేగంగా పోతుంది.",
+        "ta": "நேரம் அம்பைப்போல் பறக்கிறது.",
+        "ml": "സമയം ഒരു അമ്പ് പോലെ പறക്കുന്നു.",
+        "si": "කාලය ඊතලයක් මෙන් පියාඹයි.",
+        "ka": "დრო ისარსავით ფრინავს.",
+        "iu-cans": "ᑕᐃᒪᐃᓐᓇᐃᑦᑑᓂᖅ ᓄᓇᕐᔪᐊᓛᖑᓂᖅ.",
+        "chr": "ᏦᏢᏛ ᎠᏁᏙᏯᎢ ᎢᎪᏯᏍᏗ.",
+        "fi": "Aika lentää kuin nuoli.",
+        "tr": "Zaman ok gibi geçer.",
+        "en-legalese": "Time, for the purposes of this instrument, shall be deemed to elapse at a rate comparable to that of a projectile, specifically an arrow, in flight.",
+        "en-victorian": "How swift and merciless is the passage of time, which moves with all the swiftness and precision of an arrow loosed from the archer's bow."
+      }
+    },
+    {
+      "id": "s07",
+      "english": "All that glitters is not gold.",
+      "translations": {
+        "en": "All that glitters is not gold.",
+        "zh-classical": "閃閃發光者未必是金。",
+        "zh-modern": "闪闪发光的未必是黄金。",
+        "my": "တောက်ပသောအရာ အားလုံးသည် ရွှေမဟုတ်ပေ။",
+        "bo": "འཚེར་བ་ཐམས་ཅད་གསེར་མིན།",
+        "km": "អ្វីដែលផ្លេកផ្លេកមិនមែនជាមាស ទាំងអស់ទេ។",
+        "am": "የሚያብረቀርቀው ሁሉ ወርቅ አይደለም።",
+        "te": "మెరిసేదంతా బంగారం కాదు.",
+        "ta": "மினுமினுப்பதெல்லாம் தங்கமல்ல.",
+        "ml": "തിളങ്ങുന്നതെല്ലാം സ്വർണ്ണമല്ല.",
+        "si": "දිළිසෙන සෑම දෙයක්ම රන් නොවේ.",
+        "ka": "ყველაფერი, რაც ბრწყინავს, ოქრო არ არის.",
+        "iu-cans": "ᓇᓗᓇᐃᖅᓯᒪᔪᑦ ᑕᒪᐃᓐᓂᒃ ᐅᑉᐱᕆᔭᐅᖏᑦᑐᑦ.",
+        "chr": "ᏥᎪᎵᏍᏗᎢ ᎦᏙᎯ ᎣᏍᏓ ᎤᎾᏓᏡᎨ.",
+        "fi": "Kaikki se ei ole kultaa, mikä kiiltää.",
+        "tr": "Parlayan her şey altın değildir.",
+        "en-legalese": "Notwithstanding any superficial luminosity, no warranty, express or implied, is made that any substance or matter so gleaming constitutes gold or any gold equivalent.",
+        "en-victorian": "One must not be so readily deceived by outward brilliance, for it hath long been observed that not all which glitters with such enticing lustre is, in truth, wrought of gold."
+      }
+    },
+    {
+      "id": "s08",
+      "english": "May you live in interesting times.",
+      "translations": {
+        "en": "May you live in interesting times.",
+        "zh-classical": "願汝生於亂世。",
+        "zh-modern": "愿你生活在有趣的时代。",
+        "my": "သင်သည် စိတ်ဝင်စားဖွယ် ကာလတွင် နေထိုင်ပါစေ။",
+        "bo": "ཁྱེད་རང་གིས་གནས་སྐབས་གལ་ཆེན་པོ་ཞིག་ལ་ཡུལ་འབབ།",
+        "km": "សូមឲ្យអ្នករស់នៅក្នុងសម័យដ៏គួរចាប់អារម្មណ៍។",
+        "am": "በሚስብ ዘመን ትኖር ዘንድ ይሁን።",
+        "te": "మీరు ఆసక్తికరమైన కాలంలో జీవించాలని కోరుకుంటున్నాను.",
+        "ta": "நீங்கள் சுவாரஸ்யமான காலத்தில் வாழ வேண்டும்.",
+        "ml": "നിങ്ങൾ രസകരമായ കാലഘട്ടത്തിൽ ജീവിക്കട്ടെ.",
+        "si": "ඔබ රසවත් කාලයක ජීවත් වේවා.",
+        "ka": "ნეტარ იცხოვროთ საინტერესო ჟამს.",
+        "iu-cans": "ᐅᓪᓗᒥᐅᓂᖅᓴᒥ ᐃᓅᓯᖃᕐᕕᒋᓗᒍ.",
+        "chr": "ᏦᏛ ᎤᎵᏍᏆᏗᏍᎬᎢ ᏙᎢᏯᏍᏆᏗᏍᎬ ᎢᏳᏛᏁᏗ.",
+        "fi": "Toivottavasti elät mielenkiintoisina aikoina.",
+        "tr": "İlginç zamanlarda yaşayasınız.",
+        "en-legalese": "It is hereby wished upon the addressee that the period of their natural life shall coincide with times of notable and material interest, as determined by reasonable standards.",
+        "en-victorian": "It is my most sincere and heartfelt wish that your days upon this earth shall be spent amid times of the most extraordinary and uncommon interest."
+      }
+    }
+  ]
+}
