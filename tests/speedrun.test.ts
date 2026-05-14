@@ -93,4 +93,42 @@ describe('speedrun', () => {
 
     expect(result.budgetMs).toBe(15);
   });
+
+  // Gap: maxIterations: 0 — loop exits before the first iteration.
+  // tokensPerSecond and charactersPerSecond both resolve via the `seconds > 0` ternary;
+  // with zero iterations they should be 0 (not a divide-by-zero NaN).
+  it('maxIterations: 0 produces zero iterations, hitMaxIterations: true, and zero token rates', () => {
+    const result = speedrun({
+      durationMs: 5000,
+      seed: 'hello',
+      mode: 'verbose-lite',
+      encoding: 'cl100k_base',
+      maxIterations: 0,
+    });
+
+    expect(result.iterations).toBe(0);
+    expect(result.hitMaxIterations).toBe(true);
+    expect(result.totalTokens).toBe(0);
+    // tokensPerSecond must be 0 (not NaN) — the `seconds > 0` guard protects this
+    expect(result.tokensPerSecond).toBe(0);
+    expect(result.charactersPerSecond).toBe(0);
+  });
+
+  // Gap: output.length > OUTPUT_CAP (4096) — the currentInput slicing branch at line 68.
+  // Use a seed large enough that its verbose-ultra expansion exceeds 4096 chars.
+  it('slices currentInput when expanded output exceeds OUTPUT_CAP (4096 chars)', () => {
+    const longSeed = 'Use this to help. Start the process. Consider what to do. Find a way. Make a plan. '.repeat(5);
+    const result = speedrun({
+      durationMs: 100,
+      seed: longSeed,
+      mode: 'verbose-ultra',
+      encoding: 'cl100k_base',
+      maxIterations: 2,
+    });
+
+    // With verbose-ultra on a ~400-char seed, first expansion greatly exceeds 4096 chars.
+    // The test asserts the run completes without error and finalOutput is capped at 4096.
+    expect(result.finalOutput.length).toBeLessThanOrEqual(4096);
+    expect(result.iterations).toBeGreaterThanOrEqual(1);
+  });
 });

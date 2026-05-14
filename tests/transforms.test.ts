@@ -100,6 +100,23 @@ describe('passive', () => {
     // Must return unchanged (no confident SVO match) rather than garbled output
     expect(result).toEqual(input);
   });
+
+  // Gap: toPastParticiple — regular -es with consonant before -es (e.g. "fixes" → "fixed")
+  // Hits the `withoutEs` path where the stem does NOT end in a vowel → appends "ed".
+  it('converts regular -es verb (consonant stem) to past participle', () => {
+    // "fixes": withoutEs = "fix", /[aeiou]$/.test("fix") is false → "fix" + "ed" = "fixed"
+    const result = passive('The system fixes the bug.');
+    expect(result).toContain('fixed');
+    expect(result).toContain('by');
+  });
+
+  // Gap: toPastParticiple — verb ending in -s where base.length < 2 (e.g. "as", base "a")
+  // The SVO pattern matches but toPastParticiple returns undefined → sentence returned unchanged.
+  it('leaves sentence unchanged when verb base is a single character (base.length < 2)', () => {
+    // "as": base = "a", length 1 → toPastParticiple returns undefined → no conversion
+    const input = 'A as the thing.';
+    expect(passive(input)).toEqual(input);
+  });
 });
 
 describe('translate', () => {

@@ -1,0 +1,1 @@
+(no input required — benchmark runs against the bundled corpus)

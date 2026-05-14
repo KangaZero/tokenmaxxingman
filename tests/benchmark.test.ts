@@ -104,3 +104,86 @@ describe('toJson', () => {
     expect(() => JSON.parse(output)).not.toThrow();
   });
 });
+
+// Gap tests: benchmark.ts sort comparator branches (lines 64-67)
+describe('runBenchmark sort tiebreaker branches', () => {
+  // Gap: totalCharacters === 0 → tokensPerCharacter = 0.
+  // A language code present in languages[] but with no matching translations.
+  it('assigns tokensPerCharacter of 0 for a language with no translations', () => {
+    const sparseCorpus = {
+      version: '1' as const,
+      description: 'minimal caveats corpus',
+      sentences: [
+        { id: 's01', english: 'Hello.', translations: { en: 'Hello.' } },
+      ],
+      languages: [
+        { code: 'en', name: 'English', family: 'natural' as const, script: 'Latin', notes: '' },
+        // 'zz' has no matching translation → totalCharacters === 0 → tokensPerCharacter = 0
+        { code: 'zz', name: 'Zero', family: 'natural' as const, script: 'Latin', notes: '' },
+      ],
+    };
+    const result = runBenchmark(sparseCorpus, 'cl100k_base');
+    const zzRow = result.rows.find((r) => r.code === 'zz');
+    expect(zzRow).toBeDefined();
+    expect(zzRow?.tokensPerCharacter).toBe(0);
+  });
+
+  // Gap: sentenceCount === 0 → tokensPerSentence = 0.
+  it('assigns tokensPerSentence of 0 when sentences array is empty', () => {
+    const emptyCorpus = {
+      version: '1' as const,
+      description: 'empty caveats corpus',
+      sentences: [],
+      languages: [
+        { code: 'en', name: 'English', family: 'natural' as const, script: 'Latin', notes: '' },
+      ],
+    };
+    const result = runBenchmark(emptyCorpus, 'cl100k_base');
+    expect(result.rows[0]?.tokensPerSentence).toBe(0);
+  });
+
+  // Gap: secondary sort branch — two languages with identical tokensPerCharacter but
+  // different tokensPerSentence. The one with higher tokensPerSentence ranks first.
+  it('breaks tokensPerCharacter ties by tokensPerSentence (higher ranks first)', () => {
+    // Craft identical tok/char ratios but different total tokens across 1 vs 2 sentences.
+    // Both languages get 1 token per character. Language 'aa' accumulates across 2 sentences,
+    // language 'bb' only has one sentence. aa.tokPerSent > bb.tokPerSent → aa ranks higher.
+    const tieCorpus = {
+      version: '1' as const,
+      description: 'tiebreaker caveats corpus',
+      sentences: [
+        { id: 's01', english: 'A.', translations: { aa: 'A.', bb: 'A.' } },
+        { id: 's02', english: 'B.', translations: { aa: 'B.' } },
+      ],
+      languages: [
+        { code: 'aa', name: 'A', family: 'natural' as const, script: 'Latin', notes: '' },
+        { code: 'bb', name: 'B', family: 'natural' as const, script: 'Latin', notes: '' },
+      ],
+    };
+    const result = runBenchmark(tieCorpus, 'cl100k_base');
+    const aaRank = result.rows.find((r) => r.code === 'aa')?.rank ?? Infinity;
+    const bbRank = result.rows.find((r) => r.code === 'bb')?.rank ?? Infinity;
+    // 'aa' has more tokens across 2 sentences → higher tokensPerSentence → should rank 1 (lower rank number)
+    expect(aaRank).toBeLessThan(bbRank);
+  });
+
+  // Gap: tertiary sort (localeCompare) — two languages with identical tokensPerCharacter AND
+  // identical tokensPerSentence. Alphabetically earlier code ranks first.
+  it('breaks full ties alphabetically by language code', () => {
+    const fullTieCorpus = {
+      version: '1' as const,
+      description: 'full tie caveats corpus',
+      sentences: [
+        { id: 's01', english: 'Hi.', translations: { aa: 'Hi.', bb: 'Hi.' } },
+      ],
+      languages: [
+        { code: 'bb', name: 'B', family: 'natural' as const, script: 'Latin', notes: '' },
+        { code: 'aa', name: 'A', family: 'natural' as const, script: 'Latin', notes: '' },
+      ],
+    };
+    const result = runBenchmark(fullTieCorpus, 'cl100k_base');
+    // 'aa' < 'bb' alphabetically → 'aa' should rank 1
+    expect(result.rows[0]?.code).toBe('aa');
+    expect(result.rows[1]?.code).toBe('bb');
+  });
+});
