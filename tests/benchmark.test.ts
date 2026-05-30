@@ -51,10 +51,9 @@ describe('runBenchmark', () => {
     ).toBeGreaterThan(midpoint);
   });
 
-  it('is deterministic: two runs produce identical rows (excluding generatedAt)', () => {
-    const stripTimestamp = (r: BenchmarkResult) => r.rows;
-    const first = stripTimestamp(runBenchmark(corpus, 'cl100k_base'));
-    const second = stripTimestamp(runBenchmark(corpus, 'cl100k_base'));
+  it('is deterministic: two runs produce identical results', () => {
+    const first = runBenchmark(corpus, 'cl100k_base');
+    const second = runBenchmark(corpus, 'cl100k_base');
     expect(first).toEqual(second);
   });
 

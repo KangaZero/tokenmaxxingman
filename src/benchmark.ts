@@ -20,7 +20,6 @@ export interface BenchmarkResult {
   encoding: EncodingName;
   corpusVersion: string;
   rows: BenchmarkRow[];
-  generatedAt: string;
 }
 
 export function runBenchmark(corpus: Corpus, encoding: EncodingName): BenchmarkResult {
@@ -28,17 +27,17 @@ export function runBenchmark(corpus: Corpus, encoding: EncodingName): BenchmarkR
     let totalTokens = 0;
     let totalCharacters = 0;
     let totalBytes = 0;
+    let sentenceCount = 0;
 
     for (const sentence of corpus.sentences) {
       const text = sentence.translations[lang.code];
       if (text === undefined) continue;
+      sentenceCount += 1;
       const counted = countTokens(text, encoding);
       totalTokens += counted.tokens;
       totalCharacters += counted.characters;
       totalBytes += counted.bytes;
     }
-
-    const sentenceCount = corpus.sentences.length;
     const tokensPerCharacter = totalCharacters === 0 ? 0 : totalTokens / totalCharacters;
     const tokensPerSentence = sentenceCount === 0 ? 0 : totalTokens / sentenceCount;
 
@@ -76,6 +75,5 @@ export function runBenchmark(corpus: Corpus, encoding: EncodingName): BenchmarkR
     encoding,
     corpusVersion: corpus.version,
     rows,
-    generatedAt: new Date().toISOString(),
   };
 }

@@ -4,7 +4,7 @@ export function toMarkdown(result: BenchmarkResult): string {
   const header = [
     `# tokenmaxxingman benchmark`,
     ``,
-    `Encoding: \`${result.encoding}\` · Corpus v${result.corpusVersion} · Generated ${result.generatedAt}`,
+    `Encoding: \`${result.encoding}\` · Corpus v${result.corpusVersion}`,
     ``,
     `| Rank | Code | Name | Script | Family | Tokens | Chars | Tok/Char | Tok/Sent |`,
     `|------|------|------|--------|--------|--------|-------|----------|----------|`,
