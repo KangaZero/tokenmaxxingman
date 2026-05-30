@@ -1,9 +1,6 @@
-// Phase 3 stub: phrasebook-only translation.
-// Phase 4 will replace the lookup with corpus-driven translateFromCorpus.
-// LangCode is defined locally to avoid a dependency on src/corpus-types.ts
-// while Phase 2 may still be in flight.
+import type { LangCode } from '../corpus-types.js';
 
-export type LangCode = string;
+export type { LangCode } from '../corpus-types.js';
 
 interface LangEntry {
   label: string;
