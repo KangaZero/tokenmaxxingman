@@ -65,10 +65,10 @@ describe('CLI maxxer subcommand', () => {
     expect(stderr).toContain('--passes');
   });
 
-  it('--workers 9 exits 2 (out of range)', () => {
-    const { status, stderr } = cli(['maxxer', '--parallel', '--workers', '9'], { input: 'test' });
+  it('--passes 0 exits 2 (out of range)', () => {
+    const { status, stderr } = cli(['maxxer', '--passes', '0'], { input: 'test' });
     expect(status).toBe(2);
-    expect(stderr).toContain('--workers');
+    expect(stderr).toContain('--passes');
   });
 
   it('--target-language my produces Burmese-script characters or the fallback marker', () => {
@@ -80,9 +80,9 @@ describe('CLI maxxer subcommand', () => {
     expect(hasBurmese || hasFallback).toBe(true);
   });
 
-  it('--parallel --workers 2 exits 0 and produces output', () => {
+  it('--parallel exits 0 and produces output', () => {
     const input = 'The quick brown fox jumps over the lazy dog.';
-    const { stdout, status } = cli(['maxxer', '--parallel', '--workers', '2'], { input });
+    const { stdout, status } = cli(['maxxer', '--parallel'], { input });
     expect(status).toBe(0);
     expect(stdout.length).toBeGreaterThan(input.length);
   });

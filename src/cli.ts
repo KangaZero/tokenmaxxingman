@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import { readFileSync } from 'node:fs';
+import { readFile } from 'node:fs/promises';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { program } from 'commander';
@@ -35,7 +36,12 @@ function parseDuration(value: string): number {
     console.error(`Error: invalid duration "${value}" — expected format like 30s, 5m, 1h, 500ms`);
     process.exit(2);
   }
-  const n = parseFloat(match[1]!);
+  const raw = match[1];
+  if (raw === undefined) {
+    console.error(`Error: invalid duration "${value}"`);
+    process.exit(2);
+  }
+  const n = parseFloat(raw);
   switch (match[2]) {
     case 'ms': return n;
     case 's': return n * 1_000;
@@ -78,7 +84,7 @@ async function readInput(file: string | undefined): Promise<string> {
       process.stdin.on('error', reject);
     });
   }
-  return readFileSync(file, 'utf-8');
+  return readFile(file, 'utf-8');
 }
 
 // import.meta.url resolves correctly after npm install -g; __dirname would point to the wrong place.
@@ -86,12 +92,44 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 
 function loadCorpus(): Corpus {
   const corpusPath = resolve(__dirname, '../data/corpus.json');
-  return JSON.parse(readFileSync(corpusPath, 'utf-8')) as Corpus;
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(readFileSync(corpusPath, 'utf-8'));
+  } catch {
+    console.error(`Error: failed to parse corpus.json`);
+    process.exit(1);
+  }
+  if (
+    typeof parsed !== 'object' ||
+    parsed === null ||
+    !('version' in parsed) ||
+    !Array.isArray((parsed as Record<string, unknown>).languages) ||
+    !Array.isArray((parsed as Record<string, unknown>).sentences)
+  ) {
+    console.error(`Error: corpus.json has unexpected structure`);
+    process.exit(1);
+  }
+  return parsed as Corpus;
 }
 
-const pkg = JSON.parse(
-  readFileSync(resolve(__dirname, '../package.json'), 'utf-8'),
-) as { version: string };
+let pkg: { version: string };
+try {
+  const rawPkg: unknown = JSON.parse(
+    readFileSync(resolve(__dirname, '../package.json'), 'utf-8'),
+  );
+  if (
+    typeof rawPkg !== 'object' ||
+    rawPkg === null ||
+    typeof (rawPkg as Record<string, unknown>).version !== 'string'
+  ) {
+    console.error(`Error: package.json has unexpected structure`);
+    process.exit(1);
+  }
+  pkg = rawPkg as { version: string };
+} catch {
+  console.error(`Error: failed to parse package.json`);
+  process.exit(1);
+}
 
 program
   .name('tokenmaxxingman')
@@ -108,7 +146,7 @@ program
     try {
       const input = await readInput(file);
       const output = expand(input, mode);
-      process.stdout.write(output);
+      process.stdout.write(output + '\n');
     } catch (err) {
       console.error(`Error: ${err instanceof Error ? err.message : String(err)}`);
       process.exit(1);
@@ -240,7 +278,6 @@ program
   .option('--padding-multiplier <n>', 'essay-padding multiplier', '3')
   .option('--target-language <code>', 'final translate pass language code (e.g. my, bo, iu-cans)')
   .option('--parallel', 'use maxxerParallel instead of maxxer')
-  .option('--workers <n>', 'parallel chunk count (1-8, only with --parallel)', '4')
   .action(
     async (
       file: string | undefined,
@@ -249,7 +286,6 @@ program
         paddingMultiplier: string;
         targetLanguage?: string;
         parallel?: true;
-        workers: string;
       },
     ) => {
       const passes = validateIntInRange(opts.passes, '--passes', 1, 5);
@@ -258,7 +294,6 @@ program
         console.error('Error: --padding-multiplier must be a positive integer');
         process.exit(2);
       }
-      const workers = validateIntInRange(opts.workers, '--workers', 1, 8);
       const targetLanguage: LangCode | undefined =
         opts.targetLanguage !== undefined ? validateLangCode(opts.targetLanguage) : undefined;
 
@@ -266,7 +301,6 @@ program
         passes,
         paddingMultiplier,
         ...(targetLanguage !== undefined ? { targetLanguage } : {}),
-        workers,
       };
 
       try {
@@ -274,7 +308,7 @@ program
         const output = opts.parallel === true
           ? await maxxerParallel(input, maxxerOpts)
           : maxxer(input, maxxerOpts);
-        process.stdout.write(output);
+        process.stdout.write(output + '\n');
       } catch (err) {
         console.error(`Error: ${err instanceof Error ? err.message : String(err)}`);
         process.exit(1);
