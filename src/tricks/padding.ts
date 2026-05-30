@@ -1,3 +1,5 @@
+import { splitOnSentenceBoundaries } from '../utils/text.js';
+
 export interface PaddingOptions {
   targetMultiplier: number;
 }
@@ -36,31 +38,6 @@ const PADDING_PHRASES: readonly string[] = [
   'Notwithstanding the considerable ground already covered, it remains to be observed that',
   'For what it is worth — and the present author believes it is worth a considerable amount —',
 ];
-
-function splitOnSentenceBoundaries(input: string): string[] {
-  const parts: string[] = [];
-  let current = '';
-  let i = 0;
-  while (i < input.length) {
-    const ch = input[i];
-    if (ch === undefined) break;
-    current += ch;
-    if ((ch === '.' || ch === '?' || ch === '!') && i + 1 < input.length) {
-      const next = input[i + 1];
-      if (next === ' ') {
-        parts.push(current.trimEnd());
-        current = '';
-        i += 2;
-        continue;
-      }
-    }
-    i++;
-  }
-  if (current.trim().length > 0) {
-    parts.push(current.trimEnd());
-  }
-  return parts;
-}
 
 export function padding(input: string, opts?: Partial<PaddingOptions>): string {
   const multiplier = opts?.targetMultiplier ?? 3;

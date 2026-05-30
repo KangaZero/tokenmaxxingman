@@ -1,3 +1,5 @@
+import { splitOnSentenceBoundaries } from '../utils/text.js';
+
 const HEDGES: readonly string[] = [
   'It is, of course, important to note that',
   'Notwithstanding the foregoing,',
@@ -24,14 +26,8 @@ const SUFFIXES: readonly string[] = [
   ', subject to revision upon receipt of further information',
 ];
 
-function splitSentences(input: string): string[] {
-  // Split on sentence-ending punctuation followed by whitespace or end of string.
-  // This is a best-effort heuristic that may misfire on abbreviations.
-  return input.split(/(?<=[.!?])\s+/).filter((s) => s.trim().length > 0);
-}
-
 export function qualifiers(input: string): string {
-  const sentences = splitSentences(input);
+  const sentences = splitOnSentenceBoundaries(input);
 
   const qualified = sentences.map((sentence, index) => {
     // Deterministically select hedge by index modulo pool length — even-indexed sentences get a prefix.

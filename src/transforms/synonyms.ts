@@ -1,3 +1,5 @@
+import { applyCase } from '../utils/text.js';
+
 const VERBOSE_SYNONYMS: ReadonlyMap<string, string> = new Map([
   ['use', 'utilize'],
   ['help', 'facilitate'],
@@ -62,22 +64,13 @@ const VERBOSE_SYNONYMS: ReadonlyMap<string, string> = new Map([
   ['simple', 'straightforward in its fundamental conceptual architecture'],
 ]);
 
-function applyCase(original: string, replacement: string): string {
-  if (original.length === 0) return replacement;
-  const firstChar = original[0];
-  if (firstChar === undefined) return replacement;
-  if (firstChar === firstChar.toUpperCase() && firstChar !== firstChar.toLowerCase()) {
-    return replacement.charAt(0).toUpperCase() + replacement.slice(1);
-  }
-  return replacement;
-}
+const SYNONYM_PATTERNS: ReadonlyMap<RegExp, string> = new Map(
+  [...VERBOSE_SYNONYMS].map(([word, verbose]) => [new RegExp(`\\b(${word})\\b`, 'gi'), verbose]),
+);
 
 export function synonyms(input: string): string {
   let result = input;
-  for (const [word, verbose] of VERBOSE_SYNONYMS) {
-    // Word-boundary regex: \b does not work for multi-word replacements on the target,
-    // but works fine as an anchor on the source word being replaced.
-    const pattern = new RegExp(`\\b(${word})\\b`, 'gi');
+  for (const [pattern, verbose] of SYNONYM_PATTERNS) {
     result = result.replace(pattern, (match) => applyCase(match, verbose));
   }
   return result;

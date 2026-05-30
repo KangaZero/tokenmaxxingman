@@ -3,6 +3,8 @@
 // They are designed to be unmistakably ridiculous — not realistic enough to be mistaken
 // for real scholarship. This module exists to inflate token count via fake academic theatre.
 
+import { splitOnSentenceBoundaries } from '../utils/text.js';
+
 const FAKE_CITATIONS: readonly string[] = [
   '(see Blobsworth & Quackenheimer, 1887, pp. 3–3, "Journal of Unnecessary Verbosity Studies")',
   '(cf. Flibbertigibbet & Wobblejaw, 2099, pp. 1,492–1,501, "Annals of Profoundly Obvious Research")',
@@ -25,10 +27,6 @@ const FAKE_CITATIONS: readonly string[] = [
   '(attributed to Wafflington-Smythe, Q.Q.Q. & Tweedledum, T., 2525, pp. α–ω, "Post-Temporal Studies in Anachronistic Citation Practices")',
   '(see the collected works of Blunderpuss & Squibblethong, all years simultaneously, all pages, "The Complete Omnibus of Unnecessary Academic Apparatus")',
 ];
-
-function splitOnSentenceBoundaries(input: string): string[] {
-  return input.split(/(?<=[.!?])\s+/).filter((s) => s.trim().length > 0);
-}
 
 export function citation(input: string): string {
   if (input.trim().length === 0) return input;

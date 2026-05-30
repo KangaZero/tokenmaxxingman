@@ -1,3 +1,5 @@
+import { applyCase } from '../utils/text.js';
+
 const NOMINALIZATIONS: ReadonlyMap<string, string> = new Map([
   ['decide', 'make a decision regarding the matter of'],
   ['implement', 'carry out the implementation of'],
@@ -31,20 +33,13 @@ const NOMINALIZATIONS: ReadonlyMap<string, string> = new Map([
   ['coordinate', 'engage in coordination concerning'],
 ]);
 
-function applyCase(original: string, replacement: string): string {
-  if (original.length === 0) return replacement;
-  const firstChar = original[0];
-  if (firstChar === undefined) return replacement;
-  if (firstChar === firstChar.toUpperCase() && firstChar !== firstChar.toLowerCase()) {
-    return replacement.charAt(0).toUpperCase() + replacement.slice(1);
-  }
-  return replacement;
-}
+const NOMINALIZATION_PATTERNS: ReadonlyMap<RegExp, string> = new Map(
+  [...NOMINALIZATIONS].map(([verb, nounPhrase]) => [new RegExp(`\\b(${verb})\\b`, 'gi'), nounPhrase]),
+);
 
 export function nominalizations(input: string): string {
   let result = input;
-  for (const [verb, nounPhrase] of NOMINALIZATIONS) {
-    const pattern = new RegExp(`\\b(${verb})\\b`, 'gi');
+  for (const [pattern, nounPhrase] of NOMINALIZATION_PATTERNS) {
     result = result.replace(pattern, (match) => applyCase(match, nounPhrase));
   }
   return result;

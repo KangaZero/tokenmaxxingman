@@ -1,5 +1,6 @@
 import { synonyms } from '../transforms/synonyms.js';
 import { passive } from '../transforms/passive.js';
+import { splitOnSentenceBoundaries } from '../utils/text.js';
 
 const CONNECTORS: readonly string[] = [
   'put differently,',
@@ -13,10 +14,6 @@ const CONNECTORS: readonly string[] = [
   'which is to say, in terms that may prove more illuminating,',
   'or, as one might alternatively articulate the selfsame proposition,',
 ];
-
-function splitOnSentenceBoundaries(input: string): string[] {
-  return input.split(/(?<=[.!?])\s+/).filter((s) => s.trim().length > 0);
-}
 
 function rephrase(sentence: string): string {
   // Apply passive first, then synonyms to create a visibly different surface form.
