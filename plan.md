@@ -272,7 +272,7 @@ CLI surface:
 ```
 tokenmaxxingman expand [file]       # file or stdin if omitted
   --mode <mode>                     # default: verbose-full
-  --stdout                          # always (default); kept for explicitness
+  # Deviation: --stdout flag dropped — stdout is the default sink.
 
 tokenmaxxingman benchmark
   --format <markdown|json>          # default: markdown
