@@ -1,5 +1,6 @@
 ---
 name: tokensprint
+version: "0.1.0"
 description: >
   Conversational speedrun mode. Claude races to generate the maximum number of
   tokens within a user-specified time budget, narrated with the overlapping

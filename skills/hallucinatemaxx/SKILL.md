@@ -1,5 +1,6 @@
 ---
 name: hallucinatemaxx
+version: "0.1.0"
 description: >
   Satirical literary-confabulation mode. Produces text in the register of
   academic citation and historical authority, with all proper nouns, dates,
