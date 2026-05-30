@@ -86,14 +86,14 @@ describe('maxxerParallel', () => {
     await expect(maxxerParallel('')).resolves.not.toThrow();
   });
 
-  it('workers option does not crash and still produces output', async () => {
-    const result = await maxxerParallel(LONGER_INPUT, { workers: 4 });
+  it('with passes option produces output longer than input', async () => {
+    const result = await maxxerParallel(LONGER_INPUT, { passes: 1 });
     expect(result.length).toBeGreaterThan(LONGER_INPUT.length);
   });
 
-  it('workers > 8 is clamped to 8', async () => {
-    const clamped = await maxxerParallel(LONGER_INPUT, { workers: 99 });
-    const explicit = await maxxerParallel(LONGER_INPUT, { workers: 8 });
-    expect(clamped).toEqual(explicit);
+  it('two calls with the same options produce identical output', async () => {
+    const first = await maxxerParallel(LONGER_INPUT, { passes: 1 });
+    const second = await maxxerParallel(LONGER_INPUT, { passes: 1 });
+    expect(first).toEqual(second);
   });
 });

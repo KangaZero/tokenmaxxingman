@@ -9,6 +9,7 @@ import { footnotes } from './tricks/footnotes.js';
 import { parentheticals } from './tricks/parentheticals.js';
 import { citation } from './tricks/citation.js';
 import { repetition } from './tricks/repetition.js';
+import { splitOnSentenceBoundaries } from './utils/text.js';
 
 export type { LangCode };
 
@@ -16,14 +17,13 @@ export interface MaxxerOptions {
   targetLanguage?: LangCode;
   paddingMultiplier?: number;
   passes?: number;
-  workers?: number;
 }
 
 const MAX_PASSES = 5;
-const MAX_WORKERS = 8;
+const CHUNK_COUNT = 4;
 const MEMORY_BUDGET_BYTES = 1_048_576; // 1 MB hard cap per pass
 
-function runPipeline(input: string, opts: Required<MaxxerOptions>): string {
+function runPipeline(input: string, opts: ResolvedOptions): string {
   let result = input;
 
   result = synonyms(result);
@@ -43,12 +43,13 @@ function runPipeline(input: string, opts: Required<MaxxerOptions>): string {
   return result;
 }
 
-function resolveOptions(opts?: MaxxerOptions): Required<MaxxerOptions> {
+type ResolvedOptions = Required<Omit<MaxxerOptions, 'targetLanguage'>> & { targetLanguage: string };
+
+function resolveOptions(opts?: MaxxerOptions): ResolvedOptions {
   return {
     targetLanguage: opts?.targetLanguage ?? '',
     paddingMultiplier: opts?.paddingMultiplier ?? 3,
     passes: Math.min(opts?.passes ?? 1, MAX_PASSES),
-    workers: Math.min(opts?.workers ?? 1, MAX_WORKERS),
   };
 }
 
@@ -65,8 +66,7 @@ export function maxxer(input: string, opts?: MaxxerOptions): string {
 }
 
 function splitIntoChunks(input: string, chunkCount: number): string[] {
-  // Split on sentence boundaries, then group into chunkCount buckets.
-  const sentences = input.split(/(?<=[.!?])\s+/).filter((s) => s.trim().length > 0);
+  const sentences = splitOnSentenceBoundaries(input);
   if (sentences.length === 0) return [input];
 
   const perChunk = Math.max(1, Math.ceil(sentences.length / chunkCount));
@@ -80,10 +80,7 @@ function splitIntoChunks(input: string, chunkCount: number): string[] {
 }
 
 export async function maxxerParallel(input: string, opts?: MaxxerOptions): Promise<string> {
-  const resolved = resolveOptions(opts);
-  // More workers = smaller chunk size = more chunks.
-  const chunkCount = Math.max(1, resolved.workers);
-  const chunks = splitIntoChunks(input, chunkCount);
+  const chunks = splitIntoChunks(input, CHUNK_COUNT);
 
   // Promise.all here is structurally parallel-ready; all work is CPU-bound/sync in this runtime.
   // A future worker_threads upgrade can replace the inner maxxer call with a worker message.
