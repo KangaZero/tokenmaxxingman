@@ -2,6 +2,8 @@
 
 > The inverse of [caveman](https://getcaveman.dev/). We do not save tokens. We squander them, with intention.
 
+**🌐 Site:** [kangazero.github.io/tokenmaxxingman](https://kangazero.github.io/tokenmaxxingman/) · **📦 npm:** `tokenmaxxingman` (pending publish) · **🔌 Plugin:** `KangaZero/tokenmaxxingman`
+
 ---
 
 ## Why
@@ -308,6 +310,19 @@ The CLI (`src/cli.ts`) is a thin integration layer. It reads from a file or stdi
 ---
 
 ## Development
+
+Most common commands are wrapped in a [`justfile`](./justfile). Install [`just`](https://github.com/casey/just) (`brew install just`), then:
+
+```bash
+just                # list every recipe
+just install        # install CLI + web deps
+just ci             # full gate: typecheck + lint + tests + build + web build
+just web-dev        # http://localhost:5173/tokenmaxxingman/ — the marketing site
+just benchmark-all  # ranking under both encodings
+just install-skills # symlink skills into ~/.claude/skills/
+```
+
+Or use npm scripts directly if you'd rather not install `just`:
 
 ```bash
 npm run build       # compile TypeScript to dist/
