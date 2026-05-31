@@ -8,6 +8,11 @@
 #   just              # show this list
 #   just <recipe>     # run a recipe
 #
+# Package manager is pnpm (workspace at root + web/). `packageManager` is
+# pinned in package.json so corepack picks the right version automatically.
+# A 7-day `minimumReleaseAge` is set in pnpm-workspace.yaml as a supply-chain
+# guard against freshly-published compromised packages.
+#
 # Recipes are grouped: SETUP / DEV / TEST / WEB / RELEASE / SKILLS.
 
 set shell := ["bash", "-eu", "-c"]
@@ -19,41 +24,42 @@ default:
 
 # ───── SETUP ────────────────────────────────────────────────────────────────
 
-# Install all project + web dependencies.
-install: install-cli install-web
-    @echo "✓ all dependencies installed"
+# Install all workspace dependencies (CLI + web in one shot).
+install:
+    pnpm install
 
-# Install CLI dependencies only.
-install-cli:
-    npm install
+# Reinstall from a clean slate (drop node_modules and the store cache).
+reinstall:
+    rm -rf node_modules web/node_modules
+    pnpm install --frozen-lockfile
 
-# Install web dependencies only.
-install-web:
-    cd web && npm install
+# Update lockfile to latest within ranges (subject to minimumReleaseAge=7d).
+update:
+    pnpm update
 
 # ───── DEV / BUILD ──────────────────────────────────────────────────────────
 
 # Compile TypeScript → dist/.
 build:
-    npm run build
+    pnpm run build
 
 # Type-check without emitting.
 typecheck:
-    npm run typecheck
+    pnpm run typecheck
 
 # Lint with ESLint.
 lint:
-    npm run lint
+    pnpm run lint
 
 # Auto-format with Prettier.
 format:
-    npm run format
+    pnpm run format
 
 # Full pre-commit gate: typecheck + lint + tests + build.
 check: typecheck lint test build
     @echo "✓ all checks passed"
 
-# Alias for `check` — what CI does on every PR.
+# Alias for `check` plus the web build — what CI runs on every PR.
 ci: check web-build
     @echo "✓ CI gates green (CLI + web)"
 
@@ -61,15 +67,15 @@ ci: check web-build
 
 # Run the full vitest suite.
 test:
-    npm test
+    pnpm test
 
 # Run tests with coverage report.
 test-coverage:
-    npm run test:coverage
+    pnpm run test:coverage
 
 # Run a single test file (pass path as arg: `just test-one tests/expand.test.ts`).
 test-one path:
-    npx vitest run {{path}}
+    pnpm exec vitest run {{path}}
 
 # ───── CLI SHORTCUTS ────────────────────────────────────────────────────────
 
@@ -101,15 +107,15 @@ speedrun *args:
 
 # Run the website dev server (http://localhost:5173/tokenmaxxingman/).
 web-dev:
-    cd web && npm run dev
+    pnpm -F tokenmaxxingman-web run dev
 
 # Build the website for production (output: web/dist/).
-web-build: build
-    cd web && npm run build
+web-build:
+    pnpm -F tokenmaxxingman-web run build
 
 # Preview the production build locally.
 web-preview: web-build
-    cd web && npm run preview
+    pnpm -F tokenmaxxingman-web run preview
 
 # ───── SKILLS ───────────────────────────────────────────────────────────────
 

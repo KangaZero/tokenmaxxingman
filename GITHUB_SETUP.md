@@ -111,7 +111,8 @@ After merging to `main` and tagging a release (see `DEPLOY.md` section 4):
 3. Select the branch or ref to publish from.
 4. Click the green **"Run workflow"** button.
 
-The workflow will run `npm ci`, `npm run build`, `npm test`, then
-`npm publish --provenance --access public`. Provenance attestation is
-automatic — no extra steps needed beyond the `NPM_TOKEN` secret and the
-`id-token: write` permission already set in `release.yml`.
+The workflow runs `pnpm install --frozen-lockfile` → `pnpm run typecheck` →
+`pnpm run lint` → `pnpm test` → `pnpm run build` → `pnpm publish`.
+Provenance attestation is automatic via `publishConfig.provenance: true`
+in `package.json` plus the `id-token: write` permission already set in
+`release.yml`. No extra steps needed beyond the `NPM_TOKEN` secret.

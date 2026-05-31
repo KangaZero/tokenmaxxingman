@@ -21,6 +21,7 @@ const EXPAND_MODES: readonly ExpandMode[] = [
   'verbose-lite',
   'verbose-full',
   'verbose-ultra',
+  'verbose-galactic',
   'translate-burmese',
   'translate-tibetan',
   'translate-inuktitut',

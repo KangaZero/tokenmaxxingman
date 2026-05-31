@@ -1,0 +1,28 @@
+# Dependabot keeps everything fresh — runs weekly, opens PRs against main.
+# Major-version pinned action references + this config = supply-chain hygiene
+# without the per-SHA churn of manual lock-bumping.
+
+version: 2
+updates:
+  # GitHub Actions workflows
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    labels:
+      - dependencies
+      - github-actions
+
+  # CLI + web pnpm workspace (one ecosystem entry covers all package.json files)
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 10
+    labels:
+      - dependencies
+      - npm
+    # Don't fight the pinned tokenizer — it's intentional for reproducibility.
+    ignore:
+      - dependency-name: gpt-tokenizer

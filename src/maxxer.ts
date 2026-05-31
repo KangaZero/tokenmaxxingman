@@ -3,12 +3,15 @@ import { qualifiers } from './transforms/qualifiers.js';
 import { nominalizations } from './transforms/nominalizations.js';
 import { passive } from './transforms/passive.js';
 import { translate } from './transforms/translate.js';
+import { codeSwitching } from './transforms/code-switching.js';
 import type { LangCode } from './transforms/translate.js';
 import { padding } from './tricks/padding.js';
 import { footnotes } from './tricks/footnotes.js';
 import { parentheticals } from './tricks/parentheticals.js';
 import { citation } from './tricks/citation.js';
 import { repetition } from './tricks/repetition.js';
+import { reduplication } from './tricks/reduplication.js';
+import { rhetoricalQuestions } from './tricks/rhetorical-questions.js';
 import { splitOnSentenceBoundaries } from './utils/text.js';
 
 export type { LangCode };
@@ -26,14 +29,23 @@ const MEMORY_BUDGET_BYTES = 1_048_576; // 1 MB hard cap per pass
 function runPipeline(input: string, opts: ResolvedOptions): string {
   let result = input;
 
+  // Order matters. Word-level swaps come first so subsequent sentence-level
+  // transforms operate on the inflated vocabulary, not the bare originals.
+  // Reduplication runs before passive because passive's SVO regex only
+  // matches single-token verbs — doubled forms (`good-good`) would otherwise
+  // get skipped. Rhetorical questions land near the end so they aren't
+  // shredded by upstream sentence-splitting.
   result = synonyms(result);
+  result = codeSwitching(result);
   result = qualifiers(result);
   result = nominalizations(result);
+  result = reduplication(result);
   result = padding(result, { targetMultiplier: opts.paddingMultiplier });
   result = footnotes(result);
   result = parentheticals(result);
   result = citation(result);
   result = repetition(result);
+  result = rhetoricalQuestions(result);
   result = passive(result);
 
   if (opts.targetLanguage !== '') {
