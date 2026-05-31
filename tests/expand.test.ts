@@ -49,11 +49,25 @@ describe('expand pipeline routing', () => {
     expect(result).toContain('[no translation available: iu-cans]');
   });
 
+  it('verbose-galactic output is at least 1.5× the length of verbose-ultra', () => {
+    const longInput =
+      'Use this to help. Start the process and decide on the next steps. Consider what to do, of course.';
+    const ultra = expand(longInput, 'verbose-ultra');
+    const galactic = expand(longInput, 'verbose-galactic');
+    expect(galactic.length).toBeGreaterThan(ultra.length * 1.5);
+  });
+
+  it('verbose-galactic applies Latin code-switching when "of course" appears', () => {
+    const result = expand('Use this, of course.', 'verbose-galactic');
+    expect(result).toContain('bien évidemment');
+  });
+
   it('is deterministic: same input and mode → same output for all modes', () => {
     const modes: ExpandMode[] = [
       'verbose-lite',
       'verbose-full',
       'verbose-ultra',
+      'verbose-galactic',
       'translate-burmese',
       'translate-tibetan',
       'translate-inuktitut',

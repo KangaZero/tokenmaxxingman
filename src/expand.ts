@@ -3,11 +3,15 @@ import { qualifiers } from './transforms/qualifiers.js';
 import { nominalizations } from './transforms/nominalizations.js';
 import { passive } from './transforms/passive.js';
 import { translate } from './transforms/translate.js';
+import { codeSwitching } from './transforms/code-switching.js';
+import { reduplication } from './tricks/reduplication.js';
+import { rhetoricalQuestions } from './tricks/rhetorical-questions.js';
 
 export type ExpandMode =
   | 'verbose-lite'
   | 'verbose-full'
   | 'verbose-ultra'
+  | 'verbose-galactic'
   | 'translate-burmese'
   | 'translate-tibetan'
   | 'translate-inuktitut'
@@ -24,6 +28,20 @@ const VERBOSE_LITE: Transform = pipe(synonyms);
 const VERBOSE_FULL: Transform = pipe(synonyms, qualifiers);
 const VERBOSE_ULTRA: Transform = pipe(synonyms, qualifiers, nominalizations, passive);
 
+// `verbose-galactic` chains every English-side amplifier: synonym swap,
+// Latin/French code-switching, qualifier injection, nominalization,
+// reduplication, mid-sentence rhetorical interjection, and finally passive
+// voice. The most extreme English mode short of running through translate.
+const VERBOSE_GALACTIC: Transform = pipe(
+  synonyms,
+  codeSwitching,
+  qualifiers,
+  nominalizations,
+  reduplication,
+  rhetoricalQuestions,
+  passive,
+);
+
 // `anti-wenyan` resolves to Inuktitut Syllabics (iu-cans), the natural-language
 // winner of the bundled benchmark under both cl100k_base (2.62 tok/char) and
 // o200k_base (2.68 tok/char) — the empirical opposite of Classical Chinese
@@ -34,6 +52,7 @@ const PIPELINES: ReadonlyMap<ExpandMode, Transform> = new Map([
   ['verbose-lite', VERBOSE_LITE],
   ['verbose-full', VERBOSE_FULL],
   ['verbose-ultra', VERBOSE_ULTRA],
+  ['verbose-galactic', VERBOSE_GALACTIC],
   [
     'translate-burmese',
     pipe(VERBOSE_ULTRA, (input) => translate(input, 'my')),
