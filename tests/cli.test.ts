@@ -81,6 +81,20 @@ describe('CLI', () => {
     expect(stderr).toContain('verbose-lite');
   });
 
+  it('expand --mode anti-wenyan accepts the new mode and exits 0', () => {
+    const { stdout, status } = cli(['expand', '-', '-m', 'anti-wenyan'], { input: 'Use this.' });
+    expect(status).toBe(0);
+    // anti-wenyan resolves to verbose-ultra + Inuktitut translate; the iu-cans
+    // phrasebook does not contain the expanded form, so we expect the fallback.
+    expect(stdout).toContain('[no translation available: iu-cans]');
+  });
+
+  it('--help for expand lists anti-wenyan as a valid mode', () => {
+    const { stdout, status } = cli(['expand', '--help']);
+    expect(status).toBe(0);
+    expect(stdout).toContain('anti-wenyan');
+  });
+
   it('speedrun --tier sprint-1m --max-iterations 1 exits 0 and reports 1 iteration', () => {
     const { stdout, status } = cli(['speedrun', '--tier', 'sprint-1m', '--max-iterations', '1']);
     expect(status).toBe(0);

@@ -38,6 +38,17 @@ describe('expand pipeline routing', () => {
     expect(result).toContain('[no translation available: iu-cans]');
   });
 
+  it('anti-wenyan resolves to the same pipeline as translate-inuktitut', () => {
+    // anti-wenyan is the canonical-name alias for the benchmark-winning natural
+    // language under both cl100k_base and o200k_base (Inuktitut Syllabics).
+    expect(expand(input, 'anti-wenyan')).toEqual(expand(input, 'translate-inuktitut'));
+  });
+
+  it('anti-wenyan output ends with the iu-cans fallback prefix for unknown phrases', () => {
+    const result = expand(input, 'anti-wenyan');
+    expect(result).toContain('[no translation available: iu-cans]');
+  });
+
   it('is deterministic: same input and mode → same output for all modes', () => {
     const modes: ExpandMode[] = [
       'verbose-lite',
@@ -46,6 +57,7 @@ describe('expand pipeline routing', () => {
       'translate-burmese',
       'translate-tibetan',
       'translate-inuktitut',
+      'anti-wenyan',
     ];
     for (const mode of modes) {
       expect(expand(input, mode)).toEqual(expand(input, mode));

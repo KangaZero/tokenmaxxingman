@@ -24,6 +24,7 @@ const EXPAND_MODES: readonly ExpandMode[] = [
   'translate-burmese',
   'translate-tibetan',
   'translate-inuktitut',
+  'anti-wenyan',
 ];
 
 const ENCODING_NAMES: readonly EncodingName[] = ['cl100k_base', 'o200k_base'];

@@ -10,7 +10,8 @@ export type ExpandMode =
   | 'verbose-ultra'
   | 'translate-burmese'
   | 'translate-tibetan'
-  | 'translate-inuktitut';
+  | 'translate-inuktitut'
+  | 'anti-wenyan';
 
 type Transform = (input: string) => string;
 
@@ -22,6 +23,12 @@ function pipe(...transforms: readonly Transform[]): Transform {
 const VERBOSE_LITE: Transform = pipe(synonyms);
 const VERBOSE_FULL: Transform = pipe(synonyms, qualifiers);
 const VERBOSE_ULTRA: Transform = pipe(synonyms, qualifiers, nominalizations, passive);
+
+// `anti-wenyan` resolves to Inuktitut Syllabics (iu-cans), the natural-language
+// winner of the bundled benchmark under both cl100k_base (2.62 tok/char) and
+// o200k_base (2.68 tok/char) — the empirical opposite of Classical Chinese
+// (~1.5 / ~1.0 tok/char). Reproduce with `tmm benchmark`.
+const ANTI_WENYAN_LANG = 'iu-cans';
 
 const PIPELINES: ReadonlyMap<ExpandMode, Transform> = new Map([
   ['verbose-lite', VERBOSE_LITE],
@@ -37,7 +44,11 @@ const PIPELINES: ReadonlyMap<ExpandMode, Transform> = new Map([
   ],
   [
     'translate-inuktitut',
-    pipe(VERBOSE_ULTRA, (input) => translate(input, 'iu-cans')),
+    pipe(VERBOSE_ULTRA, (input) => translate(input, ANTI_WENYAN_LANG)),
+  ],
+  [
+    'anti-wenyan',
+    pipe(VERBOSE_ULTRA, (input) => translate(input, ANTI_WENYAN_LANG)),
   ],
 ]);
 
