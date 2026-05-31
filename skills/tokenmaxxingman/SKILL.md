@@ -1,6 +1,6 @@
 ---
 name: tokenmaxxingman
-version: "0.2.0"
+version: "0.0.1"
 description: >
   Maximalist prose-expansion mode. Inflates token usage by 300-700% through
   synonym substitution, rhetorical amplification, nominalization, and baroque
