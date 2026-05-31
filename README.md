@@ -73,23 +73,88 @@ Results are fully reproducible: pin `gpt-tokenizer` at the committed version, us
 
 ## Install
 
-Not yet published to npm. Intended install command once published:
+Three install paths, depending on what you want. Pick whichever matches your use case — they're not mutually exclusive.
+
+| Path | Gives you | Best for |
+|------|-----------|----------|
+| **Claude Code plugin** | The 4 skills inside Claude Code, namespaced under `/tokenmaxxingman:*` | Anyone who just wants to invoke the skills inside Claude Code |
+| **npm CLI** | The `tokenmaxxingman` / `tmm` binary on your `$PATH` | Anyone who wants the benchmark / speedrun / expand CLI |
+| **Clone + install script** | Both, with skills symlinked to your `~/.claude/skills/` so `git pull` updates them | Contributors, anyone who wants editable skills |
+
+### A) Claude Code plugin (recommended for most users)
+
+This repo ships its own marketplace manifest (`.claude-plugin/marketplace.json`), so Claude Code can install it directly from the git URL — no separate registry needed.
+
+```text
+/plugin marketplace add KangaZero/tokenmaxxingman
+/plugin install tokenmaxxingman@tokenmaxxingman
+```
+
+Run those two commands inside Claude Code. The first registers this repo as a marketplace; the second installs the `tokenmaxxingman` plugin from that marketplace. All four skills (`tokenmaxxingman`, `hallucinatemaxx`, `tokensprint`, `politician`) become available.
+
+To uninstall: `/plugin uninstall tokenmaxxingman` then optionally `/plugin marketplace remove tokenmaxxingman`.
+
+### B) npm — the CLI only
+
+Once published to npm:
 
 ```bash
 npm install -g tokenmaxxingman
+tokenmaxxingman --version
+tmm benchmark
 ```
 
-### Local build
+Both `tokenmaxxingman` and `tmm` are registered as bin entries. After a global install, either name works.
+
+This gives you the CLI, not the Claude Code skills. The skills ship inside the npm tarball at `node_modules/tokenmaxxingman/skills/`, but they're not auto-linked to Claude — for that, use path (A) or (C).
+
+### C) From source / GitHub release
+
+For contributors, or if you want the skills symlinked into your Claude config so repo updates flow through automatically:
 
 ```bash
-git clone https://github.com/samuelwaiweng-yong/tokenmaxxingman
+git clone git@github.com:KangaZero/tokenmaxxingman.git
 cd tokenmaxxingman
+
+# install deps and build the CLI
 npm install
 npm run build
-node dist/cli.js --help
+
+# verify CLI works
+node dist/cli.js --version
+
+# install the four skills into ~/.claude/skills/ as symlinks
+./scripts/install-skills.sh
 ```
 
-Both `tokenmaxxingman` and `tmm` are registered as bin entries in `package.json`. After a global install, either works.
+The install script is idempotent and supports a few flags:
+
+```bash
+./scripts/install-skills.sh                       # symlink (default)
+./scripts/install-skills.sh --copy                # copy instead of symlink
+./scripts/install-skills.sh --force               # overwrite existing skills
+./scripts/install-skills.sh --uninstall           # remove the symlinks
+CLAUDE_SKILLS_DIR=/custom/path ./scripts/install-skills.sh   # target a non-default dir
+```
+
+Default skills target: `$HOME/.claude/skills/`. Override with the `CLAUDE_SKILLS_DIR` env var (useful for non-standard Claude Code installs or testing).
+
+After install, restart Claude Code (or `/restart`) so the skills are picked up.
+
+#### From a GitHub release tarball
+
+If you'd rather not clone, every release attaches a source tarball:
+
+```bash
+# replace 0.0.1 with the version you want from https://github.com/KangaZero/tokenmaxxingman/releases
+curl -L https://github.com/KangaZero/tokenmaxxingman/archive/refs/tags/v0.0.1.tar.gz \
+  | tar -xz
+cd tokenmaxxingman-0.0.1
+npm install && npm run build
+./scripts/install-skills.sh
+```
+
+Same outcome as cloning, minus the git history.
 
 ---
 
