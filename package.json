@@ -55,6 +55,7 @@
     "url": "https://github.com/KangaZero/tokenmaxxingman/issues"
   },
   "homepage": "https://github.com/KangaZero/tokenmaxxingman#readme",
+  "packageManager": "pnpm@11.5.0",
   "publishConfig": {
     "access": "public",
     "provenance": true
@@ -70,6 +71,7 @@
     "@vitest/coverage-v8": "4.1.6",
     "eslint": "10.3.0",
     "eslint-config-prettier": "10.1.8",
+    "jiti": "2.4.2",
     "prettier": "3.8.3",
     "typescript": "6.0.3",
     "typescript-eslint": "8.59.3",

@@ -5,19 +5,26 @@
 ```bash
 git clone https://github.com/KangaZero/tokenmaxxingman.git
 cd tokenmaxxingman
-npm install
-npm run build
-npm test
+pnpm install
+ppnpm run build
+pnpm test
 ```
 
-Requires Node >= 22.
+Requires Node >= 22 LTS. CI matrix runs Node 22 and Node 26.2. Package manager is **pnpm** (workspace at root + `web/`, pinned via `packageManager` in `package.json`). Enable via corepack (ships with Node 22+):
+
+```bash
+corepack enable
+corepack prepare pnpm@11.5.0 --activate
+```
+
+The `pnpm-workspace.yaml` sets `minimumReleaseAge: 10080` (7 days) — pnpm will refuse to install packages whose latest release is < 7 days old, as a supply-chain guard.
 
 ## Project structure
 
 ```
 tokenmaxxingman/
 ├── data/           # Static corpus JSON and schema (committed, not generated at runtime)
-├── dist/           # Compiled output (git-ignored; produced by npm run build)
+├── dist/           # Compiled output (git-ignored; produced by pnpm run build)
 ├── scripts/        # build-corpus.ts — documentation artefact, not run in CI
 ├── skills/         # Claude Code skill definitions (SKILL.md files)
 ├── src/            # All production TypeScript source
@@ -99,7 +106,7 @@ Never commit directly to `main`, `master`, `trunk`, `dev`, `develop`, `release/*
 3. Document the translation provenance in `scripts/build-corpus.ts` — note the source
    (reference grammar, community corpus, human translator). This file is a documentation
    artefact; it never runs in CI.
-4. Re-run the benchmark locally: `npm run build && node dist/benchmark.js`.
+4. Re-run the benchmark locally: `pnpm run build && node dist/benchmark.js`.
 5. Paste the updated ranked results table into `README.md`.
 
 ## Running the speedrun / maxxer locally
@@ -107,7 +114,7 @@ Never commit directly to `main`, `master`, `trunk`, `dev`, `develop`, `release/*
 Build first if you haven't:
 
 ```bash
-npm run build --prefix /path/to/tokenmaxxingman
+ppnpm --dir /path/to/tokenmaxxingman run build
 ```
 
 Speedrun (times how quickly you can produce N tokens of output):
@@ -146,7 +153,7 @@ npm run test:coverage     # run with v8 coverage report
 
 Tests live under `tests/` and import directly from `src/` (not from `dist/`). If you are
 writing an integration test that invokes the built CLI, ensure `dist/` is up to date with
-`npm run build` first. The snapshot test in `tests/expand.test.ts` (or equivalent) uses
+`pnpm run build` first. The snapshot test in `tests/expand.test.ts` (or equivalent) uses
 `toMatchSnapshot()` — if you intentionally change expansion output, run
 `npx vitest run --update-snapshots` and commit the updated snapshot file.
 

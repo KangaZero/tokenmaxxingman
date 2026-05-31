@@ -1,6 +1,11 @@
 node_modules/
 dist/
 coverage/
+web/dist/
 .env*
 .DS_Store
 *.log
+
+# pnpm
+.pnpm-store/
+.pnpm-debug.log*

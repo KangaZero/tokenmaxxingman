@@ -155,8 +155,8 @@ Total commits at time of writing: **11**
 
 ```bash
 git clone https://github.com/KangaZero/tokenmaxxingman
-npm install
-npm run build
+pnpm install
+pnpm run build
 ```
 
 **Run the benchmark:**
