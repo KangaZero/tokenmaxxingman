@@ -1,0 +1,13 @@
+src/
+tests/
+data/
+scripts/
+skills/
+coverage/
+.github/
+eslint.config.js
+vitest.config.ts
+tsconfig.json
+.prettierrc
+.gitignore
+*.log

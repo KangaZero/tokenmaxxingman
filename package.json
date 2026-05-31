@@ -1,0 +1,78 @@
+{
+  "name": "tokenmaxxingman",
+  "version": "0.0.1",
+  "description": "A meticulously deterministic, exhaustively composable, intentionally maximalist tooling artifact for the comprehensive amplification of token expenditure across natural-language workloads — accompanied by a rigorously empirical, corpus-grounded, tokenizer-version-pinned investigation into the question of which natural language, when subjected to byte-pair encoding under cl100k_base or o200k_base vocabularies, tokenizes most prodigiously, inefficiently, and gloriously.",
+  "keywords": [
+    "tokens",
+    "tokenizer",
+    "text-expansion",
+    "verbose",
+    "cli",
+    "claude-skill",
+    "anti-caveman",
+    "benchmark",
+    "nlp",
+    "joke-tooling"
+  ],
+  "type": "module",
+  "main": "./dist/index.js",
+  "bin": {
+    "tokenmaxxingman": "./dist/cli.js",
+    "tmm": "./dist/cli.js"
+  },
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "files": [
+    "dist",
+    "data",
+    "skills",
+    ".claude-plugin",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc --project tsconfig.json",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "format": "prettier --write \"src/**/*.ts\" \"tests/**/*.ts\""
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "author": {
+    "name": "Samuel Wai Weng Yong",
+    "email": "samuelwaiweng.yong@accenture.com"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KangaZero/tokenmaxxingman.git"
+  },
+  "bugs": {
+    "url": "https://github.com/KangaZero/tokenmaxxingman/issues"
+  },
+  "homepage": "https://github.com/KangaZero/tokenmaxxingman#readme",
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "dependencies": {
+    "commander": "14.0.3",
+    "gpt-tokenizer": "3.4.0",
+    "picocolors": "1.1.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "@types/node": "22.19.19",
+    "@vitest/coverage-v8": "4.1.6",
+    "eslint": "10.3.0",
+    "eslint-config-prettier": "10.1.8",
+    "prettier": "3.8.3",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.59.3",
+    "vitest": "4.1.6"
+  }
+}
