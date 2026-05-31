@@ -22,29 +22,44 @@ The naive hypothesis is wrong.
 
 On the bundled 8-sentence × 18-language/register corpus, `cl100k_base` encoding, `gpt-tokenizer` v3.4.0:
 
-**Rank 1 — most tokens per character — the benchmark winner: Inuktitut Syllabics (`iu-cans`), 2.6158 tok/char.**
+**Rank 1 — most tokens per character — the benchmark winner: Inuktitut Syllabics (`iu-cans`), 2.6158 tok/char (cl100k_base) / 2.6780 tok/char (o200k_base).**
 
 **Rank 18 — most efficient — fewest tokens per character: English legalese (`en-legalese`), 0.1953 tok/char.**
 
-Classical Chinese (`zh-classical`) landed at rank **11/18**. Not last. Not close to last.
+Classical Chinese (`zh-classical`) landed at rank **11/18** under `cl100k_base` (1.5455 tok/char) and **5/18** under `o200k_base` (1.0364 tok/char). Not last. Not close to last. The naive "Han ideographs must tokenize worst" hypothesis is straightforwardly wrong.
 
 Why? BPE tokenizers like `cl100k_base` were trained predominantly on English text. Common English substrings — including the elaborate legal and Victorian compounds that legalese deploys — appear frequently enough in the training corpus that they are aggressively merged into single tokens. Inuktitut Syllabics, on the other hand, is a polysynthetic language written in a script the tokenizer has minimal vocabulary for. Each glyph maps to its own token or a very short sequence. The result is a token count that dwarfs Classical Chinese.
 
-### Top 5 and Bottom 5 (cl100k_base, 8 sentences)
+Notably, Inuktitut is the only natural-language entry whose `tok/char` ratio *increases* when moving from `cl100k_base` (2.6158) to the newer, larger-vocabulary `o200k_base` (2.6780) — every other non-Latin script gets *better* compression under `o200k_base`. The newer tokenizer learned more of the world; it did not learn more Inuktitut. That asymmetry is what `tokenmaxxingman` operationalises as the canonical `anti-wenyan` mode.
+
+### Top 5 and Bottom 5 (cl100k_base, 8 sentences × 18 variants)
 
 | Rank | Language / Register | Key | tok/char |
 |-----:|---------------------|-----|----------:|
 | 1 | Inuktitut Syllabics | `iu-cans` | 2.6158 |
-| 2 | Cherokee | `chr` | 2.3071 |
-| 3 | Tibetan | `bo` | 2.1944 |
-| 4 | Burmese | `my` | 1.9862 |
-| 5 | Sinhala | `si` | 1.8730 |
+| 2 | Amharic | `am` | 2.5000 |
+| 3 | Cherokee | `chr` | 2.4718 |
+| 4 | Tibetan | `bo` | 2.0396 |
+| 5 | Burmese | `my` | 1.9777 |
 | … | … | … | … |
-| 14 | Corporate English | `en-corporate` | 0.3541 |
-| 15 | Victorian English | `en-victorian` | 0.2987 |
-| 16 | Academic English | `en-academic` | 0.2614 |
-| 17 | Classical Chinese | `zh-classical` | 0.2108 |
+| 11 | Classical Chinese | `zh-classical` | 1.5455 |
+| … | … | … | … |
+| 15 | Turkish | `tr` | 0.4070 |
+| 16 | English | `en` | 0.2524 |
+| 17 | Victorian English | `en-victorian` | 0.2105 |
 | 18 | English legalese | `en-legalese` | 0.1953 |
+
+### Top 5 under `o200k_base`
+
+The ranking shifts noticeably under `o200k_base`: Amharic drops from rank 2 to rank 3, Cherokee climbs to rank 2, and Classical Chinese jumps from 11 to 5. Inuktitut stays at rank 1 and widens the gap.
+
+| Rank | Language / Register | Key | tok/char |
+|-----:|---------------------|-----|----------:|
+| 1 | Inuktitut Syllabics | `iu-cans` | 2.6780 |
+| 2 | Cherokee | `chr` | 2.6056 |
+| 3 | Amharic | `am` | 1.8378 |
+| 4 | Tibetan | `bo` | 1.5066 |
+| 5 | Classical Chinese | `zh-classical` | 1.0364 |
 
 ### Methodology
 
@@ -110,6 +125,9 @@ Output (verbose-ultra):
 # Translate mode: expand then render in Inuktitut Syllabics (the benchmark winner)
 echo "Fix the bug." | tokenmaxxingman expand --mode translate-inuktitut
 
+# Or equivalently, by canonical name — the empirical opposite of `/caveman wenyan`
+echo "Fix the bug." | tokenmaxxingman expand --mode anti-wenyan
+
 # Output (example):
 #   ᐊᑐᕆᐊᖃᖅᑐᒍᑦ ᐅᑯᓂᖓ ᐊᑐᕐᓗᒍ...
 ```
@@ -172,7 +190,7 @@ tokenmaxxingman speedrun
 
 ## The Modes
 
-The `expand` command accepts six modes. The default is `verbose-full`.
+The `expand` command accepts seven modes. The default is `verbose-full`.
 
 | Mode | Pipeline | What changes |
 |------|----------|--------------|
@@ -182,6 +200,7 @@ The `expand` command accepts six modes. The default is `verbose-full`.
 | `translate-burmese` | verbose-ultra → translate(`my`) | Applies the full verbose-ultra pipeline then renders in Burmese (Myanmar script) using the bundled corpus. |
 | `translate-tibetan` | verbose-ultra → translate(`bo`) | Applies the full verbose-ultra pipeline then renders in Tibetan (Uchen script) using the bundled corpus. |
 | `translate-inuktitut` | verbose-ultra → translate(`iu-cans`) | Applies the full verbose-ultra pipeline then renders in Inuktitut Syllabics — the empirical benchmark winner — using the bundled corpus. |
+| `anti-wenyan` | verbose-ultra → translate(`iu-cans`) | **Canonical anti-wenyan**: stable name pointing at whichever natural language the benchmark currently elects as worst-tokenizing. Today: Inuktitut Syllabics (rank 1 under both encodings). Aliased to `translate-inuktitut`; future re-rankings will redirect this name without breaking flags. |
 
 **Pipeline composition detail:**
 

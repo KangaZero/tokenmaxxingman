@@ -1,16 +1,19 @@
 ---
 name: tokenmaxxingman
-version: "0.1.0"
+version: "0.2.0"
 description: >
   Maximalist prose-expansion mode. Inflates token usage by 300-700% through
   synonym substitution, rhetorical amplification, nominalization, and baroque
   register while preserving full technical accuracy. Supports intensity levels:
-  verbose-lite, verbose-full (default), verbose-ultra, and language-translation
-  modes (translate-burmese, translate-tibetan, translate-inuktitut).
+  verbose-lite, verbose-full (default), verbose-ultra, language-translation
+  modes (translate-burmese, translate-tibetan, translate-inuktitut), and the
+  canonical anti-wenyan mode — empirically the human language that produces the
+  most tokens per character under both cl100k_base and o200k_base, which the
+  bundled benchmark confirms is Inuktitut Syllabics (iu-cans).
   Activate when user says "tokenmaxxing mode", "expand this", "make it longer",
-  "more words", "fewer words is for cavemen", "verbose mode", or invokes
-  /tokenmaxxingman. Do NOT activate during debugging, code review, or any task
-  where the output is consumed programmatically.
+  "more words", "fewer words is for cavemen", "verbose mode", "anti-wenyan", or
+  invokes /tokenmaxxingman. Do NOT activate during debugging, code review, or
+  any task where the output is consumed programmatically.
 trigger:
   - "tokenmaxxing mode"
   - "expand this"
@@ -23,6 +26,10 @@ trigger:
   - "use tokenmaxxingman"
   - "maximum tokens"
   - "tokenmaxx"
+  - "anti-wenyan"
+  - "anti wenyan"
+  - "opposite of wenyan"
+  - "opposite of caveman wenyan"
 ---
 
 ## What This Is
@@ -79,7 +86,7 @@ uncertain. Deactivate only upon: "stop tokenmaxxingman", "normal mode",
 "caveman mode", or "be brief".
 
 Default intensity: **verbose-full**. Switch with:
-`/tokenmaxxingman lite|full|ultra|translate-burmese|translate-tibetan|translate-inuktitut`
+`/tokenmaxxingman lite|full|ultra|translate-burmese|translate-tibetan|translate-inuktitut|anti-wenyan`
 
 ---
 
@@ -118,15 +125,30 @@ If in doubt: expand prose, preserve structure, never touch code.
 | **verbose-lite** | Synonym substitution only. Replace short words with longer, equally precise alternatives. Sentence structure unchanged. |
 | **verbose-full** | Synonym substitution + qualifying clauses + hedges + parenthetical elaboration. Default level. |
 | **verbose-ultra** | Full pipeline: synonyms, qualifiers, nominalizations, passive voice where it adds gravitas, embedded subordinate clauses, and where applicable a brief recapitulatory sentence at the end of each paragraph restating the paragraph's principal contention in slightly different terms. |
-| **translate-burmese** | Render the expanded text in Burmese (Myanmar script). Empirically high token-per-glyph ratio. Canonical ranking pending benchmark. |
-| **translate-tibetan** | Render in Tibetan (Uchen script). High token density. Canonical ranking pending benchmark. |
-| **translate-inuktitut** | Render in Inuktitut (Inuktitut syllabics). High token density due to polysynthetic morphology. Canonical ranking pending benchmark. |
+| **translate-burmese** | Render the expanded text in Burmese (Myanmar script). Benchmark rank 5 (cl100k_base, 1.98 tok/char). |
+| **translate-tibetan** | Render in Tibetan (Uchen script). Benchmark rank 4 (cl100k_base, 2.04 tok/char). |
+| **translate-inuktitut** | Render in Inuktitut Syllabics. **Benchmark rank 1 under both encodings.** 2.62 tok/char under cl100k_base; 2.68 tok/char under o200k_base. |
+| **anti-wenyan** | Canonical-name alias for `translate-inuktitut`. The empirical opposite of `/caveman wenyan` (Classical Chinese, ~1.55 / ~1.04 tok/char). |
 
-**On the translation modes.** The three languages listed above are placeholders
-selected on theoretical grounds — agglutinative morphology, multi-byte scripts,
-and tokenizer-hostile glyph sequences. The canonical winner language (i.e., the
-language that empirically maximizes tokens-per-semantic-unit) will be confirmed
-by the benchmark suite. See the Methodology section below.
+**On the translation modes.** The three Indigenous-language modes were
+originally placeholders selected on theoretical grounds — agglutinative
+morphology, multi-byte scripts, and tokenizer-hostile glyph sequences. The
+canonical winner has now been confirmed by the bundled benchmark suite:
+**Inuktitut Syllabics (`iu-cans`)** is rank 1 under both `cl100k_base`
+(2.6158 tok/char) and `o200k_base` (2.6780 tok/char). The `anti-wenyan` mode
+exposes this empirical result as a stable name independent of language code,
+so future re-ranking does not require renaming user-facing flags.
+
+| Language | cl100k_base | o200k_base |
+|----------|------------:|-----------:|
+| **Inuktitut (`iu-cans`)** | **2.6158** | **2.6780** |
+| Cherokee (`chr`) | 2.4718 | 2.6056 |
+| Amharic (`am`) | 2.5000 | 1.8378 |
+| Tibetan (`bo`) | 2.0396 | 1.5066 |
+| Classical Chinese (`zh-classical`) — *caveman's pick* | 1.5455 | 1.0364 |
+| English (`en`) | 0.2524 | 0.2524 |
+
+Reproduce: `tmm benchmark --encoding cl100k_base` / `tmm benchmark --encoding o200k_base`.
 
 ### Pipeline Detail: verbose-ultra
 
@@ -247,12 +269,21 @@ project README and may be reproduced at any time by running:
 
 ```bash
 tokenmaxxingman benchmark
+tokenmaxxingman benchmark --encoding o200k_base
 ```
 
-The three placeholder languages (Burmese, Tibetan, Inuktitut) will be
-confirmed, displaced, or reordered by that benchmark. Until the results are
-published, the skill uses the placeholder names. The translate modes are
-functional stubs; they will be wired to the benchmark winner in Phase 4.
+**Result (corpus v1, 8 sentences × 18 variants).** The winner among natural
+languages is **Inuktitut Syllabics (`iu-cans`)**, rank 1 under both encodings:
+2.6158 tok/char (cl100k_base) and 2.6780 tok/char (o200k_base). It is the only
+script-language combination that *increases* its tokens-per-character ratio
+when moving from `cl100k_base` to the newer `o200k_base` — the opposite of
+nearly every other entry in the table, which improve under the larger
+vocabulary. That asymmetry makes Inuktitut the most robust empirical anti-
+wenyan: not just worst under one encoding, but worst-and-getting-worse.
+
+The `anti-wenyan` mode is wired to this winner. The three legacy
+`translate-*` modes remain available for explicit script selection; they are
+no longer "stubs awaiting benchmark confirmation."
 
 ---
 

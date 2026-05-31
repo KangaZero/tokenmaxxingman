@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `anti-wenyan` expand mode — canonical, stable name for whichever natural language the bundled benchmark currently elects as worst-tokenizing. Currently aliased to `translate-inuktitut` (Inuktitut Syllabics, rank 1 under both `cl100k_base` at 2.6158 tok/char and `o200k_base` at 2.6780 tok/char). The empirical opposite of `/caveman wenyan` (Classical Chinese, ~1.55 / ~1.04 tok/char).
+- SKILL.md trigger phrases for "anti-wenyan", "anti wenyan", "opposite of wenyan", "opposite of caveman wenyan".
+
+### Changed
+
+- SKILL.md: removed "Phase 4 stub" / "pending benchmark" placeholder language. The benchmark has now been run against both encodings; the canonical anti-wenyan winner is empirically confirmed. SKILL version bumped from 0.1.0 → 0.2.0.
+- README.md: corrected the Top 5 cl100k_base ranking (Amharic restored to rank 2, numbers updated to match `tmm benchmark` output) and added a new Top 5 table for `o200k_base` showing how the ranking shifts under the newer tokenizer.
+
 ## [0.1.0] — Unreleased
 
 ### Added
