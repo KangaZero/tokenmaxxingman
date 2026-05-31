@@ -1,7 +1,7 @@
-# Manual release workflow — triggered via GitHub Actions UI (workflow_dispatch only).
-# Before running: add NPM_TOKEN to repository secrets at
-# Settings → Secrets and variables → Actions → New repository secret.
-# TODO: set NPM_TOKEN secret in repo before dispatching this workflow.
+# Manual npm publish workflow.
+# Before running: set the NPM_TOKEN secret (Automation type) in repo Settings.
+# Triggered via Actions UI (workflow_dispatch only) — pushing a tag does NOT
+# auto-publish.
 
 name: Release
 
@@ -10,7 +10,7 @@ on:
 
 permissions:
   contents: read
-  id-token: write
+  id-token: write  # required for npm provenance attestation
 
 jobs:
   release:
@@ -18,25 +18,36 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: 22
+          node-version: '26.2'
           registry-url: 'https://registry.npmjs.org'
-          cache: 'npm'
+          cache: pnpm
 
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
 
-      - name: Build
-        run: npm run build
+      - name: Typecheck
+        run: pnpm run typecheck
+
+      - name: Lint
+        run: pnpm run lint
 
       - name: Test
-        run: npm test
+        run: pnpm test
 
+      - name: Build
+        run: pnpm run build
+
+      # pnpm publish honours package.json `publishConfig` (access, provenance).
       - name: Publish
-        run: npm publish --provenance --access public
+        run: pnpm publish --no-git-checks
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
