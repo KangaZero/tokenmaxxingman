@@ -1,0 +1,45 @@
+# pnpm workspace + settings (pnpm >= 11).
+#
+# Both the CLI (root) and the website (web/) live under one workspace so
+# `pnpm install` from the repo root installs both. Use `pnpm -F` to scope
+# a command at one member, e.g. `pnpm -F tokenmaxxingman-web run build`.
+
+packages:
+  - '.'
+  - 'web'
+
+# ── supply-chain hardening ────────────────────────────────────────────────
+# Refuse to install packages whose latest release is < 7 days old. Gives
+# the npm security team a window to flag typosquatted / compromised packages
+# before they land in our lockfile.
+#
+# Value is in MINUTES. 7 days × 24 hours × 60 minutes = 10080.
+# Requires pnpm >= 10. The setting name uses camelCase here (workspace YAML
+# convention); the equivalent .npmrc form is `minimum-release-age=10080`.
+minimumReleaseAge: 10080
+
+# ── lockfile hygiene ──────────────────────────────────────────────────────
+# Pin exact versions on `pnpm add`. We never want ^/~ ranges to slip into
+# package.json — they undermine the lockfile contract.
+saveExact: true
+
+# ── peer-dependency strictness ────────────────────────────────────────────
+# Refuse install if peerDeps are missing or mismatched. Surfaces real
+# breakage at install-time rather than at runtime.
+strictPeerDependencies: true
+
+# ── postinstall script allowlist ──────────────────────────────────────────
+# pnpm >= 10 blocks arbitrary postinstall scripts by default. Only these
+# packages may run install/postinstall scripts. Add new entries ONLY after
+# auditing the script and understanding why it's needed.
+#
+#   esbuild — required to fetch the platform-specific native binary that
+#             Vite uses for transformation. Without this, web builds fail.
+onlyBuiltDependencies:
+  - esbuild
+
+# Some tooling expects an `allowBuilds` map; keep an explicit `true` for
+# esbuild to match. The canonical pnpm setting above (`onlyBuiltDependencies`)
+# is what pnpm 11 actually reads.
+allowBuilds:
+  esbuild: true
