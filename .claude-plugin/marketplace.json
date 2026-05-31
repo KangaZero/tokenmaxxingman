@@ -1,0 +1,22 @@
+{
+  "name": "tokenmaxxingman",
+  "owner": {
+    "name": "Samuel Wai Weng Yong",
+    "email": "samuelwaiweng.yong@accenture.com",
+    "url": "https://github.com/KangaZero"
+  },
+  "metadata": {
+    "description": "The tokenmaxxingman plugin family — maximalist anti-caveman skills (tokenmaxxingman, hallucinatemaxx, tokensprint, politician), plus a tokenization benchmark CLI.",
+    "version": "0.0.1"
+  },
+  "plugins": [
+    {
+      "name": "tokenmaxxingman",
+      "source": ".",
+      "description": "Maximalist prose expansion (verbose-lite/full/ultra), anti-wenyan translate modes (Burmese, Tibetan, Inuktitut), and the canonical anti-wenyan alias backed by the bundled tokenization benchmark.",
+      "version": "0.0.1",
+      "category": "writing",
+      "keywords": ["tokens", "anti-caveman", "verbose", "benchmark"]
+    }
+  ]
+}
