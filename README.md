@@ -118,9 +118,9 @@ For contributors, or if you want the skills symlinked into your Claude config so
 git clone git@github.com:KangaZero/tokenmaxxingman.git
 cd tokenmaxxingman
 
-# install deps and build the CLI
-npm install
-npm run build
+# install deps and build the CLI (pnpm workspace covers CLI + web site)
+pnpm install
+pnpm run build
 
 # verify CLI works
 node dist/cli.js --version
@@ -128,6 +128,8 @@ node dist/cli.js --version
 # install the four skills into ~/.claude/skills/ as symlinks
 ./scripts/install-skills.sh
 ```
+
+This repo uses **pnpm** (pinned via `packageManager` in `package.json`). Corepack picks the right version automatically on Node 22+. If you don't have pnpm: `brew install pnpm` or `corepack enable && corepack prepare pnpm@11.5.0 --activate`.
 
 The install script is idempotent and supports a few flags:
 
@@ -152,7 +154,7 @@ If you'd rather not clone, every release attaches a source tarball:
 curl -L https://github.com/KangaZero/tokenmaxxingman/archive/refs/tags/v0.0.1.tar.gz \
   | tar -xz
 cd tokenmaxxingman-0.0.1
-npm install && npm run build
+pnpm install && pnpm run build
 ./scripts/install-skills.sh
 ```
 
@@ -311,31 +313,44 @@ The CLI (`src/cli.ts`) is a thin integration layer. It reads from a file or stdi
 
 ## Development
 
+This repo is a **pnpm workspace** (root CLI + `web/` site). Package manager pinned via the `packageManager` field; a 7-day `minimumReleaseAge` rule in `pnpm-workspace.yaml` blocks freshly-published versions from entering the lockfile (supply-chain guard).
+
 Most common commands are wrapped in a [`justfile`](./justfile). Install [`just`](https://github.com/casey/just) (`brew install just`), then:
 
 ```bash
 just                # list every recipe
-just install        # install CLI + web deps
+just install        # pnpm install (CLI + web in one go)
 just ci             # full gate: typecheck + lint + tests + build + web build
 just web-dev        # http://localhost:5173/tokenmaxxingman/ — the marketing site
 just benchmark-all  # ranking under both encodings
 just install-skills # symlink skills into ~/.claude/skills/
 ```
 
-Or use npm scripts directly if you'd rather not install `just`:
+Or use pnpm directly:
 
 ```bash
-npm run build       # compile TypeScript to dist/
-npm run typecheck   # tsc --noEmit, no emit, strict mode
-npm run lint        # eslint on src/
-npm test            # vitest run (unit + integration + snapshot)
-npm run format      # prettier --write on src/ and tests/
+pnpm install                                # workspace-wide install
+pnpm run build                              # compile TypeScript to dist/
+pnpm run typecheck                          # tsc --noEmit, strict mode
+pnpm run lint                               # eslint on src/
+pnpm test                                   # vitest run (unit + integration + snapshot)
+pnpm run format                             # prettier --write on src/ and tests/
+pnpm -F tokenmaxxingman-web run build       # site build → web/dist/
+pnpm -F tokenmaxxingman-web run dev         # site dev server
 ```
 
 Test coverage report:
 
 ```bash
-npx vitest run --coverage
+pnpm exec vitest run --coverage
+```
+
+### Node version
+
+Engines: `>=22` (current LTS floor). CI runs against Node **22** and **26.2** in matrix. To match CI locally, use [`fnm`](https://github.com/Schniz/fnm) or `nvm`:
+
+```bash
+fnm install 26.2.0 && fnm use 26.2.0
 ```
 
 The snapshot test in `tests/snapshot/expansion.test.ts` will fail if the output of `expand("The quick fox.", 'verbose-ultra')` changes. Update snapshots explicitly with `--update-snapshots` if a transform change is intentional.
@@ -350,7 +365,7 @@ Node >= 22 required. The project targets Node 24 but runs on 22.
 
 **Corpus entries are not strict translations.** Several non-English entries in `data/corpus.json` are assembled from public-domain script samples and reference grammars rather than direct translations of the English source sentences. The benchmark ranks tokenizer behavior for that script-language pair under `cl100k_base`. It does not claim the entries are semantically equivalent to the English originals.
 
-**Tokenizer-version-specific results.** Results are pinned to `gpt-tokenizer` v3.4.0. If the BPE vocabulary changes in a future version, token counts will shift. The exact semver is pinned in `package.json` (no `^`) and `package-lock.json` is committed. Reproduce results by using the committed lock file.
+**Tokenizer-version-specific results.** Results are pinned to `gpt-tokenizer` v3.4.0. If the BPE vocabulary changes in a future version, token counts will shift. The exact semver is pinned in `package.json` (no `^`) and `pnpm-lock.yaml` is committed. Reproduce results by using the committed lock file.
 
 **The transforms are heuristic, not complete.** The passive and nominalization transforms use regex pattern matching, not a full NLP parse. Complex sentences, compound clauses, and inverted syntax pass through unchanged. The transforms never silently mangle text — unmatched input is returned verbatim.
 
