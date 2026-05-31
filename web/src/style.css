@@ -1,0 +1,64 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    background: radial-gradient(ellipse at top, #1a1a1a 0%, #0a0a0a 50%, #050505 100%);
+    background-attachment: fixed;
+    min-height: 100vh;
+  }
+  ::selection {
+    background-color: theme('colors.accent.DEFAULT');
+    color: theme('colors.ink');
+  }
+}
+
+@layer components {
+  .glow-accent {
+    box-shadow:
+      0 0 32px -8px theme('colors.accent.DEFAULT'),
+      0 0 64px -16px theme('colors.accent.soft');
+  }
+
+  .glow-cool {
+    box-shadow:
+      0 0 32px -8px theme('colors.cool.DEFAULT'),
+      0 0 64px -16px theme('colors.cool.deep');
+  }
+
+  .stat-figure {
+    @apply font-display font-bold tabular-nums tracking-tight;
+    background: linear-gradient(135deg, theme('colors.accent.soft') 0%, theme('colors.accent.DEFAULT') 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .pill {
+    @apply inline-flex items-center gap-2 rounded-full border border-bone/15 bg-bone/5 px-3 py-1 text-xs font-medium uppercase tracking-wider text-bone/70;
+  }
+
+  .grid-bg {
+    background-image:
+      linear-gradient(to right, rgba(250, 250, 247, 0.04) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(250, 250, 247, 0.04) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+
+  .card {
+    @apply rounded-2xl border border-bone/10 bg-bone/[0.03] p-6 backdrop-blur-sm transition-all duration-300;
+  }
+  .card:hover {
+    @apply border-bone/25 bg-bone/[0.05];
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
