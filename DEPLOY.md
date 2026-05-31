@@ -1,8 +1,9 @@
 # Deploy instructions
 
 **Target:** npm package (public)
-**Artifact:** `tokenmaxxingman@0.1.0` via `npm publish`
+**Artifact:** `tokenmaxxingman@<version>` via `pnpm publish`
 **Repo:** https://github.com/KangaZero/tokenmaxxingman
+**Workspace:** pnpm (root + `web/`, pinned via `packageManager` field)
 
 ---
 
@@ -10,17 +11,17 @@
 
 | Tool | Required version | Check |
 |------|-----------------|-------|
-| Node.js | >= 22 | `node --version` |
-| npm | >= 10 | `npm --version` |
+| Node.js | >= 22 LTS (CI runs 22 + 26.2) | `node --version` |
+| pnpm | matches `packageManager` field — auto via corepack | `pnpm --version` |
 | Git | any recent | `git --version` |
-| npm account | publish rights on `tokenmaxxingman` | `npm whoami` |
+| npm registry account | publish rights on `tokenmaxxingman` | `pnpm whoami --registry=https://registry.npmjs.org` |
 
-For **manual publish with provenance** only:
+Enable pnpm via corepack (ships with Node):
 
-| Tool | Required version |
-|------|-----------------|
-| Node.js | >= 24 |
-| npm | >= 11.5 |
+```bash
+corepack enable
+corepack prepare pnpm@11.5.0 --activate
+```
 
 The `NPM_TOKEN` repository secret must be configured before dispatching the
 GitHub Actions release workflow. See `GITHUB_SETUP.md` for exact steps.
@@ -32,28 +33,24 @@ GitHub Actions release workflow. See `GITHUB_SETUP.md` for exact steps.
 Run every command from the project root. Each must exit 0 before proceeding.
 
 ```bash
-npm --prefix /Users/samuelwaiweng.yong/Documents/tokenmaxxingman ci
-npm --prefix /Users/samuelwaiweng.yong/Documents/tokenmaxxingman run typecheck
-npm --prefix /Users/samuelwaiweng.yong/Documents/tokenmaxxingman run lint
-npm --prefix /Users/samuelwaiweng.yong/Documents/tokenmaxxingman test
-npm --prefix /Users/samuelwaiweng.yong/Documents/tokenmaxxingman run build
+pnpm install --frozen-lockfile
+pnpm run typecheck
+pnpm run lint
+pnpm test
+pnpm run build
 ```
 
-If you are working from the project root directly:
+Or use the single `just` recipe that runs the full CI gate:
 
 ```bash
-npm ci
-npm run typecheck
-npm run lint
-npm test
-npm run build
+just ci
 ```
 
 ---
 
 ## 3. Pre-publish smoke test
 
-After `npm run build` succeeds, confirm the CLI entry point is functional.
+After `pnpm run build` succeeds, confirm the CLI entry point is functional.
 
 ### `--help`
 
@@ -143,7 +140,7 @@ after pushing the tag (see section 5).
 4. Select the branch or tag you want to publish from.
 5. Click the green **"Run workflow"** button.
 
-The workflow runs: `npm ci` → `npm run build` → `npm test` → `npm publish --provenance --access public`.
+The workflow runs: `pnpm install --frozen-lockfile` → `pnpm run typecheck` → `pnpm run lint` → `pnpm test` → `pnpm run build` → `pnpm publish` (with `publishConfig.provenance: true` and `publishConfig.access: public` set in `package.json`).
 
 Provenance attestation is automatic because `release.yml` sets:
 
@@ -155,22 +152,20 @@ permissions:
 
 ### Option B — Manual publish (local machine)
 
-Requires Node >= 24 and npm >= 11.5 for `--provenance` to work locally.
+Requires Node >= 24 for `--provenance` to work locally.
 
 ```bash
-npm login
-npm publish --access public --provenance
+pnpm login --registry=https://registry.npmjs.org
+pnpm publish --provenance
 ```
 
-If your Node/npm version does not support provenance, omit `--provenance`:
+`access: public` and `provenance: true` are set in `publishConfig` in
+`package.json`, so no flag is needed. If your Node version does not support
+provenance, omit it:
 
 ```bash
-npm publish --access public
+pnpm publish --no-provenance
 ```
-
-Do NOT use `npm publish` without `--access public` — the package is scoped
-to public by `publishConfig` in `package.json`, but being explicit avoids
-accidental private publishes.
 
 ---
 
@@ -179,7 +174,7 @@ accidental private publishes.
 Allow 30–60 seconds for the registry to propagate, then:
 
 ```bash
-npm view tokenmaxxingman
+pnpm view tokenmaxxingman
 ```
 
 Expected: package metadata including `version: '0.1.0'`, `dist-tags.latest`,
@@ -199,20 +194,20 @@ npm does not allow unpublishing packages that have been public for more than
 72 hours. The correct rollback is deprecation:
 
 ```bash
-npm deprecate tokenmaxxingman@0.1.0 "Critical bug — use 0.1.1 instead"
+pnpm deprecate tokenmaxxingman@0.0.1 "Critical bug — use 0.1.1 instead"
 ```
 
 To undo a deprecation (clear the message):
 
 ```bash
-npm deprecate tokenmaxxingman@0.1.0 ""
+pnpm deprecate tokenmaxxingman@0.0.1 ""
 ```
 
 If the package is within the 72-hour window and unpublishing is truly
 necessary:
 
 ```bash
-npm unpublish tokenmaxxingman@0.1.0
+npm unpublish tokenmaxxingman@0.0.1
 ```
 
 **Do not use `npm unpublish tokenmaxxingman` (no version) — that removes the
