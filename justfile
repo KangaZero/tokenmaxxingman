@@ -147,6 +147,21 @@ release-page version:
     @open "https://github.com/KangaZero/tokenmaxxingman/releases/new?tag=v{{version}}" || \
      xdg-open "https://github.com/KangaZero/tokenmaxxingman/releases/new?tag=v{{version}}"
 
+# Dry-run the npm publish: build + test, then preview package contents.
+# Safe — never touches the registry. Run this before any real publish.
+publish-dry: build test
+    pnpm publish --dry-run --no-git-checks
+    @echo "✓ dry-run complete — nothing published"
+
+# Publish to npm for real from this machine (build + test gate first).
+# NOTE: package.json sets publishConfig.provenance=true, which requires a
+# supported CI runner. From a local shell that fails, so this recipe passes
+# --no-provenance. For a provenance-signed release use `just publish-npm`
+# (CI). Requires `npm login` first.
+publish-live: build test
+    pnpm publish --no-provenance
+    @echo "✓ published tokenmaxxingman to npm"
+
 # Trigger the npm publish workflow on GitHub (requires gh CLI + auth).
 publish-npm:
     gh workflow run release.yml --repo KangaZero/tokenmaxxingman
