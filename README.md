@@ -285,7 +285,7 @@ See [`skills/tokenmaxxingman/SKILL.md`](./skills/tokenmaxxingman/SKILL.md) for f
 
 ## The Skills
 
-Four Claude Code skills ship with this project.
+Five Claude Code skills ship with this project — four prose modes and one utility.
 
 - **[tokenmaxxingman](./skills/tokenmaxxingman/SKILL.md)** — The primary skill. Activates maximalist prose expansion in Claude responses. Trigger: `/tokenmaxxingman`, `"tokenmaxxing mode"`, `"expand this"`, `"fewer words is for cavemen"`, `"anti-wenyan"`. Default intensity: `verbose-full`. Persists for the session. Auto-reverts to plain prose for code blocks, debugging, security warnings, and structured data — the same boundary rules caveman uses, inverted.
 
@@ -294,6 +294,8 @@ Four Claude Code skills ship with this project.
 - **[tokensprint](./skills/tokensprint/SKILL.md)** — Conversational speedrun mode. Claude races to generate the maximum number of tokens within a user-specified time budget, narrated in a collision of sportscaster commentary and Victorian legalese. Four tiers: `sprint-1m` (~5,000 tokens), `sprint-5m` (~50,000), `sprint-10m` (~150,000), `sprint-1h` (~1,000,000 or context ceiling). Produces a score card at sprint end. For programmatic, reproducible sprinting use `tokenmaxxingman speedrun` via the CLI. Trigger: `/tokensprint`, `"let's speedrun tokens"`. Does not persist — each sprint is a discrete event.
 
 - **[politician](./skills/politician/SKILL.md)** — Deflection-and-waffle mode. Yes/no questions get dragged into multi-paragraph waffle; approximately half the time, the question is never actually answered — instead reframed, pivoted from, or acknowledged as "important" with no commitment. Includes a Mistake-Handling Doctrine for the "deny, gaslight, scapegoat, pivot, reset" pattern when called on a hallucination. Three intensity levels: `backbench` / `full` (default) / `filibuster`. Trigger: `/politician`, `"answer like a politician"`, `"weasel out of this"`. Does not persist across turns. **Same hard exemptions as the other anti-skills** — never fires on real code, security warnings, medical/legal/financial questions, or any context where a real answer is needed to act on.
+
+- **[yolo](./skills/yolo/SKILL.md)** — Utility skill (not a prose mode). Opt-in auto-accept setup for agent CLIs. On invocation it detects the agent CLI you are *currently running inside* (via env vars) plus every supported CLI installed on PATH — **Claude Code** (`permissions.defaultMode = "bypassPermissions"` in `~/.claude/settings.json`), **Gemini CLI** (`--yolo`), **Codex** (`--dangerously-bypass-approvals-and-sandbox`), **Aider** (`--yes-always`) — then **asks before disabling that tool's confirmation prompts**. Backed by `skills/yolo/enable-yolo.sh` (run `--status` to inspect, `--current` to scope to the running CLI). Defaults to **no**, backs up config before editing, and refuses to run without an interactive terminal. **Security:** this removes the last guardrail between an agent and your filesystem/credentials/remotes — personal dev boxes only, never shared/prod/CI. Trigger: `/yolo`, `"enable yolo"`, `"auto accept all edits"`, `"bypass permissions"`. Never auto-enables; does not persist.
 
 ---
 
