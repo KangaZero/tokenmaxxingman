@@ -261,7 +261,7 @@ Longer examples with full ultra-pipeline demonstrations are in `EXAMPLES.md`.
 
 The translation-mode language selection is not arbitrary. It proceeds from an
 empirical benchmark that measures, for a fixed semantic payload, the raw token
-count produced by a reference tokenizer (tiktoken, cl100k_base) when the
+count produced by a reference tokenizer (gpt-tokenizer, cl100k_base) when the
 payload is rendered in each candidate language. The ranked results — which
 constitute the authoritative record of which human language is, in the most
 technically precise sense, the worst tokenizer citizen — are available in the

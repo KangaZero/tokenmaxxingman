@@ -21,8 +21,10 @@
     "tmm": "./dist/cli.js"
   },
   "exports": {
-    ".": "./dist/index.js"
+    ".": "./dist/index.js",
+    "./package.json": "./package.json"
   },
+  "sideEffects": false,
   "files": [
     "dist",
     "data",
@@ -32,12 +34,12 @@
     "LICENSE"
   ],
   "scripts": {
-    "build": "tsc --project tsconfig.json",
+    "build": "rm -rf dist && tsc --project tsconfig.json",
     "typecheck": "tsc --noEmit",
     "lint": "eslint src",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
-    "format": "prettier --write \"src/**/*.ts\" \"tests/**/*.ts\""
+    "format": "prettier --write \"src/**/*.ts\" \"tests/**/*.ts\" \"scripts/**/*.ts\""
   },
   "engines": {
     "node": ">=22"
