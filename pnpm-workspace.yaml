@@ -38,8 +38,5 @@ strictPeerDependencies: true
 onlyBuiltDependencies:
   - esbuild
 
-# Some tooling expects an `allowBuilds` map; keep an explicit `true` for
-# esbuild to match. The canonical pnpm setting above (`onlyBuiltDependencies`)
-# is what pnpm 11 actually reads.
 allowBuilds:
-  esbuild: true
+  esbuild: set this to true or false

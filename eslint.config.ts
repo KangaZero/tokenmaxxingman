@@ -9,15 +9,16 @@ export default tseslint.config(
   {
     languageOptions: {
       parserOptions: {
-        project: true,
+        projectService: true,
         tsconfigRootDir: import.meta.dirname,
       },
     },
     rules: {
       '@typescript-eslint/no-explicit-any': 'error',
-      '@typescript-eslint/no-unused-vars': 'error',
-      '@typescript-eslint/explicit-function-return-type': ['warn', { allowExpressions: true }],
-      'no-console': 'error',
+      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }],
+      '@typescript-eslint/explicit-function-return-type': ['error', { allowExpressions: true }],
+      '@typescript-eslint/consistent-type-imports': 'error',
+      'no-console': ['error', { allow: ['warn', 'error'] }],
     },
   },
   {
