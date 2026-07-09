@@ -17,13 +17,9 @@ const CONNECTORS: readonly string[] = [
 
 function rephrase(sentence: string): string {
   // Apply passive first, then synonyms to create a visibly different surface form.
-  const passivized = passive(sentence);
-  const verbosified = synonyms(passivized);
-  // If neither transform changed anything, at minimum append a synonym pass alone.
-  if (verbosified === sentence) {
-    return synonyms(sentence);
-  }
-  return verbosified;
+  // If neither transform changes the sentence the result simply equals the input;
+  // there is no distinct fallback to attempt (synonyms(passive(x)) already covers it).
+  return synonyms(passive(sentence));
 }
 
 export function repetition(input: string): string {

@@ -47,12 +47,16 @@ describe('maxxer', () => {
     expect(high.length).toBeGreaterThanOrEqual(low.length);
   });
 
-  // Gap: MEMORY_BUDGET_BYTES short-circuit — input already > 1 MB causes the loop to break
-  // on the very first iteration check, returning the input unchanged.
-  it('returns input unchanged when it already exceeds the 1 MB memory budget', () => {
+  // MEMORY_BUDGET_BYTES caps growth ACROSS passes: a large input is still expanded
+  // once, then the budget halts further passes. So an oversized input is transformed
+  // (not returned unchanged), and passes:3 collapses to the same single-pass output.
+  it('expands an oversized input exactly once, then halts further passes at the budget', () => {
     const oversizedInput = 'x'.repeat(1_048_577); // 1 MB + 1 byte
-    const result = maxxer(oversizedInput, { passes: 3 });
-    expect(result).toBe(oversizedInput);
+    const onePass = maxxer(oversizedInput, { passes: 1 });
+    const threePasses = maxxer(oversizedInput, { passes: 3 });
+    expect(onePass).not.toBe(oversizedInput);
+    expect(onePass.length).toBeGreaterThan(oversizedInput.length);
+    expect(threePasses).toBe(onePass);
   });
 
   // Gap: snapshot test — pins the deterministic output of a single-pass expansion with

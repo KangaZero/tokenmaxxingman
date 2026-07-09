@@ -45,11 +45,19 @@ function parseDuration(value: string): number {
   }
   const n = parseFloat(raw);
   switch (match[2]) {
-    case 'ms': return n;
-    case 's': return n * 1_000;
-    case 'm': return n * 60_000;
-    case 'h': return n * 3_600_000;
-    default: return n;
+    case 'ms':
+      return n;
+    case 's':
+      return n * 1_000;
+    case 'm':
+      return n * 60_000;
+    case 'h':
+      return n * 3_600_000;
+    default:
+      // Unreachable: the regex only admits ms|s|m|h. Fail loudly rather than
+      // silently returning an unconverted count if the pattern ever changes.
+      console.error(`Error: unsupported duration unit in "${value}"`);
+      process.exit(2);
   }
 }
 
@@ -104,11 +112,11 @@ function loadCorpus(): Corpus {
   if (
     typeof parsed !== 'object' ||
     parsed === null ||
-    !('version' in parsed) ||
-    !Array.isArray((parsed as Record<string, unknown>).languages) ||
-    !Array.isArray((parsed as Record<string, unknown>).sentences)
+    (parsed as Record<string, unknown>)['version'] !== '1' ||
+    !Array.isArray((parsed as Record<string, unknown>)['languages']) ||
+    !Array.isArray((parsed as Record<string, unknown>)['sentences'])
   ) {
-    console.error(`Error: corpus.json has unexpected structure`);
+    console.error(`Error: corpus.json has unexpected structure (expected version "1")`);
     process.exit(1);
   }
   return parsed as Corpus;
@@ -116,13 +124,11 @@ function loadCorpus(): Corpus {
 
 let pkg: { version: string };
 try {
-  const rawPkg: unknown = JSON.parse(
-    readFileSync(resolve(__dirname, '../package.json'), 'utf-8'),
-  );
+  const rawPkg: unknown = JSON.parse(readFileSync(resolve(__dirname, '../package.json'), 'utf-8'));
   if (
     typeof rawPkg !== 'object' ||
     rawPkg === null ||
-    typeof (rawPkg as Record<string, unknown>).version !== 'string'
+    typeof (rawPkg as Record<string, unknown>)['version'] !== 'string'
   ) {
     console.error(`Error: package.json has unexpected structure`);
     process.exit(1);
@@ -159,7 +165,11 @@ program
   .command('benchmark')
   .description('Run the tokenisation benchmark against the bundled corpus.')
   .option('-f, --format <fmt>', 'output format: markdown | json', 'markdown')
-  .option('-e, --encoding <enc>', `tokenizer encoding: ${ENCODING_NAMES.join(' | ')}`, 'cl100k_base')
+  .option(
+    '-e, --encoding <enc>',
+    `tokenizer encoding: ${ENCODING_NAMES.join(' | ')}`,
+    'cl100k_base',
+  )
   .option('--pretty', 'pretty-print JSON output (only applies when --format json)')
   .action((opts: { format: string; encoding: string; pretty: boolean }) => {
     const encoding = validateEncoding(opts.encoding);
@@ -307,9 +317,10 @@ program
 
       try {
         const input = await readInput(file);
-        const output = opts.parallel === true
-          ? await maxxerParallel(input, maxxerOpts)
-          : maxxer(input, maxxerOpts);
+        const output =
+          opts.parallel === true
+            ? await maxxerParallel(input, maxxerOpts)
+            : maxxer(input, maxxerOpts);
         process.stdout.write(output + '\n');
       } catch (err) {
         console.error(`Error: ${err instanceof Error ? err.message : String(err)}`);

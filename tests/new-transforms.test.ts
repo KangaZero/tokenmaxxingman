@@ -54,7 +54,8 @@ describe('rhetoricalQuestions', () => {
   });
 
   it('is deterministic across calls', () => {
-    const input = 'One two three four five. Six seven eight nine ten. Eleven twelve thirteen fourteen.';
+    const input =
+      'One two three four five. Six seven eight nine ten. Eleven twelve thirteen fourteen.';
     expect(rhetoricalQuestions(input)).toEqual(rhetoricalQuestions(input));
   });
 

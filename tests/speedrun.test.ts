@@ -117,7 +117,10 @@ describe('speedrun', () => {
   // Gap: output.length > OUTPUT_CAP (4096) — the currentInput slicing branch at line 68.
   // Use a seed large enough that its verbose-ultra expansion exceeds 4096 chars.
   it('slices currentInput when expanded output exceeds OUTPUT_CAP (4096 chars)', () => {
-    const longSeed = 'Use this to help. Start the process. Consider what to do. Find a way. Make a plan. '.repeat(5);
+    const longSeed =
+      'Use this to help. Start the process. Consider what to do. Find a way. Make a plan. '.repeat(
+        5,
+      );
     const result = speedrun({
       durationMs: 100,
       seed: longSeed,

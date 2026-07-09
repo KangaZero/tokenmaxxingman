@@ -16,7 +16,8 @@ describe('expand pipeline routing', () => {
   });
 
   it('verbose-ultra output is at least 2× the length of input', () => {
-    const longInput = 'Use this to help. Start the process and decide on the next steps. Consider what to do.';
+    const longInput =
+      'Use this to help. Start the process and decide on the next steps. Consider what to do.';
     const result = expand(longInput, 'verbose-ultra');
     expect(result.length).toBeGreaterThanOrEqual(longInput.length * 2);
   });

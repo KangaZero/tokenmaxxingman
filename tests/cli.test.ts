@@ -15,7 +15,10 @@ beforeAll(() => {
   execSync(`npm run build --prefix "${PROJECT_ROOT}"`, { stdio: 'inherit' });
 }, 60_000);
 
-function cli(args: string[], opts: { input?: string } = {}): { stdout: string; stderr: string; status: number } {
+function cli(
+  args: string[],
+  opts: { input?: string } = {},
+): { stdout: string; stderr: string; status: number } {
   try {
     const stdout = execFileSync(process.execPath, [CLI, ...args], {
       input: opts.input,

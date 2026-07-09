@@ -112,9 +112,7 @@ describe('runBenchmark sort tiebreaker branches', () => {
     const sparseCorpus = {
       version: '1' as const,
       description: 'minimal caveats corpus',
-      sentences: [
-        { id: 's01', english: 'Hello.', translations: { en: 'Hello.' } },
-      ],
+      sentences: [{ id: 's01', english: 'Hello.', translations: { en: 'Hello.' } }],
       languages: [
         { code: 'en', name: 'English', family: 'natural' as const, script: 'Latin', notes: '' },
         // 'zz' has no matching translation → totalCharacters === 0 → tokensPerCharacter = 0
@@ -172,9 +170,7 @@ describe('runBenchmark sort tiebreaker branches', () => {
     const fullTieCorpus = {
       version: '1' as const,
       description: 'full tie caveats corpus',
-      sentences: [
-        { id: 's01', english: 'Hi.', translations: { aa: 'Hi.', bb: 'Hi.' } },
-      ],
+      sentences: [{ id: 's01', english: 'Hi.', translations: { aa: 'Hi.', bb: 'Hi.' } }],
       languages: [
         { code: 'bb', name: 'B', family: 'natural' as const, script: 'Latin', notes: '' },
         { code: 'aa', name: 'A', family: 'natural' as const, script: 'Latin', notes: '' },

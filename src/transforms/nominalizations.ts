@@ -34,7 +34,10 @@ const NOMINALIZATIONS: ReadonlyMap<string, string> = new Map([
 ]);
 
 const NOMINALIZATION_PATTERNS: ReadonlyMap<RegExp, string> = new Map(
-  [...NOMINALIZATIONS].map(([verb, nounPhrase]) => [new RegExp(`\\b(${verb})\\b`, 'gi'), nounPhrase]),
+  [...NOMINALIZATIONS].map(([verb, nounPhrase]) => [
+    new RegExp(`\\b(${verb})\\b`, 'gi'),
+    nounPhrase,
+  ]),
 );
 
 export function nominalizations(input: string): string {

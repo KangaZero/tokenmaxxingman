@@ -60,9 +60,7 @@ describe('nominalizations', () => {
   });
 
   it('converts "implement" to a noun-phrase form', () => {
-    expect(nominalizations('We will implement this')).toContain(
-      'carry out the implementation of',
-    );
+    expect(nominalizations('We will implement this')).toContain('carry out the implementation of');
   });
 
   it('is deterministic: same input → same output', () => {
@@ -71,9 +69,7 @@ describe('nominalizations', () => {
   });
 
   it('leaves unmatched verbs unchanged', () => {
-    expect(nominalizations('The cat sat on the mat.')).toEqual(
-      'The cat sat on the mat.',
-    );
+    expect(nominalizations('The cat sat on the mat.')).toEqual('The cat sat on the mat.');
   });
 });
 

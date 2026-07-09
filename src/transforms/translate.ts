@@ -16,7 +16,10 @@ const BURMESE_PHRASEBOOK: ReadonlyMap<string, string> = new Map([
   ['Goodbye.', 'နှုတ်ဆက်ပါသည်။'],
   ['I understand.', 'နားလည်ပါသည်။'],
   ['I do not understand.', 'နားမလည်ပါ။'],
-  ['The quick brown fox jumps over the lazy dog.', 'မြန်ဆန်သော အညိုရောင် မြေခွေးသည် ပျင်းရိသော ခွေးကို ကျော်ခုန်သည်။'],
+  [
+    'The quick brown fox jumps over the lazy dog.',
+    'မြန်ဆန်သော အညိုရောင် မြေခွေးသည် ပျင်းရိသော ခွေးကို ကျော်ခုန်သည်။',
+  ],
   ['The sun rises in the east.', 'နေသည် အရှေ့မှ ထွက်သည်။'],
 ]);
 
@@ -29,7 +32,10 @@ const TIBETAN_PHRASEBOOK: ReadonlyMap<string, string> = new Map([
   ['Goodbye.', 'གཞན་ལ་རྒྱུགས་གནང་།'],
   ['I understand.', 'ང་ཧ་གོ་བྱུང་།'],
   ['I do not understand.', 'ང་ཧ་མི་གོ།'],
-  ['The quick brown fox jumps over the lazy dog.', 'མགྱོགས་པའི་སྐྱ་ཁྱི་རྒྱལ་པོས་ལེལ་ཕབ་ཀྱི་ཁྱི་ལ་བརྒལ་ལྡིང་།'],
+  [
+    'The quick brown fox jumps over the lazy dog.',
+    'མགྱོགས་པའི་སྐྱ་ཁྱི་རྒྱལ་པོས་ལེལ་ཕབ་ཀྱི་ཁྱི་ལ་བརྒལ་ལྡིང་།',
+  ],
   ['The sun rises in the east.', 'ཉི་མ་ཤར་ཕྱོགས་ནས་འཆར།'],
 ]);
 
