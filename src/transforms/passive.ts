@@ -1,3 +1,5 @@
+import { splitOnSentenceBoundaries } from '../utils/text.js';
+
 // Heuristic passive-voice conversion using regex.
 // LIMITATIONS (intentional, documented):
 //   - Only handles simple SVO patterns: "Subject Verbs Object" in a single clause.
@@ -75,12 +77,7 @@ function convertSentenceToPassive(sentence: string): string {
   if (match === null) return sentence;
 
   const [, subject, verb, object, punct] = match;
-  if (
-    subject === undefined ||
-    verb === undefined ||
-    object === undefined ||
-    punct === undefined
-  ) {
+  if (subject === undefined || verb === undefined || object === undefined || punct === undefined) {
     return sentence;
   }
 
@@ -93,8 +90,9 @@ function convertSentenceToPassive(sentence: string): string {
 
 export function passive(input: string): string {
   // Process sentence by sentence so multi-sentence inputs are handled gracefully.
-  return input
-    .split(/(?<=[.!?])\s+/)
+  // splitOnSentenceBoundaries filters empty fragments, avoiding the double-space
+  // artefacts an inline split would leave on trailing punctuation/whitespace.
+  return splitOnSentenceBoundaries(input)
     .map((sentence) => convertSentenceToPassive(sentence))
     .join(' ');
 }

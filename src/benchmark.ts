@@ -23,7 +23,7 @@ export interface BenchmarkResult {
 }
 
 export function runBenchmark(corpus: Corpus, encoding: EncodingName): BenchmarkResult {
-  const unranked = corpus.languages.map((lang) => {
+  const unranked: Array<Omit<BenchmarkRow, 'rank'>> = corpus.languages.map((lang) => {
     let totalTokens = 0;
     let totalCharacters = 0;
     let totalBytes = 0;
@@ -52,7 +52,6 @@ export function runBenchmark(corpus: Corpus, encoding: EncodingName): BenchmarkR
       sentenceCount,
       tokensPerCharacter,
       tokensPerSentence,
-      rank: 0,
     };
   });
 

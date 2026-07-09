@@ -77,7 +77,7 @@ export function padding(input: string, opts?: Partial<PaddingOptions>): string {
     output += ` ${phrase} the substance of the preceding statement warrants serious attention.`;
     extra++;
     // Guard: never loop more than phrase bank size times to avoid infinite loops on tiny inputs.
-    if (extra > PADDING_PHRASES.length * multiplier) break;
+    if (extra >= PADDING_PHRASES.length * multiplier) break;
   }
 
   return output;

@@ -24,7 +24,7 @@ export interface MaxxerOptions {
 
 const MAX_PASSES = 5;
 const CHUNK_COUNT = 4;
-const MEMORY_BUDGET_BYTES = 1_048_576; // 1 MB hard cap per pass
+const MEMORY_BUDGET_BYTES = 1_048_576; // 1 MB — stop growing output once a pass crosses this
 
 function runPipeline(input: string, opts: ResolvedOptions): string {
   let result = input;
@@ -70,8 +70,11 @@ export function maxxer(input: string, opts?: MaxxerOptions): string {
   let result = input;
 
   for (let pass = 0; pass < resolved.passes; pass++) {
-    if (result.length > MEMORY_BUDGET_BYTES) break;
     result = runPipeline(result, resolved);
+    // Stop before the next pass once output has crossed the budget. The check
+    // runs after the pass so a large initial input still gets expanded once,
+    // rather than being silently returned unchanged.
+    if (result.length > MEMORY_BUDGET_BYTES) break;
   }
 
   return result;
@@ -96,9 +99,7 @@ export async function maxxerParallel(input: string, opts?: MaxxerOptions): Promi
 
   // Promise.all here is structurally parallel-ready; all work is CPU-bound/sync in this runtime.
   // A future worker_threads upgrade can replace the inner maxxer call with a worker message.
-  const processed = await Promise.all(
-    chunks.map((chunk) => Promise.resolve(maxxer(chunk, opts))),
-  );
+  const processed = await Promise.all(chunks.map((chunk) => Promise.resolve(maxxer(chunk, opts))));
 
   return processed.join(' ');
 }

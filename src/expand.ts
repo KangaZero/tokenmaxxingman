@@ -20,8 +20,7 @@ export type ExpandMode =
 type Transform = (input: string) => string;
 
 function pipe(...transforms: readonly Transform[]): Transform {
-  return (input: string) =>
-    transforms.reduce((acc, transform) => transform(acc), input);
+  return (input: string) => transforms.reduce((acc, transform) => transform(acc), input);
 }
 
 const VERBOSE_LITE: Transform = pipe(synonyms);
@@ -48,27 +47,19 @@ const VERBOSE_GALACTIC: Transform = pipe(
 // (~1.5 / ~1.0 tok/char). Reproduce with `tmm benchmark`.
 const ANTI_WENYAN_LANG = 'iu-cans';
 
+// `translate-inuktitut` and `anti-wenyan` are two names for the same pipeline
+// (Inuktitut is the benchmark winner). Share one Transform so they can never drift.
+const ANTI_WENYAN: Transform = pipe(VERBOSE_ULTRA, (input) => translate(input, ANTI_WENYAN_LANG));
+
 const PIPELINES: ReadonlyMap<ExpandMode, Transform> = new Map([
   ['verbose-lite', VERBOSE_LITE],
   ['verbose-full', VERBOSE_FULL],
   ['verbose-ultra', VERBOSE_ULTRA],
   ['verbose-galactic', VERBOSE_GALACTIC],
-  [
-    'translate-burmese',
-    pipe(VERBOSE_ULTRA, (input) => translate(input, 'my')),
-  ],
-  [
-    'translate-tibetan',
-    pipe(VERBOSE_ULTRA, (input) => translate(input, 'bo')),
-  ],
-  [
-    'translate-inuktitut',
-    pipe(VERBOSE_ULTRA, (input) => translate(input, ANTI_WENYAN_LANG)),
-  ],
-  [
-    'anti-wenyan',
-    pipe(VERBOSE_ULTRA, (input) => translate(input, ANTI_WENYAN_LANG)),
-  ],
+  ['translate-burmese', pipe(VERBOSE_ULTRA, (input) => translate(input, 'my'))],
+  ['translate-tibetan', pipe(VERBOSE_ULTRA, (input) => translate(input, 'bo'))],
+  ['translate-inuktitut', ANTI_WENYAN],
+  ['anti-wenyan', ANTI_WENYAN],
 ]);
 
 export function expand(input: string, mode: ExpandMode): string {

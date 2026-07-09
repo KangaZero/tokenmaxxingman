@@ -5,7 +5,8 @@ import { footnotes } from '../src/tricks/footnotes.js';
 import { parentheticals } from '../src/tricks/parentheticals.js';
 import { citation } from '../src/tricks/citation.js';
 
-const MULTI_SENTENCE = 'The quick fox runs fast. The lazy dog sleeps. Every result matters greatly.';
+const MULTI_SENTENCE =
+  'The quick fox runs fast. The lazy dog sleeps. Every result matters greatly.';
 const SINGLE_WORD = 'Hello';
 const EMPTY = '';
 

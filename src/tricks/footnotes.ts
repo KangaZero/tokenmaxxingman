@@ -26,7 +26,9 @@ const FOOTNOTE_ASIDES: readonly string[] = [
 export function footnotes(input: string): string {
   if (input.trim().length === 0) return input;
 
-  const words = input.split(' ');
+  // Split on runs of whitespace so consecutive spaces/tabs/newlines don't yield
+  // empty entries that would surface as double-spaces in the joined output.
+  const words = input.trim().split(/\s+/);
   if (words.length <= 1) return input;
 
   const result: string[] = [];
