@@ -9,7 +9,8 @@ const wenyanMultiplier = computed(() =>
 const o200kDelta = computed(() => {
   const cl = HEADLINE_STATS.topRowCl100k.tokensPerCharacter;
   const o = HEADLINE_STATS.topRowO200k.tokensPerCharacter;
-  return (((o - cl) / cl) * 100).toFixed(1);
+  const delta = ((o - cl) / cl) * 100;
+  return `${delta >= 0 ? '+' : ''}${delta.toFixed(1)}`;
 });
 
 const stats = computed(() => [
@@ -20,7 +21,7 @@ const stats = computed(() => [
   },
   {
     label: 'Inuktitut gets worse on o200k_base by',
-    figure: `+${o200kDelta.value}%`,
+    figure: `${o200kDelta.value}%`,
     note: 'the only natural-language entry that worsens',
   },
   {
