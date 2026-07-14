@@ -11,35 +11,46 @@ import SiteFooter from './components/SiteFooter.vue';
 </script>
 
 <template>
+  <!-- skip-to-content: visible only on keyboard focus -->
+  <a
+    href="#main-content"
+    class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-accent focus:px-4 focus:py-2 focus:font-medium focus:text-ink focus:shadow-lg"
+  >
+    Skip to main content
+  </a>
+
   <AnnouncementBanner />
-  <main class="relative isolate min-h-screen overflow-x-hidden">
+
+  <main id="main-content" class="relative isolate min-h-screen overflow-x-hidden">
     <div class="pointer-events-none absolute inset-0 -z-10 grid-bg opacity-60"></div>
 
     <Hero />
     <StatRow />
 
-    <section id="benchmark" class="relative mx-auto max-w-6xl px-6 py-24">
+    <section id="benchmark" aria-labelledby="benchmark-heading" class="relative mx-auto max-w-6xl px-6 py-24">
       <div class="mb-12 flex flex-col gap-3">
         <span class="pill">benchmark · cl100k_base</span>
-        <h2 class="font-display text-4xl font-bold text-bone md:text-5xl">
+        <h2 id="benchmark-heading" class="font-display text-4xl font-bold text-bone md:text-5xl">
           The naive hypothesis is <span class="text-accent">wrong.</span>
         </h2>
         <p class="max-w-3xl text-lg text-bone/70">
-          You would expect Classical Chinese to top the table — dense ideographs, surely the worst case
-          for byte-pair encoding. It is not even close. Inuktitut Syllabics is
-          <span class="font-mono text-bone">7.2×</span> worse than wenyan, and
+          You would expect Finnish or Turkish to top the table — agglutinative morphology,
+          one surface form for what English needs an entire phrase. It is not even close.
+          Inuktitut is polysynthetic: a single word encodes an entire clause.
+          That word costs <span class="font-mono text-bone">21</span> tokens.
+          <span class="font-mono text-bone">7.2×</span> worse than Classical Chinese, and
           <span class="font-mono text-bone">16.7×</span> worse than English. The opposite of
-          <a class="text-accent underline-offset-4 hover:underline" href="https://getcaveman.dev/">caveman</a>
-          is not "more characters." It is <em class="italic">this</em>.
+          <a class="text-accent underline-offset-4 hover:underline" href="https://getcaveman.dev/" rel="noopener noreferrer">caveman</a>
+          is not "more words." It is <em class="italic">this</em>.
         </p>
       </div>
       <BenchmarkBarChart />
     </section>
 
-    <section id="comparison" class="relative mx-auto max-w-6xl px-6 py-24">
+    <section id="comparison" aria-labelledby="comparison-heading" class="relative mx-auto max-w-6xl px-6 py-24">
       <div class="mb-12 flex flex-col gap-3">
         <span class="pill">cl100k_base vs o200k_base</span>
-        <h2 class="font-display text-4xl font-bold text-bone md:text-5xl">
+        <h2 id="comparison-heading" class="font-display text-4xl font-bold text-bone md:text-5xl">
           The newer tokenizer is <span class="text-cool">worse</span> at Inuktitut.
         </h2>
         <p class="max-w-3xl text-lg text-bone/70">
@@ -51,10 +62,10 @@ import SiteFooter from './components/SiteFooter.vue';
       <EncodingComparisonChart />
     </section>
 
-    <section id="skills" class="relative mx-auto max-w-6xl px-6 py-24">
+    <section id="skills" aria-labelledby="skills-heading" class="relative mx-auto max-w-6xl px-6 py-24">
       <div class="mb-12 flex flex-col gap-3">
         <span class="pill">four skills · zero external deps</span>
-        <h2 class="font-display text-4xl font-bold text-bone md:text-5xl">
+        <h2 id="skills-heading" class="font-display text-4xl font-bold text-bone md:text-5xl">
           The anti-skill family.
         </h2>
         <p class="max-w-3xl text-lg text-bone/70">
@@ -66,10 +77,10 @@ import SiteFooter from './components/SiteFooter.vue';
       <SkillsGrid />
     </section>
 
-    <section id="pipeline" class="relative mx-auto max-w-6xl px-6 py-24">
+    <section id="pipeline" aria-labelledby="pipeline-heading" class="relative mx-auto max-w-6xl px-6 py-24">
       <div class="mb-12 flex flex-col gap-3">
         <span class="pill">deterministic · spec-driven · local-first</span>
-        <h2 class="font-display text-4xl font-bold text-bone md:text-5xl">
+        <h2 id="pipeline-heading" class="font-display text-4xl font-bold text-bone md:text-5xl">
           A pipeline you can audit.
         </h2>
         <p class="max-w-3xl text-lg text-bone/70">
@@ -80,10 +91,10 @@ import SiteFooter from './components/SiteFooter.vue';
       <PipelineFlow />
     </section>
 
-    <section id="install" class="relative mx-auto max-w-6xl px-6 py-24">
+    <section id="install" aria-labelledby="install-heading" class="relative mx-auto max-w-6xl px-6 py-24">
       <div class="mb-12 flex flex-col gap-3">
         <span class="pill">install · three paths</span>
-        <h2 class="font-display text-4xl font-bold text-bone md:text-5xl">
+        <h2 id="install-heading" class="font-display text-4xl font-bold text-bone md:text-5xl">
           Pick a path. Ship today.
         </h2>
       </div>

@@ -19,6 +19,7 @@ const maxAmp = Math.max(...stages.map((s) => s.amp));
     >
       <div class="flex flex-shrink-0 items-center gap-4 md:w-56">
         <div
+          aria-hidden="true"
           class="flex h-10 w-10 items-center justify-center rounded-full border border-bone/20 bg-bone/5 font-mono text-sm text-bone/70"
         >
           {{ i + 1 }}
@@ -30,11 +31,18 @@ const maxAmp = Math.max(...stages.map((s) => s.amp));
 
       <div class="flex-1 min-w-0">
         <p class="truncate font-display text-base text-bone/90">{{ stage.glyph }}</p>
-        <p class="mt-0.5 text-xs text-bone/40">{{ stage.note }}</p>
+        <p class="mt-0.5 text-xs text-bone/50">{{ stage.note }}</p>
       </div>
 
       <div class="flex flex-shrink-0 items-center gap-3 md:w-48">
-        <div class="relative h-2 flex-1 overflow-hidden rounded-full bg-bone/10">
+        <div
+          role="progressbar"
+          :aria-valuenow="Math.round((stage.amp / maxAmp) * 100)"
+          aria-valuemin="0"
+          aria-valuemax="100"
+          :aria-label="`${stage.name} amplification: ${stage.amp.toFixed(1)}×`"
+          class="relative h-2 flex-1 overflow-hidden rounded-full bg-bone/10"
+        >
           <div
             class="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-accent-soft to-accent"
             :style="{ width: `${(stage.amp / maxAmp) * 100}%` }"

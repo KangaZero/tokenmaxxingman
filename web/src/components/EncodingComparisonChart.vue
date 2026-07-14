@@ -88,7 +88,12 @@ const options: ChartOptions<'bar'> = {
 </script>
 
 <template>
-  <div class="card p-8" style="height: 480px">
+  <div
+    role="img"
+    aria-label="Grouped bar chart comparing cl100k_base vs o200k_base tok/word for 7 languages. Most scripts improve under o200k_base. Inuktitut is the only language that worsens: 21.05 → 21.55 tok/word."
+    class="card p-8"
+    style="height: 480px"
+  >
     <Bar :data="chartData" :options="options" />
   </div>
   <p class="mt-4 text-sm text-bone/50">

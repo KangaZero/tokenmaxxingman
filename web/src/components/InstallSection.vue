@@ -52,6 +52,8 @@ npm install && npm run build
       <h3 class="font-display text-2xl font-bold text-bone">{{ path.title }}</h3>
       <p class="text-sm text-bone/60">{{ path.blurb }}</p>
       <pre
+        tabindex="0"
+        :aria-label="`${path.title} install commands`"
         class="overflow-x-auto rounded-lg border border-bone/10 bg-ink/60 p-4 font-mono text-xs leading-relaxed text-bone/85"
       ><code>{{ path.code }}</code></pre>
     </article>
@@ -70,10 +72,11 @@ npm install && npm run build
       <a
         href="https://github.com/casey/just"
         target="_blank"
-        rel="noopener"
+        rel="noopener noreferrer"
         class="inline-flex shrink-0 items-center justify-center rounded-full border border-accent/40 px-5 py-2.5 text-sm font-medium text-accent transition-all hover:bg-accent/10"
       >
-        Get just →
+        Get just <span aria-hidden="true">→</span>
+        <span class="sr-only">(opens in new tab)</span>
       </a>
     </div>
   </div>

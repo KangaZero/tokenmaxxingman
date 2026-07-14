@@ -1,171 +1,261 @@
 # Contributing to tokenmaxxingman
 
-## Quick start
+We are not here to help efficiently. We are here to spend tokens with the
+unhurried magnanimity of a Belle Epoque dowager who has never once been
+presented with a bill she found surprising.
+
+This document describes, in rather more detail than is strictly necessary,
+how one might go about contributing to a project whose primary measure of
+success is the deliberate and principled waste of computational resources.
+
+---
+
+## The Mission
+
+**Core metric: token amplification ratio.**
+
+A contribution that doubles the token count of a given input is considered
+satisfactory. A contribution that triples it while simultaneously reducing
+the usefulness of the output is considered commendable. A contribution that
+achieves 21× amplification — the empirical ceiling established by the Inuktitut
+Syllabics benchmark — is the formal target. We do not expect to exceed it.
+We have not stopped trying.
+
+The amplification ratio is computed as:
+
+```
+amplification = tokens(output) / tokens(input)
+```
+
+Reproduce the benchmark at any time:
 
 ```bash
-git clone https://github.com/KangaZero/tokenmaxxingman.git
-cd tokenmaxxingman
-pnpm install
-ppnpm run build
-pnpm test
+just benchmark
+tmm benchmark --encoding cl100k_base
+tmm benchmark --encoding o200k_base
 ```
 
-Requires Node >= 22 LTS. CI matrix runs Node 22 and Node 26.2. Package manager is **pnpm** (workspace at root + `web/`, pinned via `packageManager` in `package.json`). Enable via corepack (ships with Node 22+):
+---
+
+## Adding a New Anti-Skill
+
+### 1. Create the skill directory and SKILL.md
 
 ```bash
-corepack enable
-corepack prepare pnpm@11.5.0 --activate
+mkdir skills/<name>
+touch skills/<name>/SKILL.md
 ```
 
-The `pnpm-workspace.yaml` sets `minimumReleaseAge: 10080` (7 days) — pnpm will refuse to install packages whose latest release is < 7 days old, as a supply-chain guard.
+Follow the frontmatter schema exactly:
 
-## Project structure
-
+```yaml
+---
+name: <slug>
+version: "0.0.1"
+description: >
+  One-paragraph description. What it does, when it fires, what it produces.
+  Token amplification ratio (measured or estimated).
+trigger:
+  - "/slug"
+  - "natural language trigger"
+  - "another trigger phrase"
+---
 ```
-tokenmaxxingman/
-├── data/           # Static corpus JSON and schema (committed, not generated at runtime)
-├── dist/           # Compiled output (git-ignored; produced by pnpm run build)
-├── scripts/        # build-corpus.ts — documentation artefact, not run in CI
-├── skills/         # Claude Code skill definitions (SKILL.md files)
-├── src/            # All production TypeScript source
-├── tests/          # Vitest test suite
-├── eslint.config.js
-├── tsconfig.json
-└── vitest.config.ts
+
+### 2. Write the skill body
+
+Required sections, in order:
+
+1. **What This Is** — The philosophical premise. What inversion does this
+   skill perform? What does it satirise? The joke must be stated plainly;
+   it is funnier that way.
+
+2. **When to Fire** — Explicit trigger conditions. List every invocation
+   phrase. State that the skill persists across turns once activated.
+
+3. **When NOT to Fire** — Categorical exemptions. These are non-negotiable:
+   - Code blocks, variable names, function names, commit messages — never touched.
+   - Debugging and error analysis — plain prose only.
+   - Code review — precision required; baroque code review is actively harmful.
+   - Security warnings and irreversible operations — always plain.
+   - Structured data (JSON, YAML, TOML) — emitted normally.
+
+4. **Before / After Examples** — A minimum of three examples demonstrating
+   the transformation at each intensity level the skill supports. The examples
+   must be measured, not estimated. Run `tmm benchmark` or count manually.
+
+5. **Caveats** — The mandatory disclaimer. Include: "This is a joke skill."
+   Include the deployment warning. Include the statement that the caveman
+   skill is correct and this skill is its shadow.
+
+### 3. Register in `web/src/data/benchmark.ts`
+
+Add an entry to the `SKILLS` array:
+
+```typescript
+{
+  slug: '<name>',
+  name: '<name>',
+  tagline: 'One sentence. Deadpan.',
+  description: 'Two sentences. Formal register. State the amplification.',
+  triggers: ['/<name>', 'trigger phrase', 'another phrase'],
+  accent: 'accent' | 'cool',
+},
 ```
 
-`src/` contains `cli.ts` (integration point only), `expand.ts` (pipeline composer),
-`benchmark.ts`, `tokenizer.ts`, `maxxer.ts`, `speedrun.ts`, and the sub-directories
-`transforms/`, `formatters/`, and `tricks/`.
+Alternate `accent` values across skills for visual variety on the skills grid.
 
-## Architecture
-
-The mental model is: **input → transforms → optional translate → output**. Five pure
-functions in `src/transforms/` each handle one concern (synonym inflation, qualifier
-injection, nominalization, passive-voice wrapping, corpus-based translation). `src/expand.ts`
-selects and composes these into a pipeline based on the requested mode — it knows nothing about
-I/O. The benchmark in `src/benchmark.ts` is a separate, read-only path: it reads the static
-corpus, tokenizes every language variant via the wrapper in `src/tokenizer.ts`, and returns
-ranked rows; it does not share state with the expansion pipeline. `speedrun.ts` and `maxxer.ts`
-compose the same primitives from `expand.ts` with different control-flow constraints. The CLI
-in `src/cli.ts` is thin (≈180 lines): it parses arguments with `commander`, reads stdin or a
-file, and delegates entirely to library modules — no logic lives there.
-
-## Conventions
-
-- TypeScript strict mode. `no-explicit-any` is an ESLint error; use `unknown` at I/O
-  boundaries and narrow with type guards.
-- ESM only (`"type": "module"`). Never use `require()` or `module.exports`.
-- All transform functions must be pure: `(input: string) => string`, no side effects, no I/O.
-- Transforms must be deterministic. No `Math.random()` and no `Date.now()` except inside
-  `speedrun.ts` where timing is the explicit purpose.
-- Comments only when the WHY is non-obvious (a hidden constraint, a heuristic limitation, a
-  BPE edge case). Never comment what the code already says.
-
-## Commits
-
-Use [Conventional Commits](https://www.conventionalcommits.org/):
-
-| Prefix | When |
-|---|---|
-| `feat:` | New capability |
-| `fix:` | Bug fix |
-| `docs:` | Documentation only |
-| `chore:` | Config, tooling, dependencies |
-| `test:` | Test additions or changes |
-| `refactor:` | Internal restructure, no behaviour change |
-| `style:` | Formatting only |
-
-Subject line: imperative mood, ≤ 72 characters (`add synonym table for legal register`, not
-`added` or `adding`). Body explains WHY, not what — the diff already shows what.
-
-## Branching
-
-Never commit directly to `main`, `master`, `trunk`, `dev`, `develop`, `release/*`, or
-`prod/*`. Always work on a feature branch and open a PR. Branch names should be descriptive:
-`feat/add-georgian-corpus`, `fix/passive-svo-edge-case`.
-
-## Adding a new transform
-
-1. Create `src/transforms/<name>.ts`. Export a single named function with signature
-   `(input: string) => string`.
-2. The function must be deterministic — same input always produces the same output.
-3. Register it in `src/transforms/index.ts` as a named export.
-4. If the transform fits naturally into an existing verbosity pipeline, wire it into the
-   appropriate pipeline in `src/expand.ts`.
-5. Add a unit test in `tests/transforms.test.ts` with at least one known-input → known-output
-   assertion and one idempotency or edge-case check.
-
-## Adding a new language to the corpus
-
-1. Add an entry to `data/corpus.json` following the existing schema (see
-   `data/corpus.schema.json`). Every sentence object must include all 8 required translation
-   fields — partial entries will fail schema validation.
-2. Add the language key and display label to the languages array in `src/corpus-types.ts` (or
-   wherever the canonical list lives).
-3. Document the translation provenance in `scripts/build-corpus.ts` — note the source
-   (reference grammar, community corpus, human translator). This file is a documentation
-   artefact; it never runs in CI.
-4. Re-run the benchmark locally: `pnpm run build && node dist/benchmark.js`.
-5. Paste the updated ranked results table into `README.md`.
-
-## Running the speedrun / maxxer locally
-
-Build first if you haven't:
+### 4. Verify
 
 ```bash
-ppnpm --dir /path/to/tokenmaxxingman run build
+just ci
 ```
 
-Speedrun (times how quickly you can produce N tokens of output):
+All 156 tests must pass. TypeScript strict mode; `tsc --noEmit` must produce
+no output.
+
+---
+
+## Anti-Skill Quality Gate
+
+A pull request introducing a new anti-skill will be evaluated against the
+following criteria. Failure on any criterion is grounds for rejection.
+
+### (a) It must produce more tokens than the original.
+
+This is not negotiable. An anti-skill that produces equal or fewer tokens
+is not an anti-skill. It is a skill, and it is in the wrong repository.
+
+### (b) It must preserve technical accuracy while destroying usefulness.
+
+The transformation must be semantically faithful. The output must mean the
+same thing as the input, in the same way that a 12-paragraph legal contract
+means the same thing as a handshake. Accuracy is the constraint. Usefulness
+is the target.
+
+### (c) It must be funny through rigor, not randomness.
+
+The output must be predictable. A Markov chain that occasionally produces
+verbose sentences is not an anti-skill; it is entropy. The amplification
+must follow a documented, reproducible pipeline. The joke depends on the
+procedure. A baroque transformation performed inconsistently is merely verbose.
+Ours is baroque with procedure.
+
+### (d) The token amplification ratio must be measurable.
+
+Estimate it in the SKILL.md. Measure it. If the measured ratio is below 2×,
+reconsider the scope of the transformation. If it is above 10×, document
+the pipeline in detail. If it is above 20×, you may have discovered something
+important and should open an issue before submitting a PR.
+
+### The One Rule
+
+> **If your contribution accidentally makes the tool more useful, it will be
+> rejected.**
+
+This is not cruelty. It is quality control. The satirical premise collapses
+the moment the tool does something genuinely helpful. We have worked very
+hard to avoid this.
+
+---
+
+## Adding a Benchmark Language
+
+The benchmark measures token cost for a fixed semantic payload across language
+variants. To add a new language:
+
+### 1. Add the language corpus to `src/benchmark.ts`
+
+```typescript
+{
+  code: 'xx',       // BCP 47 tag, or custom if BCP 47 is unavailable
+  name: 'Language Name',
+  locale: 'xx',    // passed to Intl.Segmenter for word counting
+  sentences: [
+    'Sentence one, translated.',
+    'Sentence two, translated.',
+    // ... 8 sentences total, matching the canonical English corpus
+  ],
+}
+```
+
+The canonical corpus is 8 sentences covering: a declarative statement, a
+question, a technical instruction, a hedged assertion, a list, a warning,
+a complaint, and an imperative. Match the semantic payload; do not paraphrase.
+
+### 2. Run the benchmark
 
 ```bash
-echo "Explain quantum entanglement." | node dist/cli.js expand --mode verbose-ultra
+npm test
+just benchmark
 ```
 
-Maxxer (maximizes a given input to hit a target token budget):
+The test suite will compute `tokensPerCharacter`, `tokensPerWord`, and
+`tokensPerSentence` for both `cl100k_base` and `o200k_base`. If the language's
+BCP 47 tag is invalid, `Intl.Segmenter` will fall back to `undefined` locale
+and word count may be approximate — document this in the SKILL.md if relevant.
+
+### 3. Update `web/src/data/benchmark.ts`
+
+Copy the computed values into `CL100K_ROWS` and `O200K_ROWS`, maintaining
+sort order by `tokensPerWord` descending.
+
+---
+
+## Running Tests
 
 ```bash
-echo "Use this tool." | node dist/cli.js expand --mode verbose-ultra
+just ci          # full gate: typecheck + lint + test + build
+just web-dev     # spin up the Vite dev server for the web app
+just benchmark   # re-run the benchmark and print the table
+npm test         # vitest only
+tsc --noEmit     # typecheck only
 ```
 
-Benchmark (ranked table of token density by language across the corpus):
+The CI gate runs identically locally and in GitHub Actions. If it passes
+locally, it passes in CI. If it fails in CI but not locally, check `node`
+and `pnpm` versions.
 
-```bash
-node dist/cli.js benchmark --format markdown
-node dist/cli.js benchmark --format json
-```
+---
 
-Or via the bin alias after `npm link` or global install:
+## Code Style
 
-```bash
-tmm benchmark
-tmm expand --mode verbose-lite
-echo "Fix this." | tmm expand --mode verbose-full
-```
+**TypeScript always.** No `any`. If the type cannot be determined, use
+`unknown` as a last resort and document why. The compiler is an ally.
 
-## Tests
+**No external libraries** unless the library is:
+1. Genuinely the industry-standard solution for the problem, AND
+2. Actively maintained (last commit within the last year), OR
+3. Unmaintained for at least a decade and you have a very good reason.
 
-```bash
-npm test                  # run full suite with vitest
-npm run test:coverage     # run with v8 coverage report
-```
+The third clause exists for `okay-boomer` mode compatibility testing only.
+Do not use it in production code.
 
-Tests live under `tests/` and import directly from `src/` (not from `dist/`). If you are
-writing an integration test that invokes the built CLI, ensure `dist/` is up to date with
-`pnpm run build` first. The snapshot test in `tests/expand.test.ts` (or equivalent) uses
-`toMatchSnapshot()` — if you intentionally change expansion output, run
-`npx vitest run --update-snapshots` and commit the updated snapshot file.
+**Functional style preferred.** Hooks, pure functions, composition over
+inheritance. Small focused functions. No class hierarchies.
 
-Target: ≥ 80% line coverage across `src/`. New code that meaningfully reduces coverage below
-this threshold will be flagged in review.
+**DRY, but readability first.** Three similar lines is not necessarily an
+abstraction opportunity. Do not extract a function unless it will be called
+from more than one place or the name meaningfully clarifies intent.
 
-## The joke
+**Zero comments** unless the WHY is non-obvious. The code is the documentation.
+The SKILL.md is the specification. Comments are not the README.
 
-tokenmaxxingman is the inverse of caveman. Caveman strips language to its minimum viable
-token count; tokenmaxxingman inflates it to the maximum. The rigor — a pinned tokenizer, a
-committed corpus, deterministic transforms, a ranked empirical benchmark — is the punchline.
-The more seriously the engineering is taken, the funnier it gets. Please keep contributions
-aligned with that spirit: technically clean, tonally absurd. Do not add shortcuts that break
-determinism, do not add runtime API calls, and do not make the code clever at the expense of
-readability. The joke only works if the thing actually works.
+---
+
+## Submitting a Pull Request
+
+1. Fork the repo. Branch from `main`.
+2. Name the branch: `feat/<slug>` for new skills, `fix/<thing>` for fixes,
+   `bench/<language>` for benchmark additions.
+3. Run `just ci`. All checks must pass.
+4. Open the PR against `main`. The title should be one line. The body should
+   include: what the skill does, the measured amplification ratio, and the
+   before/after example that best demonstrates the satire.
+5. Do not include the phrase "looking forward to your feedback" in the PR body.
+   We are not running a feelings seminar. We are reviewing code.
+
+---
+
+*tokenmaxxingman is a joke. The Contributor Covenant at `CODE_OF_CONDUCT.md`
+is not. Please read it.*

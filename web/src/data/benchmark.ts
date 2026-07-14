@@ -95,6 +95,15 @@ export const SKILLS = [
     triggers: ['/politician', 'answer like a politician', 'weasel out of this'],
     accent: 'cool',
   },
+  {
+    slug: 'okay-boomer',
+    name: 'okay-boomer',
+    tagline: 'var, callbacks, jQuery 1.x. Get off my lawn.',
+    description:
+      'Rewrites your code using deprecated patterns, abandoned packages, and ancient browser APIs. Bonus: unsolicited opinions about why React is unnecessary and PHP was fine. Three intensities: boomer-lite, boomer-full (default), boomer-ultra.',
+    triggers: ['/okay-boomer', 'old school', 'use deprecated'],
+    accent: 'cool',
+  },
 ] as const;
 
 // Derived headline stats — recomputed when the benchmark JSON changes.

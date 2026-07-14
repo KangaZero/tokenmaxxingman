@@ -5,19 +5,28 @@ const tokenRatio = (HEADLINE_STATS.topRowO200k.tokensPerWord / HEADLINE_STATS.en
 </script>
 
 <template>
-  <section class="relative isolate overflow-hidden px-6 pt-32 pb-20 md:pt-40 md:pb-32">
+  <section aria-labelledby="hero-heading" class="relative isolate overflow-hidden px-6 pt-32 pb-20 md:pt-40 md:pb-32">
     <!-- ambient glows -->
     <div class="pointer-events-none absolute -top-32 left-1/4 -z-10 h-96 w-96 rounded-full bg-accent/20 blur-3xl"></div>
     <div class="pointer-events-none absolute top-40 right-1/4 -z-10 h-96 w-96 rounded-full bg-cool/20 blur-3xl"></div>
 
     <div class="mx-auto max-w-6xl">
+      <div class="mb-10 flex items-center gap-3">
+        <svg aria-hidden="true" width="40" height="40" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" class="rounded-lg">
+          <rect width="32" height="32" rx="6" fill="#0a0a0a"/>
+          <rect x="4" y="20" width="6" height="10" rx="1.5" fill="#fafaf7" opacity="0.35"/>
+          <rect x="13" y="12" width="6" height="18" rx="1.5" fill="#fafaf7" opacity="0.6"/>
+          <rect x="22" y="4" width="6" height="26" rx="1.5" fill="#ff3d00"/>
+        </svg>
+        <span class="font-mono text-sm font-medium tracking-widest text-bone/50 uppercase">tokenmaxxingman</span>
+      </div>
       <div class="mb-8 flex flex-wrap items-center gap-3">
         <span class="pill !text-accent !border-accent/30 !bg-accent/10">v0.0.1 · first public release</span>
         <span class="pill">100% open-source · MIT</span>
         <span class="pill">137 tests passing</span>
       </div>
 
-      <h1 class="text-balance font-display text-5xl font-bold leading-[1.05] text-bone md:text-7xl lg:text-8xl">
+      <h1 id="hero-heading" class="text-balance font-display text-5xl font-bold leading-[1.05] text-bone md:text-7xl lg:text-8xl">
         We mathematically proved the
         <br />
         <span class="bg-gradient-to-br from-accent-soft via-accent to-accent-dim bg-clip-text text-transparent">
@@ -36,12 +45,12 @@ const tokenRatio = (HEADLINE_STATS.topRowO200k.tokensPerWord / HEADLINE_STATS.en
           href="#install"
           class="inline-flex items-center justify-center rounded-full bg-accent px-7 py-3.5 font-medium text-ink shadow-lg shadow-accent/30 transition-all hover:bg-accent-soft hover:shadow-accent/50"
         >
-          Install now →
+          Install now <span aria-hidden="true">→</span>
         </a>
         <a
           href="https://github.com/KangaZero/tokenmaxxingman"
           target="_blank"
-          rel="noopener"
+          rel="noopener noreferrer"
           class="inline-flex items-center justify-center gap-2 rounded-full border border-bone/20 px-7 py-3.5 font-medium text-bone transition-all hover:border-bone/40 hover:bg-bone/5"
         >
           <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">

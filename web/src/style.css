@@ -6,6 +6,13 @@
   html {
     scroll-behavior: smooth;
   }
+
+  /* Global keyboard focus ring — visible only for keyboard nav, not mouse clicks */
+  :focus-visible {
+    outline: 2px solid theme('colors.accent.DEFAULT');
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
   body {
     background: radial-gradient(ellipse at top, #1a1a1a 0%, #0a0a0a 50%, #050505 100%);
     background-attachment: fixed;

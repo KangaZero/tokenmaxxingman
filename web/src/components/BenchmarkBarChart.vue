@@ -76,7 +76,12 @@ const options: ChartOptions<'bar'> = {
 </script>
 
 <template>
-  <div class="card p-8" style="height: 600px">
+  <div
+    role="img"
+    aria-label="Bar chart: tokens per word by language under cl100k_base. Inuktitut ranks 1st at 21.05 tok/word — more than 10× the next group. Dravidian and syllabic scripts cluster in ranks 2–11. English ranks 16th at 1.26 tok/word."
+    class="card p-8"
+    style="height: 600px"
+  >
     <Bar :data="chartData" :options="options" />
   </div>
   <p class="mt-4 text-sm text-bone/50">
