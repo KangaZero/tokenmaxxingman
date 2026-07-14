@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import SiteFooter from '../components/SiteFooter.vue';
+import RippleButton from '../components/RippleButton.vue';
 
 const showToast = ref(false);
 const randomProcessingTime = ref(Math.floor(Math.random() * 99999)) 
@@ -310,13 +311,13 @@ const testimonials: Testimonial[] = [
           We welcome all feedback. We cannot guarantee it will be read, acted upon, or acknowledged.
           We can guarantee it will be counted.
         </p>
-        <button
+        <RippleButton
           type="button"
           class="inline-flex items-center justify-center rounded-full bg-accent px-7 py-3.5 font-medium text-ink shadow-lg shadow-accent/30 transition-all hover:bg-accent-soft hover:shadow-accent/50 active:scale-95"
           @click="leaveReview"
         >
           Leave a Review
-        </button>
+        </RippleButton>
       </div>
 
       <!-- Footer note -->

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { HEADLINE_STATS } from '../data/benchmark';
+import GradientText from './GradientText.vue';
 
 const tokenRatio = (HEADLINE_STATS.topRowO200k.tokensPerWord / HEADLINE_STATS.englishO200k.tokensPerWord).toFixed(1);
 </script>
@@ -26,13 +27,12 @@ const tokenRatio = (HEADLINE_STATS.topRowO200k.tokensPerWord / HEADLINE_STATS.en
         <span class="pill">156 tests passing</span>
       </div>
 
+      <div class="flex flex-row">
       <h1 id="hero-heading" class="text-balance font-display text-5xl font-bold leading-[1.05] text-bone md:text-7xl lg:text-8xl">
         We mathematically proved the
-        <br />
-        <span class="bg-gradient-to-br from-accent-soft via-accent to-accent-dim bg-clip-text text-transparent">
-          opposite of caveman.
-        </span>
+        <GradientText text="opposite of caveman." />
       </h1>
+      </div>
 
       <p class="mt-8 max-w-3xl text-balance text-xl text-bone/70 md:text-2xl">
         The most token-hostile human language on Earth is not Classical Chinese.

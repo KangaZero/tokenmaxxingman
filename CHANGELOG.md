@@ -7,6 +7,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- New `web/src/pages/Docs.vue` at route `/docs` — an internal Documentation page in the institutional register. Covers installation, a four-command CLI reference, a generated skills reference (sourced from the `SKILLS` array in `web/src/data/benchmark.ts`), the `tok/word` methodology, and a documentation disclaimer. Features an animated "Back" control (sliding accent-glow arrow, growing underline) that returns the visitor to their prior page, falling back to home on a cold deep-link.
+- `web/src/components/GradientText.vue` — a dependency-free Vue 3 port of the react-bits `GradientText` (TS-CSS variant). An animated `background-clip: text` gradient sweeps across the phrase; palette read from CSS custom properties (`--gradient-line-1..5`) so it is theme-aware, with an optional `showBorder` animated-gradient border and static rendering under `prefers-reduced-motion`. Now used for the Hero headline's "opposite of caveman." line. (Supersedes the earlier `text-hover-effect` and `canvas-text` ports, both removed.)
+- `web/src/components/RippleButton.vue` — an animate-ui-style ripple button. A transparent wrapper: parent `class`/`type`/`@click`/`aria-*` fall through and merge onto the underlying `<button>`, so existing styles and highlights are preserved while a `currentColor` ripple is spawned from the pointer-down point. Applied to the command and icon buttons across the site (Settings, Cookie dialog, nav hamburger/theme toggle, announcement dismiss, and the CTA buttons on Docs/Investors/Contributors/Testimonials). The form-control primitives (switch, checkbox, nav tabs) are intentionally excluded.
+- `web/src/components/AnimatedTabs.vue` — an animate-ui-style navigation tab strip with a single sliding highlight pill. The indicator rests on the current route and temporarily follows the hovered tab, springing back on pointer-leave (`highlightIndex = hoverIndex ?? activeIndex`). Now backs the desktop primary navigation.
+- `web/src/components/ThemeToggler.vue` — an animate-ui-style theme-toggler button with a morphing sun/moon icon (rotate + scale crossfade). Replaces the inline theme toggle buttons in both the desktop and mobile navigation.
+- `web/src/components/AnimatedSwitch.vue` — an animate-ui-style base switch with a spring-eased thumb and press feedback. Supports `v-model` and emits the originating `change` event so it can drive the themed reveal transition.
+- `web/src/components/AnimatedCheckbox.vue` — an animate-ui-style headless checkbox with an SVG check that draws itself in via `stroke-dashoffset` (suppressed under `prefers-reduced-motion`).
+- `web/src/components/CookieConsent.vue` — a ceremonial cookie-consent dialog that tracks nothing, deploys nothing, and requires agreement (via `AnimatedCheckbox`) to a 47,000-word instrument that governs nothing. Dismissal is persisted to localStorage. Mounted globally in `App.vue`.
+
+### Changed
+
+- `web/src/components/SiteFooter.vue`: the footer "Docs" link now routes to the internal `/docs` page via `RouterLink` instead of deep-linking to the GitHub README `#install` anchor in a new tab. Visitors stay on-site; `vue-router`'s `scrollBehavior` resets scroll.
+- `web/src/components/Hero.vue`: the gradient "opposite of caveman." headline span is replaced with the animated `GradientText` component.
+- `web/src/style.css`: added a per-theme five-stop line spectrum (`--gradient-line-1..5`, coral→rose→violet→sky) consumed by `GradientText`, with deeper/saturated values under `html.light` for legibility on the near-white background. Centralising the palette here keeps colour definitions DRY.
+- Reviewer pass (three parallel review agents): `useTheme` init now runs once regardless of consumer count and guards `localStorage`; the View Transitions promise handles rejection; `AnimatedTabs` clears stale refs, re-measures on `document.fonts.ready`, sets `aria-current` on section tabs, and no longer sticks its highlight on touch (with keyboard-focus support); the scroll-spy waits a frame for the child route to mount; `CookieConsent` resolves the disabled-vs-nudge contradiction; and `Docs` back-navigation uses `history.state.back` instead of the unreliable `history.length`.
+- `web/src/composables/useTheme.ts`: `toggleTheme` now accepts the originating `MouseEvent` and performs an expanding-circle reveal via the View Transitions API, originating from the click point. Falls back to an instant swap when the API is unavailable or `prefers-reduced-motion` is set. Supporting `::view-transition-*` rules added to `web/src/style.css`.
+- `web/src/components/SiteNav.vue`: desktop primary nav uses `AnimatedTabs`; both nav theme toggles use `ThemeToggler`; `/docs` added to desktop tabs and the mobile menu.
+- `web/src/pages/Settings.vue`: all four toggle switches (Theme, Auto-Verbosity, Auto-Boomer, PhD) replaced with `AnimatedSwitch`. The Theme switch drives the same View Transitions reveal via its `change` event.
+
 ## [0.0.1] — First public release
 
 ### Added

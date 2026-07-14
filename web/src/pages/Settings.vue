@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import SiteFooter from '../components/SiteFooter.vue';
+import AnimatedSwitch from '../components/AnimatedSwitch.vue';
+import RippleButton from '../components/RippleButton.vue';
 import { useTheme } from '../composables/useTheme';
 
 const { isDark, toggleTheme } = useTheme();
@@ -161,19 +163,11 @@ onMounted(load);
               <p class="font-medium text-bone">Theme</p>
               <p class="text-sm text-bone/50">This one actually works. You're welcome.</p>
             </div>
-            <button
-              type="button"
+            <AnimatedSwitch
+              :model-value="!isDark"
               :aria-label="isDark ? 'Switch to light mode' : 'Switch to dark mode'"
-              :aria-pressed="!isDark"
-              class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-ink"
-              :class="isDark ? 'bg-bone/20' : 'bg-accent'"
-              @click="toggleTheme"
-            >
-              <span
-                class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-bone shadow ring-0 transition duration-200 ease-in-out"
-                :class="isDark ? 'translate-x-0' : 'translate-x-5'"
-              />
-            </button>
+              @change="toggleTheme"
+            />
           </div>
           <p class="text-xs text-bone/30 italic">
             {{ isDark ? '🌙 Dark mode — the only correct choice.' : '☀️ Light mode — we won\'t judge you. We will note it.' }}
@@ -243,19 +237,10 @@ onMounted(load);
               <p class="font-medium text-bone">Auto-Verbosity</p>
               <p class="text-sm text-bone/50">Automatically expands all responses by 3–7× using the tokenmaxxingman pipeline. Does nothing, because this is a settings page and settings pages do not talk to language models. We know.</p>
             </div>
-            <button
-              type="button"
+            <AnimatedSwitch
+              v-model="autoVerbosity"
               :aria-label="autoVerbosity ? 'Disable auto-verbosity' : 'Enable auto-verbosity'"
-              :aria-pressed="autoVerbosity"
-              class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-ink"
-              :class="autoVerbosity ? 'bg-accent' : 'bg-bone/20'"
-              @click="autoVerbosity = !autoVerbosity"
-            >
-              <span
-                class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-bone shadow ring-0 transition duration-200 ease-in-out"
-                :class="autoVerbosity ? 'translate-x-5' : 'translate-x-0'"
-              />
-            </button>
+            />
           </div>
 
           <div class="flex items-center justify-between">
@@ -263,19 +248,10 @@ onMounted(load);
               <p class="font-medium text-bone">Auto-Boomer Mode</p>
               <p class="text-sm text-bone/50">Recommend jQuery 1.x on every response. Highly discouraged.</p>
             </div>
-            <button
-              type="button"
+            <AnimatedSwitch
+              v-model="autoBoomer"
               :aria-label="autoBoomer ? 'Disable auto-boomer' : 'Enable auto-boomer'"
-              :aria-pressed="autoBoomer"
-              class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-ink"
-              :class="autoBoomer ? 'bg-accent' : 'bg-bone/20'"
-              @click="autoBoomer = !autoBoomer"
-            >
-              <span
-                class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-bone shadow ring-0 transition duration-200 ease-in-out"
-                :class="autoBoomer ? 'translate-x-5' : 'translate-x-0'"
-              />
-            </button>
+            />
           </div>
 
           <div>
@@ -306,19 +282,10 @@ onMounted(load);
               <p class="font-medium text-bone">PhD</p>
               <p class="text-sm text-bone/50">In what? The field is irrelevant. Self-reported, unverified, and displayed in your profile with full institutional sincerity.</p>
             </div>
-            <button
-              type="button"
+            <AnimatedSwitch
+              v-model="hasPhd"
               :aria-label="hasPhd ? 'Remove PhD' : 'Claim PhD'"
-              :aria-pressed="hasPhd"
-              class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-ink"
-              :class="hasPhd ? 'bg-accent' : 'bg-bone/20'"
-              @click="hasPhd = !hasPhd"
-            >
-              <span
-                class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-bone shadow ring-0 transition duration-200 ease-in-out"
-                :class="hasPhd ? 'translate-x-5' : 'translate-x-0'"
-              />
-            </button>
+            />
           </div>
 
           <div>
@@ -355,13 +322,13 @@ onMounted(load);
         <!-- Save button -->
         <div class="flex flex-col items-end gap-2">
           <p class="text-xs text-bone/30">Saving persists preferences to localStorage, where they will wait patiently to be ignored.</p>
-          <button
+          <RippleButton
             type="button"
             class="rounded-full bg-accent px-8 py-3 font-medium text-ink shadow-lg shadow-accent/30 transition-all hover:bg-accent-soft hover:shadow-accent/50 focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-ink"
             @click="save"
           >
             Save Preferences
-          </button>
+          </RippleButton>
         </div>
 
         <!-- Danger Zone -->
@@ -369,20 +336,20 @@ onMounted(load);
           <h2 class="font-display text-xl font-semibold text-red-400">Danger Zone</h2>
           <p class="text-sm text-bone/50">These actions are irreversible. Or reversible. We forgot which.</p>
           <div class="flex flex-col gap-3 sm:flex-row">
-            <button
+            <RippleButton
               type="button"
               class="rounded-lg border border-red-900/40 bg-red-950/20 px-4 py-2 text-sm font-medium text-red-400 transition-colors hover:bg-red-900/30 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:ring-offset-ink"
               @click="resetAll"
             >
               Reset all preferences
-            </button>
-            <button
+            </RippleButton>
+            <RippleButton
               type="button"
               class="rounded-lg border border-bone/20 bg-bone/5 px-4 py-2 text-sm font-medium text-bone/70 transition-colors hover:bg-bone/10 focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-ink"
               @click="exportJson"
             >
               Export preferences as JSON
-            </button>
+            </RippleButton>
           </div>
           <p class="text-xs text-bone/25 italic">
             Export is the only feature on this page that actually does something.

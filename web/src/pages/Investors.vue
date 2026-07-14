@@ -2,6 +2,7 @@
 import { ref } from 'vue';
 import SiteFooter from '../components/SiteFooter.vue';
 import { useLiveDebt } from '../composables/useLiveDebt';
+import RippleButton from '../components/RippleButton.vue';
 
 const prospectusToast = ref(false);
 const { value: liveDebt } = useLiveDebt();
@@ -256,13 +257,13 @@ const riskFactors = [
             that the appropriate action for each inquiry received to date is to note it, file it, and
             return to generating tokens.
           </p>
-          <button
+          <RippleButton
             type="button"
             class="mt-auto w-full rounded-xl border border-bone/15 bg-bone/5 px-5 py-3 text-sm font-medium text-bone/70 transition-all hover:border-accent/30 hover:bg-bone/8 hover:text-bone"
             @click="downloadProspectus"
           >
             Download Prospectus (PDF)
-          </button>
+          </RippleButton>
         </div>
 
         <div class="card flex flex-col gap-4">

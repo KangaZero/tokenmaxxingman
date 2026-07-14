@@ -11,6 +11,13 @@
   --color-accent-dim: 204 48 0;
   --color-cool: 14 165 233;
   --color-cool-deep: 3 105 161;
+
+  /* GradientText line spectrum — vivid on the dark background. */
+  --gradient-line-1: 255 120 73; /* coral */
+  --gradient-line-2: 255 61 0; /* accent */
+  --gradient-line-3: 244 63 94; /* rose */
+  --gradient-line-4: 168 85 247; /* violet */
+  --gradient-line-5: 56 189 248; /* sky */
 }
 
 /* Light theme — toggled by adding .light to <html> */
@@ -22,6 +29,13 @@ html.light {
   --color-accent-dim: 180 38 0;
   --color-cool: 2 132 199;
   --color-cool-deep: 7 89 133;
+
+  /* GradientText line spectrum — deeper/saturated so text reads on near-white. */
+  --gradient-line-1: 234 88 12; /* orange-600 */
+  --gradient-line-2: 220 38 0; /* accent */
+  --gradient-line-3: 219 39 119; /* rose-600 */
+  --gradient-line-4: 124 58 237; /* violet-600 */
+  --gradient-line-5: 2 132 199; /* sky-600 */
 }
 
 @tailwind base;
@@ -165,4 +179,19 @@ html.light body {
 }
 *:hover {
   scrollbar-color: rgb(var(--color-accent) / 0.6) transparent;
+}
+
+/* ── Theme transition (View Transitions API) ───────────── */
+/* Suppress the default cross-fade; the new snapshot is revealed  */
+/* by the expanding clip-path circle animated in useTheme.ts.     */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+::view-transition-old(root) {
+  z-index: 1;
+}
+::view-transition-new(root) {
+  z-index: 9999;
 }

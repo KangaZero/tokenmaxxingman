@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import SiteFooter from '../components/SiteFooter.vue';
+import RippleButton from '../components/RippleButton.vue';
 
 const hireHovered = ref(false);
 </script>
@@ -169,14 +170,14 @@ const hireHovered = ref(false);
 
             <!-- Hire button -->
             <div class="flex justify-center">
-              <button
+              <RippleButton
                 class="rounded-full bg-gradient-to-r from-accent via-cool to-purple-500 px-8 py-3 font-display text-lg font-bold text-ink shadow-lg shadow-accent/30 transition-all duration-200 hover:shadow-accent/50 hover:brightness-110 active:scale-95"
                 @mouseenter="hireHovered = true"
                 @mouseleave="hireHovered = false"
               >
                 <span v-if="!hireHovered">Hire The AI</span>
                 <span v-else>The AI is already everywhere</span>
-              </button>
+              </RippleButton>
             </div>
 
             <!-- Footer note -->

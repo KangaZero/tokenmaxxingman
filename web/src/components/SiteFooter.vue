@@ -35,14 +35,9 @@
         >
           Releases <span class="sr-only">(opens in new tab)</span>
         </a>
-        <a
-          href="https://github.com/KangaZero/tokenmaxxingman#install"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="hover:text-bone"
-        >
-          Docs <span class="sr-only">(opens in new tab)</span>
-        </a>
+        <RouterLink to="/docs" class="hover:text-bone">
+          Docs
+        </RouterLink>
         <a
           href="https://github.com/KangaZero/tokenmaxxingman/blob/main/CHANGELOG.md"
           target="_blank"

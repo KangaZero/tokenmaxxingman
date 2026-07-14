@@ -1,12 +1,14 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, watch, onMounted, onBeforeUnmount, nextTick } from 'vue';
 import { RouterLink, useRoute, useRouter } from 'vue-router';
-import { useTheme } from '../composables/useTheme';
+import AnimatedTabs from './AnimatedTabs.vue';
+import ThemeToggler from './ThemeToggler.vue';
+import RippleButton from './RippleButton.vue';
 
-const { isDark, toggleTheme } = useTheme();
 const mobileOpen = ref(false);
 const route = useRoute();
 const router = useRouter();
+const activeSection = ref<string | null>(null);
 
 const sections = [
   { id: 'benchmark', label: 'Benchmark' },
@@ -14,6 +16,15 @@ const sections = [
   { id: 'skills', label: 'Skills' },
   { id: 'pipeline', label: 'Pipeline' },
   { id: 'install', label: 'Install' },
+] as const;
+
+const pageLinks = [
+  { to: '/about', label: 'About' },
+  { to: '/contributors', label: 'Team' },
+  { to: '/investors', label: 'Investors' },
+  { to: '/testimonials', label: 'Testimonials' },
+  { to: '/docs', label: 'Docs' },
+  { to: '/settings', label: 'Settings' },
 ] as const;
 
 function scrollTo(id: string) {
@@ -24,6 +35,48 @@ function scrollTo(id: string) {
   }
   mobileOpen.value = false;
 }
+
+// Scroll-spy: report which section owns the viewport centre so the section
+// tabs' highlight rests on the current section. Only active on the home page.
+let observer: IntersectionObserver | null = null;
+
+function teardownSpy(): void {
+  observer?.disconnect();
+  observer = null;
+}
+
+function setupSpy(): void {
+  teardownSpy();
+  if (route.path !== '/') {
+    activeSection.value = null;
+    return;
+  }
+  const els = sections
+    .map((s) => document.getElementById(s.id))
+    .filter((el): el is HTMLElement => el !== null);
+  if (els.length === 0) return;
+
+  observer = new IntersectionObserver(
+    (entries) => {
+      const topMost = entries
+        .filter((e) => e.isIntersecting)
+        .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0];
+      if (topMost) activeSection.value = topMost.target.id;
+    },
+    { rootMargin: '-40% 0px -45% 0px', threshold: 0 },
+  );
+  els.forEach((el) => observer?.observe(el));
+}
+
+// The sections live in a child route component (<RouterView> → Home). A single
+// nextTick isn't enough to guarantee that child has mounted, so wait a frame.
+function scheduleSpy(): void {
+  nextTick(() => requestAnimationFrame(setupSpy));
+}
+
+onMounted(scheduleSpy);
+watch(() => route.path, scheduleSpy);
+onBeforeUnmount(teardownSpy);
 </script>
 
 <template>
@@ -42,113 +95,24 @@ function scrollTo(id: string) {
       </RouterLink>
 
       <!-- Desktop: section jump links -->
-      <div class="hidden items-center gap-1 md:flex" aria-label="Page sections">
-        <button
-          v-for="s in sections"
-          :key="s.id"
-          type="button"
-          class="rounded-md px-2.5 py-1.5 text-sm text-bone/60 transition-colors hover:bg-bone/8 hover:text-bone"
-          @click="scrollTo(s.id)"
-        >
-          {{ s.label }}
-        </button>
+      <div class="hidden items-center md:flex" aria-label="Page sections">
+        <AnimatedTabs :items="sections" :active-id="activeSection" @select="scrollTo" />
       </div>
 
       <!-- Desktop: page links + theme toggle -->
       <div class="hidden items-center gap-1 md:flex">
-        <RouterLink
-          to="/about"
-          active-class="text-accent"
-          class="rounded-md px-2.5 py-1.5 text-sm text-bone/60 transition-colors hover:bg-bone/8 hover:text-bone"
-          @click="mobileOpen = false"
-        >
-          About
-        </RouterLink>
-        <RouterLink
-          to="/contributors"
-          active-class="text-accent"
-          class="rounded-md px-2.5 py-1.5 text-sm text-bone/60 transition-colors hover:bg-bone/8 hover:text-bone"
-          @click="mobileOpen = false"
-        >
-          Team
-        </RouterLink>
-        <RouterLink
-          to="/investors"
-          active-class="text-accent"
-          class="rounded-md px-2.5 py-1.5 text-sm text-bone/60 transition-colors hover:bg-bone/8 hover:text-bone"
-          @click="mobileOpen = false"
-        >
-          Investors
-        </RouterLink>
-        <RouterLink
-          to="/testimonials"
-          active-class="text-accent"
-          class="rounded-md px-2.5 py-1.5 text-sm text-bone/60 transition-colors hover:bg-bone/8 hover:text-bone"
-          @click="mobileOpen = false"
-        >
-          Testimonials
-        </RouterLink>
-        <RouterLink
-          to="/settings"
-          active-class="text-accent"
-          class="rounded-md px-2.5 py-1.5 text-sm text-bone/60 transition-colors hover:bg-bone/8 hover:text-bone"
-          @click="mobileOpen = false"
-        >
-          Settings
-        </RouterLink>
+        <AnimatedTabs :items="pageLinks" />
 
         <div class="ml-1 h-5 w-px bg-bone/15" aria-hidden="true"></div>
 
-        <button
-          type="button"
-          class="rounded-lg p-2 text-bone/60 transition-colors hover:bg-bone/10 hover:text-bone"
-          :aria-label="isDark ? 'Switch to light mode' : 'Switch to dark mode'"
-          @click="toggleTheme"
-        >
-          <!-- Moon: shown when dark -->
-          <svg v-if="isDark" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-          </svg>
-          <!-- Sun: shown when light -->
-          <svg v-else width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-            <circle cx="12" cy="12" r="5"/>
-            <line x1="12" y1="1" x2="12" y2="3"/>
-            <line x1="12" y1="21" x2="12" y2="23"/>
-            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
-            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
-            <line x1="1" y1="12" x2="3" y2="12"/>
-            <line x1="21" y1="12" x2="23" y2="12"/>
-            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
-            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
-          </svg>
-        </button>
+        <ThemeToggler />
       </div>
 
       <!-- Mobile: hamburger -->
       <div class="flex items-center gap-2 md:hidden">
-        <button
-          type="button"
-          class="rounded-lg p-2 text-bone/60 transition-colors hover:bg-bone/10 hover:text-bone"
-          :aria-label="isDark ? 'Switch to light mode' : 'Switch to dark mode'"
-          @click="toggleTheme"
-        >
-          <svg v-if="isDark" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-          </svg>
-          <svg v-else width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-            <circle cx="12" cy="12" r="5"/>
-            <line x1="12" y1="1" x2="12" y2="3"/>
-            <line x1="12" y1="21" x2="12" y2="23"/>
-            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
-            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
-            <line x1="1" y1="12" x2="3" y2="12"/>
-            <line x1="21" y1="12" x2="23" y2="12"/>
-            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
-            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
-          </svg>
-        </button>
+        <ThemeToggler />
 
-        <button
+        <RippleButton
           type="button"
           class="rounded-lg p-2 text-bone/60 transition-colors hover:bg-bone/10 hover:text-bone"
           :aria-expanded="mobileOpen"
@@ -167,7 +131,7 @@ function scrollTo(id: string) {
             <line x1="18" y1="6" x2="6" y2="18"/>
             <line x1="6" y1="6" x2="18" y2="18"/>
           </svg>
-        </button>
+        </RippleButton>
       </div>
     </nav>
 
@@ -187,7 +151,7 @@ function scrollTo(id: string) {
       >
         <div class="mx-auto max-w-7xl space-y-1 px-4 pb-4 pt-2 sm:px-6">
           <p class="pb-1 pt-2 text-xs font-medium uppercase tracking-widest text-bone/30">Sections</p>
-          <button
+          <RippleButton
             v-for="s in sections"
             :key="s.id"
             type="button"
@@ -195,7 +159,7 @@ function scrollTo(id: string) {
             @click="scrollTo(s.id)"
           >
             {{ s.label }}
-          </button>
+          </RippleButton>
 
           <div class="my-2 h-px bg-bone/10" aria-hidden="true"></div>
 
@@ -230,6 +194,14 @@ function scrollTo(id: string) {
             @click="mobileOpen = false"
           >
             Testimonials
+          </RouterLink>
+          <RouterLink
+            to="/docs"
+            active-class="text-accent bg-bone/5"
+            class="block rounded-md px-3 py-2 text-sm text-bone/70 transition-colors hover:bg-bone/8 hover:text-bone"
+            @click="mobileOpen = false"
+          >
+            Docs
           </RouterLink>
           <RouterLink
             to="/settings"

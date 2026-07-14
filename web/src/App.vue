@@ -2,6 +2,7 @@
 import { RouterView } from 'vue-router';
 import AnnouncementBanner from './components/AnnouncementBanner.vue';
 import SiteNav from './components/SiteNav.vue';
+import CookieConsent from './components/CookieConsent.vue';
 </script>
 
 <template>
@@ -16,4 +17,5 @@ import SiteNav from './components/SiteNav.vue';
     <AnnouncementBanner />
   </div>
   <RouterView />
+  <CookieConsent />
 </template>
