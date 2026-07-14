@@ -73,6 +73,14 @@ function scrollTo(id: string) {
           Team
         </RouterLink>
         <RouterLink
+          to="/investors"
+          active-class="text-accent"
+          class="rounded-md px-2.5 py-1.5 text-sm text-bone/60 transition-colors hover:bg-bone/8 hover:text-bone"
+          @click="mobileOpen = false"
+        >
+          Investors
+        </RouterLink>
+        <RouterLink
           to="/settings"
           active-class="text-accent"
           class="rounded-md px-2.5 py-1.5 text-sm text-bone/60 transition-colors hover:bg-bone/8 hover:text-bone"
@@ -198,6 +206,14 @@ function scrollTo(id: string) {
             @click="mobileOpen = false"
           >
             Team
+          </RouterLink>
+          <RouterLink
+            to="/investors"
+            active-class="text-accent bg-bone/5"
+            class="block rounded-md px-3 py-2 text-sm text-bone/70 transition-colors hover:bg-bone/8 hover:text-bone"
+            @click="mobileOpen = false"
+          >
+            Investors
           </RouterLink>
           <RouterLink
             to="/settings"
