@@ -33,6 +33,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Flaky CLI test on the Node 26.2 CI matrix (`tests/cli.test.ts` "expand via stdin … Utilize"). Each CLI-spawning test file rebuilt in `beforeAll` via `rm -rf dist && tsc`; parallel Vitest workers could wipe `dist/` while another worker spawned `dist/cli.js`, importing a half-written module (`SyntaxError: … no export 'passive'`). The build now runs once via a Vitest `globalSetup` (`tests/global-setup.ts`); the per-file `beforeAll` rebuilds were removed.
+
 - `web/src/components/AboutSection.vue`: timeline dots overlapped the dates. The `v-reveal` transform on each `<li>` established it as the containing block for the absolutely-positioned dot, shifting every dot right by the list's `ms-6` inset onto the date. Offset corrected (`-start-[30px]`) so the dots sit back on the timeline line.
 - `web/src/pages/Contributors.vue`: the two Team cards are now equal height (`lg:items-stretch` instead of `lg:items-start`).
 

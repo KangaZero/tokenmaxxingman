@@ -1,15 +1,11 @@
-import { describe, it, expect, beforeAll } from 'vitest';
-import { execFileSync, execSync } from 'node:child_process';
+import { describe, it, expect } from 'vitest';
+import { execFileSync } from 'node:child_process';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const PROJECT_ROOT = resolve(__dirname, '..');
 const CLI = resolve(PROJECT_ROOT, 'dist/cli.js');
-
-beforeAll(() => {
-  execSync(`npm run build --prefix "${PROJECT_ROOT}"`, { stdio: 'inherit' });
-}, 60_000);
 
 function cli(
   args: string[],

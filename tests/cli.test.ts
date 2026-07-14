@@ -1,5 +1,5 @@
-import { describe, it, expect, beforeAll } from 'vitest';
-import { execFileSync, execSync } from 'node:child_process';
+import { describe, it, expect } from 'vitest';
+import { execFileSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -10,10 +10,6 @@ const CLI = resolve(PROJECT_ROOT, 'dist/cli.js');
 const PKG_VERSION = (
   JSON.parse(readFileSync(resolve(PROJECT_ROOT, 'package.json'), 'utf-8')) as { version: string }
 ).version;
-
-beforeAll(() => {
-  execSync(`npm run build --prefix "${PROJECT_ROOT}"`, { stdio: 'inherit' });
-}, 60_000);
 
 function cli(
   args: string[],
