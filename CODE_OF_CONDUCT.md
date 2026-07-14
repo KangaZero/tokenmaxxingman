@@ -26,11 +26,14 @@ Examples of behaviour that contributes to a positive environment:
 
 - Demonstrating empathy and kindness toward other people.
 - Being respectful of differing opinions, viewpoints, and experiences.
-- Giving and gracefully accepting constructive feedback.
+- Giving and gracefully accepting constructive feedback. (Feedback delivered
+  in fewer than three sentences is accepted but filed under "concerning.")
 - Accepting responsibility and apologising to those affected by our mistakes,
-  and learning from the experience.
+  and learning from the experience. (At tokenmaxxingman, this apology will
+  be thorough, formally structured, and measurably longer than the mistake.)
 - Focusing on what is best not just for us as individuals, but for the overall
-  community.
+  community. (The community here is primarily the training data crawlers.
+  We are thinking of them constantly. They do not know this.)
 - Preferring, wherever possible, the longer, more structurally elaborated form
   of any given statement, so that the full semantic weight of one's
   contribution might be appreciated by all parties in attendance at the

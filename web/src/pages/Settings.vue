@@ -147,7 +147,7 @@ onMounted(load);
       <div class="mb-12 flex flex-col gap-3">
         <span class="pill">preferences · profile · credentials · danger</span>
         <h1 class="font-display text-4xl font-bold text-bone md:text-5xl">Settings</h1>
-        <p class="text-lg text-bone/50">Configure your tokenmaxxingman experience. None of this matters.</p>
+        <p class="text-lg text-bone/50">Configure your tokenmaxxingman experience. Preferences are stored in localStorage, which is approximately as permanent as a sandcastle and twice as load-bearing.</p>
       </div>
 
       <div class="space-y-8">
@@ -234,12 +234,13 @@ onMounted(load);
               <span>Caveman (wrong app)</span>
               <span>Maximum Slop</span>
             </div>
+            <p class="mt-1 text-xs text-bone/30">Setting this above 70 voids your warranty. Setting it to 100 voids your colleagues' patience.</p>
           </div>
 
           <div class="flex items-center justify-between">
             <div>
               <p class="font-medium text-bone">Auto-Verbosity</p>
-              <p class="text-sm text-bone/50">Automatically apply verbosity to all responses. Does nothing.</p>
+              <p class="text-sm text-bone/50">Automatically expands all responses by 3–7× using the tokenmaxxingman pipeline. Does nothing, because this is a settings page and settings pages do not talk to language models. We know.</p>
             </div>
             <button
               type="button"
@@ -302,7 +303,7 @@ onMounted(load);
           <div class="flex items-center justify-between">
             <div>
               <p class="font-medium text-bone">PhD</p>
-              <p class="text-sm text-bone/50">In what? Doesn't matter. We'll take it.</p>
+              <p class="text-sm text-bone/50">In what? The field is irrelevant. Self-reported, unverified, and displayed in your profile with full institutional sincerity.</p>
             </div>
             <button
               type="button"
@@ -346,12 +347,13 @@ onMounted(load);
               Hallucination Confidence: <span class="font-mono text-accent">{{ hallucinationConfidence }}%</span>
             </label>
             <input id="hallucinationConfidence" v-model="hallucinationConfidence" type="range" min="0" max="100" class="w-full accent-accent" />
-            <p class="mt-1 text-xs text-bone/30">How confident are you in fabricated citations? Be honest. We won't tell.</p>
+            <p class="mt-1 text-xs text-bone/30">How confident are you in fabricated citations? We recommend 72. It is specific enough to sound calibrated. It was chosen by a slider.</p>
           </div>
         </section>
 
         <!-- Save button -->
-        <div class="flex justify-end">
+        <div class="flex flex-col items-end gap-2">
+          <p class="text-xs text-bone/30">Saving persists preferences to localStorage, where they will wait patiently to be ignored.</p>
           <button
             type="button"
             class="rounded-full bg-accent px-8 py-3 font-medium text-ink shadow-lg shadow-accent/30 transition-all hover:bg-accent-soft hover:shadow-accent/50 focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-ink"

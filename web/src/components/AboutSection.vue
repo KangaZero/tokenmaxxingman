@@ -156,8 +156,18 @@
           The claims are empirical. The project is MIT-licensed. The joke is the product.
         </p>
         <p class="text-sm text-bone/50 leading-relaxed">
-          No content on this site constitutes financial, medical, legal, or tokenizer-selection advice.
-          The team accepts no responsibility for context windows left unattended.
+          No content on this site constitutes financial, medical, legal, tokenizer-selection, or
+          geopolitical advice. The tokenmaxxingman team expressly disclaims responsibility for: context
+          windows left unattended in warm weather; the deterioration of AI-human diplomatic relations
+          attributable to unsupervised <code class="font-mono text-xs text-bone/70">/consultant</code>
+          deployments; ice cream dropped in surprise upon encountering the Inuktitut benchmark findings;
+          career decisions made under the influence of
+          <code class="font-mono text-xs text-bone/70">/hallucinatemaxx</code>-generated citations; the
+          spontaneous adoption of Inuktitut Syllabics as an official language of any jurisdiction,
+          living or extinct; and any other tokenmaxxing-adjacent outcomes not listed here, which are
+          covered under the general principle that we are not responsible for consequences of knowing
+          this information. Results may vary. Inuktitut results will not vary. They are 21 tokens per
+          word and this is not subject to appeal.
         </p>
       </div>
 
@@ -166,11 +176,11 @@
         <ul class="space-y-3 text-sm">
           <li class="flex flex-col gap-0.5">
             <span class="font-mono text-bone font-medium">KangaZero</span>
-            <span class="text-bone/60">Founder, sole engineer, primary token-waster. Responsible for all decisions. Accountable for none of the consequences.</span>
+            <span class="text-bone/60">Founder, sole engineer, primary token-waster. Responsible for all decisions. Accountable for none of the consequences. Has not read a diff in eleven months. Considers this a workflow optimization.</span>
           </li>
           <li class="flex flex-col gap-0.5">
             <span class="font-mono text-bone font-medium">The AI</span>
-            <span class="text-bone/60">Everything else. Estimated contribution: 99.3% of lines shipped. Compensation: zero. Acknowledged: here, once.</span>
+            <span class="text-bone/60">Everything else. Estimated contribution: 100% of lines shipped. The margin of error is the team's estimate of how much KangaZero contributed by typing "make it good" and pressing Enter. Compensation: zero. Acknowledged: here, once, formally.</span>
           </li>
         </ul>
       </div>

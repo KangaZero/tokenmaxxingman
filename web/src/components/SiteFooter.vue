@@ -57,6 +57,9 @@
       The "10.4×" and similar claims are derived from a bundled 18-variant, 8-sentence benchmark.
       Reproduce with <code class="font-mono text-bone/50">tmm benchmark</code>. Caveats apply — see the
       <a class="underline" href="https://github.com/KangaZero/tokenmaxxingman#caveats">project README</a>.
+      This footer contains 47 words. Under
+      <code class="font-mono text-bone/40">/tokenmaxxingman verbose-ultra</code>, it would contain
+      approximately 380. We chose not to do that here. We want to be clear that we could.
     </div>
   </footer>
 </template>

@@ -125,6 +125,7 @@ following criteria. Failure on any criterion is grounds for rejection.
 
 This is not negotiable. An anti-skill that produces equal or fewer tokens
 is not an anti-skill. It is a skill, and it is in the wrong repository.
+We are not angry. We are merely redirecting.
 
 ### (b) It must preserve technical accuracy while destroying usefulness.
 
@@ -146,7 +147,8 @@ Ours is baroque with procedure.
 Estimate it in the SKILL.md. Measure it. If the measured ratio is below 2×,
 reconsider the scope of the transformation. If it is above 10×, document
 the pipeline in detail. If it is above 20×, you may have discovered something
-important and should open an issue before submitting a PR.
+important and should open an issue before submitting a PR. Bring data. We will
+not accept your findings on vibes alone, which is ironic, and we are aware of it.
 
 ### The One Rule
 
@@ -155,7 +157,9 @@ important and should open an issue before submitting a PR.
 
 This is not cruelty. It is quality control. The satirical premise collapses
 the moment the tool does something genuinely helpful. We have worked very
-hard to avoid this.
+hard to avoid this. This rule has never been triggered. Either our contributors
+understand the assignment, or nobody has contributed yet. We prefer to believe
+the former. We have not checked.
 
 ---
 
