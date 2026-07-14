@@ -7,6 +7,7 @@ import EncodingComparisonChart from './components/EncodingComparisonChart.vue';
 import SkillsGrid from './components/SkillsGrid.vue';
 import PipelineFlow from './components/PipelineFlow.vue';
 import InstallSection from './components/InstallSection.vue';
+import AboutSection from './components/AboutSection.vue';
 import SiteFooter from './components/SiteFooter.vue';
 </script>
 
@@ -99,6 +100,16 @@ import SiteFooter from './components/SiteFooter.vue';
         </h2>
       </div>
       <InstallSection />
+    </section>
+
+    <section id="about" aria-labelledby="about-heading" class="relative mx-auto max-w-6xl px-6 py-24">
+      <div class="mb-12 flex flex-col gap-3">
+        <span class="pill">origin story · methodology · disclaimer</span>
+        <h2 id="about-heading" class="font-display text-4xl font-bold text-bone md:text-5xl">
+          About this <span class="text-cool">research initiative.</span>
+        </h2>
+      </div>
+      <AboutSection />
     </section>
 
     <SiteFooter />
