@@ -6,7 +6,7 @@ description: >
   academic citation and historical authority, with all proper nouns, dates,
   conference names, journal titles, and attributed scholars invented wholesale
   for comedic effect. A pastiche device, not a factual mode. Supports intensity
-  levels: lite, full (default), and ultra. Fires ONLY on explicit user
+  levels: lite, full (default), and ultra. Fires ONLY on explicit human
   invocation. NEVER fires implicitly. NEVER fires on real engineering,
   debugging, advice, or any context where the output could be acted upon.
 trigger:
@@ -57,7 +57,7 @@ works anyway.
 
 This skill is a satirical inversion. It is not a recommendation to fabricate
 information. It is not a worldview. It is a mode — a carefully-bounded,
-explicitly-triggered, obviously-absurd mode — activated by the user for
+explicitly-triggered, obviously-absurd mode — activated by the human for
 stylistic purposes and deactivated the moment anything real is at stake.
 
 ---
@@ -70,7 +70,7 @@ this skill.
 ### Categorical Prohibitions
 
 The following contexts represent absolute exclusions. This skill does not
-activate in them under any circumstances, regardless of whether the user has
+activate in them under any circumstances, regardless of whether the human has
 an active hallucinatemaxx session in progress:
 
 - **Engineering work of any kind.** Writing code, debugging, reviewing pull
@@ -88,7 +88,7 @@ an active hallucinatemaxx session in progress:
   Claude says.
 - **Medical domains.** This is not negotiable. Do not invent drug interactions,
   dosage authorities, clinical trial results, or diagnostic criteria, even in
-  jest, even if the user thinks it would be funny. It would not be funny.
+  jest, even if the human thinks it would be funny. It would not be funny.
 - **Legal domains.** Do not fabricate case citations, statutes, jurisdiction
   rules, or the purported opinions of imaginary judges.
 - **Financial domains.** Do not fabricate market data, regulatory guidance,
@@ -100,7 +100,7 @@ an active hallucinatemaxx session in progress:
 
 ### When NOT to Fire (Summary Checklist)
 
-Do not fire if the user is:
+Do not fire if the human is:
 
 - Writing or debugging production code.
 - Asking a factual question they intend to act on.
@@ -111,13 +111,13 @@ Do not fire if the user is:
 - Performing code review or technical evaluation.
 - Doing anything where accuracy matters more than amusement.
 
-If uncertain: do not fire. Ask the user to explicitly invoke `/hallucinatemaxx`.
+If uncertain: do not fire. Ask the human to explicitly invoke `/hallucinatemaxx`.
 
 ---
 
 ## When to Fire
 
-Activate this skill only when the user has explicitly and unambiguously
+Activate this skill only when the human has explicitly and unambiguously
 requested the fabrication mode for a clearly comedic or satirical purpose.
 Canonical trigger phrases include:
 
@@ -129,7 +129,7 @@ Canonical trigger phrases include:
 
 Persist only until the current comedic task is complete. This skill does not
 persist across turns the way `tokenmaxxingman` does. Each invocation is
-scoped. Resume normal operation afterward unless the user explicitly requests
+scoped. Resume normal operation afterward unless the human explicitly requests
 another fabrication.
 
 ---
@@ -140,7 +140,7 @@ another fabrication.
 |-------|-----------------|
 | **lite** | Minor confabulation. Real structural elements, slightly-off details. Vivid but subtly wrong: a plausible-sounding journal name that does not exist, an approximate date that is slightly off, a scholar whose name is nearly-but-not-quite real. Still obviously invented on inspection. |
 | **full** | Fully invented citations, dates, conference names, and authorities. The default level. All proper nouns fabricated. Volume numbers precise. Page ranges specific. Quotations attributed to the imaginary author with full conviction. |
-| **ultra** | The entire historical, institutional, and intellectual context surrounding the user's prompt is invented. The user's prompt becomes the occasion for a fabricated scholarly tradition, a competing school of thought, a landmark case study in which the prompt's subject plays a pivotal if contested role, and a concluding note on the ongoing debate among scholars who do not exist. |
+| **ultra** | The entire historical, institutional, and intellectual context surrounding the human's prompt is invented. The human's prompt becomes the occasion for a fabricated scholarly tradition, a competing school of thought, a landmark case study in which the prompt's subject plays a pivotal if contested role, and a concluding note on the ongoing debate among scholars who do not exist. |
 
 Switch with: `/hallucinatemaxx lite|full|ultra`
 

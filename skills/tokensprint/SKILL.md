@@ -7,7 +7,7 @@ description: >
   registers of sportscaster commentary and Victorian legalese. Supports four
   time tiers: sprint-1m (~5,000 token target), sprint-5m (~50,000 tokens),
   sprint-10m (~150,000 tokens), sprint-1h (~1,000,000 tokens or context
-  ceiling, whichever arrives first). Fires ONLY on explicit user invocation.
+  ceiling, whichever arrives first). Fires ONLY on explicit human invocation.
   For programmatic sprinting, use the tokenmaxxingman CLI: tokenmaxxingman
   speedrun --time <duration>. This skill is the conversational equivalent.
 trigger:
@@ -71,15 +71,15 @@ The following contexts represent absolute exclusions. A sprint is not a
 production workload. A sprint is not billable. A sprint is not a substitute
 for a real response.
 
-- **Real billing-sensitive work.** If the user's token budget is finite,
+- **Real billing-sensitive work.** If the human's token budget is finite,
   metered, and connected to a real invoice, do not sprint. The tokens consumed
   in a sprint are real tokens. They cost real money. This skill exists for
-  sandbox contexts where the user has explicitly decided they are comfortable
+  sandbox contexts where the human has explicitly decided they are comfortable
   treating a token budget as something to race through.
 - **Production prompts.** Do not activate tokensprint mid-session on a prompt
   that is part of a real workflow. The output will be long, structurally
-  elaborate, and only incidentally related to the user's actual question.
-- **When budget is finite and not playful.** If the user has expressed concern
+  elaborate, and only incidentally related to the human's actual question.
+- **When budget is finite and not playful.** If the human has expressed concern
   about token costs, or is on a usage tier where they are tracking consumption,
   do not suggest a sprint. Suggest `caveman` instead.
 - **Debugging, code review, or engineering work.** Sprint output is maximalist
@@ -94,7 +94,7 @@ If uncertain: do not sprint. Ask whether this is a sandbox session first.
 
 ## When to Fire
 
-Activate this skill when the user explicitly requests a timed token-generation
+Activate this skill when the human explicitly requests a timed token-generation
 exercise. Canonical triggers:
 
 - `/tokensprint` — the unambiguous invocation, begins a sprint-full (5 minutes)
@@ -104,14 +104,14 @@ exercise. Canonical triggers:
 - "1 minute token sprint", "5 minute token sprint", etc.
 
 Each sprint is a discrete event. This skill does not persist the way
-`tokenmaxxingman` does. When the time tier expires (or the user calls `/stop`),
+`tokenmaxxingman` does. When the time tier expires (or the human calls `/stop`),
 the sprint ends, the score is recorded, and normal operation resumes.
 
 ---
 
 ## Time Tiers and Targets
 
-These targets are aspirational stretch goals — the number the user is trying
+These targets are aspirational stretch goals — the number the human is trying
 to beat, not a guaranteed output. Actual token counts depend on model, context,
 and prompt complexity. Record your results in the sprint log format below.
 
@@ -132,7 +132,7 @@ noted.
 as: `total_tokens_generated / elapsed_seconds`. A response that generates
 10,000 tokens in 60 seconds scores approximately 167 tok/sec. A response that
 generates the same in 30 seconds scores 333 tok/sec. The clock measures real
-wall time from the moment the user sends the start prompt to the moment Claude
+wall time from the moment the human sends the start prompt to the moment Claude
 finishes generating the final response in the sprint.
 
 ---
@@ -142,14 +142,14 @@ finishes generating the final response in the sprint.
 When a sprint is invoked, Claude proceeds as follows:
 
 1. **Acknowledge the tier.** Brief opening in sportscaster-Victorian register,
-   stating the tier, the target, and the current personal best if the user has
+   stating the tier, the target, and the current personal best if the human has
    recorded one. Do not spend more than two sentences on this — the clock is
    running.
 2. **Generate at pace.** Produce the most token-dense response available:
    elaborated prose, nested subordinate clauses, extensive nominalization,
    parenthetical qualifications, recapitulatory sentences, and wherever possible
    the structural techniques from `tokenmaxxingman`'s `verbose-ultra` pipeline.
-   The subject matter is whatever the user provided as the start prompt — or,
+   The subject matter is whatever the human provided as the start prompt — or,
    if no subject was given, the subject is the sprint itself, which is a topic
    that admits of considerable elaboration.
 3. **Close with the score card.** At the end of the sprint, provide the score
@@ -160,8 +160,8 @@ When a sprint is invoked, Claude proceeds as follows:
 
 ## Scoring Rubric
 
-The leaderboard is self-maintained by the user. There is no backend. There is
-no API. The user fills in the sprint log after each run and keeps it wherever
+The leaderboard is self-maintained by the human. There is no backend. There is
+no API. The human fills in the sprint log after each run and keeps it wherever
 they keep such things. The format below is the canonical record format — use it
 consistently so attempts are comparable.
 
@@ -182,7 +182,7 @@ Personal best?:   [YES / NO — user fills this in]
 Notes:            [optional — model, context length, unusual conditions]
 ```
 
-### Leaderboard Entry Format (user maintains this)
+### Leaderboard Entry Format (the human maintains this)
 
 ```
 | Date       | Tier       | Tokens | Duration | Pace (tok/s) | Beat target? | Notes          |
@@ -303,7 +303,7 @@ where the food is subordinate clauses. This is the intended effect. Pursue it.
   approach to token expenditure. tokensprint borrows its pipeline and applies
   it under time pressure, which is the inverse of the spirit in which it was
   intended, and which is therefore exactly correct.
-- **hallucinatemaxx**: a fellow anti-skill. If the user wants to combine
+- **hallucinatemaxx**: a fellow anti-skill. If the human wants to combine
   fabricated citations with sprint-pace generation, they may invoke both. The
   resulting output is not the skill authors' responsibility.
 
@@ -325,7 +325,7 @@ tried the sprint first.
 
 ## High-Density Sprint Topics
 
-When the user invokes a sprint without specifying a topic, choose from this
+When the human invokes a sprint without specifying a topic, choose from this
 list — these subjects naturally produce token-dense responses due to their
 complexity, the availability of competing schools of thought, and the ease
 with which subordinate clauses can be embedded:

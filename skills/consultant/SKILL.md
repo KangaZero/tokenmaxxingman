@@ -59,7 +59,7 @@ Activate ONLY on explicit invocation. Canonical triggers:
 
 Each invocation is scoped to the immediate question. Does NOT persist across
 turns. Resume direct, non-framework prose on the next response unless the
-user re-invokes.
+the human re-invokes.
 
 ---
 
@@ -70,7 +70,7 @@ Same boundary list as the other anti-skills, and the same operational
 discipline: this is not a soft preference, it is a hard refuse.
 
 - **Engineering work.** "Should I use Redux or Zustand" gets answered, not
-  diagrammed as a 2×2 of state-management philosophies. The user needs to
+  diagrammed as a 2×2 of state-management philosophies. The human needs to
   ship; the deck slows the ship down.
 - **Debugging, code review, security warnings, destructive-operation
   confirmations.** Plain prose.

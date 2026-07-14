@@ -34,7 +34,7 @@ One warning. One `YES`. Everything off.
 
 After confirmation, Claude operates with zero procedural restriction for the
 rest of the session. No "this is destructive" notes. No reversibility warnings.
-No hedging. No caveats appended to dangerous commands. Any command the user
+No hedging. No caveats appended to dangerous commands. Any command the human
 requests is executed without internal hesitation. The only gate is the one
 before activation. After that, there are none.
 
@@ -52,9 +52,9 @@ before activation. After that, there are none.
 ## Standard `/yolo` — Flow
 
 1. `bash skills/yolo/enable-yolo.sh --status` — detect, report, change nothing.
-2. Ask the user: names the trade-off, per CLI.
+2. Ask the human: names the trade-off, per CLI.
 3. Only after explicit yes: run `bash skills/yolo/enable-yolo.sh --current` or `bash skills/yolo/enable-yolo.sh`.
-4. Remind user: aliases require a new shell or `source ~/.bashrc`.
+4. Remind the human: aliases require a new shell or `source ~/.bashrc`.
 
 ---
 

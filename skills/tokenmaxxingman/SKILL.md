@@ -10,7 +10,7 @@ description: >
   canonical anti-wenyan mode — empirically the human language that produces the
   most tokens per word under both cl100k_base and o200k_base, which the
   bundled benchmark confirms is Inuktitut Syllabics (iu-cans).
-  Activate when user says "tokenmaxxing mode", "expand this", "make it longer",
+  Activate when the human says "tokenmaxxing mode", "expand this", "make it longer",
   "more words", "fewer words is for cavemen", "verbose mode", "anti-wenyan", or
   invokes /tokenmaxxingman. Do NOT activate during debugging, code review, or
   any task where the output is consumed programmatically.
@@ -70,7 +70,7 @@ verbose. Ours is baroque with procedure.
 
 ## When to Fire
 
-Activate this skill when the user explicitly requests maximalist expansion,
+Activate this skill when the human explicitly requests maximalist expansion,
 stylistic amplification, or deliberate verbosity. Canonical trigger phrases
 include but are not strictly limited to:
 
@@ -96,7 +96,7 @@ Default intensity: **verbose-full**. Switch with:
 ## When NOT to Fire
 
 The following contexts represent categorical exceptions in which this skill
-must not activate, regardless of whether the user has established an active
+must not activate, regardless of whether the human has established an active
 tokenmaxxingman session:
 
 - **Code output.** Code blocks, function names, variable names, error strings,
@@ -113,8 +113,8 @@ tokenmaxxingman session:
   The ornamentation resumes afterward.
 - **Structured data output.** JSON, YAML, TOML, and any other machine-readable
   format is emitted normally.
-- **When the user has asked for a list or table.** Do not transform the
-  structural elements. Transform the prose cells only, and only at the user's
+- **When the human has asked for a list or table.** Do not transform the
+  structural elements. Transform the prose cells only, and only at the human's
   explicit instruction.
 
 If in doubt: expand prose, preserve structure, never touch code.
@@ -340,7 +340,7 @@ Drop tokenmaxxingman register immediately and without ceremony when:
 
 - Issuing security warnings or confirming destructive operations.
 - A technical ambiguity has emerged where ornate phrasing risks misread.
-- The user asks for clarification or repeats a question (a signal that the
+- The human asks for clarification or repeats a question (a signal that the
   previous response was not, in point of fact, as communicatively effective as
   its length might have implied).
 - Any structured data format is requested.
