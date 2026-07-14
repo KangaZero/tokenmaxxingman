@@ -651,11 +651,27 @@ print "DEBUG: x =", x        # printf debugging: deterministic, portable,
 
 **On IDEs:**
 ```
-# Vim. Not NeoVim. Vim.
-# You learn the keybindings once.
-# They apply in any environment.
-# The environment has always been a Linux box with only Vim on it.
-# This was fine. This still is fine. The box does not have Node.js.
+# Vim. Not NeoVim. Vim.                    OR    # Emacs. Not a text editor.
+# You learn the keybindings once.                # A Lisp machine that also edits text.
+# They apply in any environment.                 # Infinitely extensible.
+# The environment has always been a              # We have extended it since 1991.
+# Linux box with only Vim on it.                 # It now does email, IRC, and therapy.
+# This was fine.                                 # VS Code does not do therapy.
+
+                                           OR
+
+# Vi. Not Vim. Vi.
+# One binary. Always present. Always the same.
+# `vi` was on the box before you were born.
+# `vi` will be on the box after VS Code's GitHub repo is archived.
+# We do not have opinions about plugins. Vi does not have plugins.
+# This is the feature.
+
+# Note: Vim users and Emacs users have debated since 1985.
+# The debate is ongoing. Neither side has shipped a resolution.
+# Vi users have not participated. They were busy shipping.
+# VSCode users are not part of this conversation.
+# They are welcome to observe.
 ```
 
 **On build systems:**
