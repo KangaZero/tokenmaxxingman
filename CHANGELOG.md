@@ -29,7 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `web/src/components/SiteNav.vue`: desktop primary nav uses `AnimatedTabs`; both nav theme toggles use `ThemeToggler`; `/docs` added to desktop tabs and the mobile menu.
 - `web/src/pages/Settings.vue`: all four toggle switches (Theme, Auto-Verbosity, Auto-Boomer, PhD) replaced with `AnimatedSwitch`. The Theme switch drives the same View Transitions reveal via its `change` event.
 
-- `web/src/style.css` + `web/src/App.vue`: a site-wide animated topography background (`.topo-bg`), mounted as a fixed layer behind all content. Built from layered `repeating-radial-gradient` rings (an original implementation — the reference page is client-rendered and exposes no source), with a slow `background-position` drift, theme-aware line colour via `--color-bone`, and animation disabled under `prefers-reduced-motion`. The former per-page `grid-bg` overlays and the now-unused `.grid-bg` utility were removed so topography is the sole background.
+- `web/src/components/HexagonBackground.vue` + `web/src/App.vue`: a site-wide animated hexagon background (animate-ui `backgrounds/hexagon`), mounted as a fixed `-z-10` layer behind all content. A canvas draws the honeycomb once (correct flat-top hex lattice, DPR-aware, redrawn on resize/theme change, theme-aware via `--color-bone`); a soft accent glow drifts across with `mix-blend-mode: screen` so the cells appear to light up in a passing wave, disabled under `prefers-reduced-motion`. Original canvas implementation — the reference page is client-rendered and exposes no source. The former per-page `grid-bg` overlays and the now-unused `.grid-bg` utility were removed so this is the sole background.
 
 ### Fixed
 

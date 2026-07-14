@@ -141,7 +141,7 @@ onMounted(load);
 </script>
 
 <template>
-  <main id="main-content" class="relative isolate min-h-screen overflow-x-hidden 
+  <main id="main-content" class="relative min-h-screen overflow-x-hidden 
 ">
 
     <div class="mx-auto max-w-3xl px-6 py-24">

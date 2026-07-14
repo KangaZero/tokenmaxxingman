@@ -4,7 +4,7 @@ import SiteFooter from '../components/SiteFooter.vue';
 </script>
 
 <template>
-  <main id="main-content" class="relative isolate min-h-screen overflow-x-hidden 
+  <main id="main-content" class="relative min-h-screen overflow-x-hidden 
 ">
     <section class="mx-auto max-w-6xl px-6 py-24">
       <div class="mb-12 flex flex-col gap-3">

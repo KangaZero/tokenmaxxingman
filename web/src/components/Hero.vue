@@ -6,12 +6,12 @@ const tokenRatio = (HEADLINE_STATS.topRowO200k.tokensPerWord / HEADLINE_STATS.en
 </script>
 
 <template>
-  <section aria-labelledby="hero-heading" class="relative isolate overflow-hidden px-6 pt-32 pb-20 md:pt-40 md:pb-32">
+  <section aria-labelledby="hero-heading" class="relative overflow-hidden px-6 pt-32 pb-20 md:pt-40 md:pb-32">
     <!-- ambient glows -->
     <div class="pointer-events-none absolute -top-32 left-1/4 -z-10 h-96 w-96 rounded-full bg-accent/20 blur-3xl"></div>
     <div class="pointer-events-none absolute top-40 right-1/4 -z-10 h-96 w-96 rounded-full bg-cool/20 blur-3xl"></div>
 
-    <div class="mx-auto max-w-6xl">
+    <div class="relative z-10 mx-auto max-w-6xl">
       <div class="mb-10 flex items-center gap-3">
         <svg aria-hidden="true" width="40" height="40" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" class="rounded-lg">
           <rect width="32" height="32" rx="6" fill="#0a0a0a"/>

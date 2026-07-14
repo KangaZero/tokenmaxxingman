@@ -30,7 +30,7 @@ function spawn(event: PointerEvent): void {
 
 <template>
   <!-- Parent class/type/@click/aria-* fall through and merge onto this button. -->
-  <button class="relative overflow-hidden" @pointerdown="spawn">
+  <button class="relative z-10 overflow-hidden" @pointerdown="spawn">
     <span
       v-for="r in ripples"
       :key="r.id"

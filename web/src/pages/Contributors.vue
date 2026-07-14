@@ -7,7 +7,7 @@ const hireHovered = ref(false);
 </script>
 
 <template>
-  <main id="main-content" class="relative isolate min-h-screen overflow-x-hidden 
+  <main id="main-content" class="relative min-h-screen overflow-x-hidden 
 ">
 
     <section aria-labelledby="contributors-heading" class="mx-auto max-w-6xl px-6 py-24">
@@ -97,7 +97,7 @@ const hireHovered = ref(false);
 
         <!-- Card 2: The AI — MASSIVE, LOUD, COLORFUL -->
         <!-- Gradient border via wrapper -->
-        <div v-reveal="'fade-right'" class="card-ai-wrapper rounded-2xl bg-gradient-to-r from-accent via-cool to-purple-500 p-0.5">
+        <div v-reveal="'fade-right'" class="card-ai-wrapper relative z-10 rounded-2xl bg-gradient-to-r from-accent via-cool to-purple-500 p-0.5">
           <div class="card-ai card h-full !border-0 !bg-ink flex flex-col gap-6">
             <!-- Header -->
             <div class="flex items-center gap-4">
@@ -188,7 +188,7 @@ const hireHovered = ref(false);
       </div>
 
       <!-- Contribution breakdown -->
-      <div v-reveal="'fade-up'" class="mt-16 rounded-2xl border border-bone/10 bg-bone/[0.02] p-8">
+      <div v-reveal="'fade-up'" class="relative z-10 mt-16 rounded-2xl border border-bone/10 bg-bone/[0.02] p-8 backdrop-blur-sm">
         <h2 class="mb-6 font-display text-2xl font-bold text-bone">Contribution Breakdown</h2>
 
         <div class="space-y-4 font-mono">

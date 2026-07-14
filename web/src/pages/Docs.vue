@@ -48,7 +48,7 @@ function accentBorder(accent: string): string {
 </script>
 
 <template>
-  <main id="main-content" class="relative isolate min-h-screen overflow-x-hidden">
+  <main id="main-content" class="relative min-h-screen overflow-x-hidden">
 
     <section aria-labelledby="docs-heading" class="mx-auto max-w-6xl px-6 py-24">
       <!-- Cool looking back button -->
@@ -96,7 +96,7 @@ function accentBorder(accent: string): string {
       <!-- Installation -->
       <div v-reveal="'fade-up'" class="mb-16">
         <h2 class="mb-6 font-display text-2xl font-bold text-bone">Installation</h2>
-        <div class="rounded-2xl border border-bone/10 bg-bone/[0.02] p-6">
+        <div class="surface rounded-2xl border border-bone/10 bg-bone/[0.02] p-6">
           <AnimatedCode code="pnpm add -g tokenmaxxingman" prompt />
           <p class="mt-4 text-sm text-bone/50 leading-relaxed">
             The package manager is <code class="font-mono text-bone/70">pnpm</code>. It is not
@@ -116,12 +116,12 @@ function accentBorder(accent: string): string {
           Four commands. Each produces more output than it received. This is the value proposition,
           stated in full.
         </p>
-        <div class="space-y-4">
+        <div class="space-y-4 card surface">
           <div
             v-for="c in commands"
             :key="c.cmd"
             v-reveal="'fade-left'"
-            class="rounded-xl border border-bone/10 bg-bone/[0.02] p-5"
+            class="surface rounded-xl border border-bone/10 bg-bone/[0.02] p-5"
           >
             <AnimatedCode :code="c.cmd" prompt />
             <p class="mt-3 text-sm text-bone/55 leading-relaxed">{{ c.note }}</p>
@@ -163,7 +163,7 @@ function accentBorder(accent: string): string {
       </div>
 
       <!-- Primary metric -->
-      <div v-reveal="'fade-up'" class="mb-16 rounded-2xl border border-cool/20 bg-cool/[0.04] p-8">
+      <div v-reveal="'fade-up'" class="surface mb-16 rounded-2xl border border-cool/20 bg-cool/[0.04] p-8">
         <span class="pill !border-cool/30 !text-cool">Methodology</span>
         <h2 class="mt-4 mb-4 font-display text-2xl font-bold text-bone">
           The Primary Metric is <span class="text-cool">tok/word.</span>
@@ -186,7 +186,7 @@ function accentBorder(accent: string): string {
       </div>
 
       <!-- Disclaimer -->
-      <div v-reveal="'fade-up'" class="rounded-2xl border border-bone/10 bg-bone/[0.02] p-8">
+      <div v-reveal="'fade-up'" class="surface rounded-2xl border border-bone/10 bg-bone/[0.02] p-8">
         <p class="text-xs text-bone/35 leading-relaxed">
           <strong class="text-bone/50">Documentation Disclaimer.</strong> This documentation is
           complete to the extent that the organisation considers it complete, which is fully. The

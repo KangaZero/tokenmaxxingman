@@ -1,7 +1,7 @@
 <script setup lang="ts"></script>
 
 <template>
-  <footer class="border-t border-bone/10 px-6 py-12">
+  <footer class="relative z-10 border-t border-bone/10 px-6 py-12">
     <div class="mx-auto flex max-w-6xl flex-col gap-6 md:flex-row md:items-center md:justify-between">
       <div>
         <div class="flex items-center gap-2.5">

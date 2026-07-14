@@ -57,7 +57,7 @@ npm install && npm run build
     </article>
   </div>
 
-  <div class="mt-12 rounded-2xl border border-accent/20 bg-accent/[0.04] p-6 md:p-8">
+  <div class="surface mt-12 rounded-2xl border border-accent/20 bg-accent/[0.04] p-6 md:p-8">
     <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
       <div>
         <h4 class="font-display text-xl font-bold text-bone">Got <code class="font-mono text-accent">just</code>?</h4>

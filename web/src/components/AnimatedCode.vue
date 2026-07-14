@@ -133,7 +133,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div ref="root" class="overflow-hidden rounded-lg border border-bone/10 bg-ink/60" role="group" :aria-label="filename || 'code block'">
+  <div ref="root" class="surface overflow-hidden rounded-lg border border-bone/10 bg-ink/60" role="group" :aria-label="filename || 'code block'">
     <!-- Window header -->
     <div class="flex items-center justify-between border-b border-bone/10 bg-bone/[0.03] px-3 py-2">
       <div class="flex items-center gap-1.5">

@@ -10,7 +10,7 @@ import SiteFooter from '../components/SiteFooter.vue';
 </script>
 
 <template>
-  <main id="main-content" class="relative isolate min-h-screen overflow-x-hidden 
+  <main id="main-content" class="relative min-h-screen overflow-x-hidden 
 ">
 
     <Hero />

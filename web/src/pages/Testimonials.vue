@@ -202,7 +202,7 @@ const testimonials: Testimonial[] = [
 </script>
 
 <template>
-  <main id="main-content" class="relative isolate min-h-screen overflow-x-hidden 
+  <main id="main-content" class="relative min-h-screen overflow-x-hidden 
 ">
 
     <!-- Toast -->
@@ -240,7 +240,7 @@ const testimonials: Testimonial[] = [
       </div>
 
       <!-- Stats bar -->
-      <div v-reveal="'fade-up'" class="mb-16 grid grid-cols-2 gap-4 rounded-2xl border border-bone/10 bg-bone/[0.02] p-6 md:grid-cols-4">
+      <div v-reveal="'fade-up'" class="surface mb-16 grid grid-cols-2 gap-4 rounded-2xl border border-bone/10 bg-bone/[0.02] p-6 md:grid-cols-4">
         <div class="text-center">
           <div class="font-display text-2xl font-bold text-bone">★★★★★</div>
           <div class="mt-1 text-xs text-bone/50">Average Rating (disputed)</div>

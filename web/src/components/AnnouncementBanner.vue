@@ -12,7 +12,7 @@ watch(dismissed, (val) => localStorage.setItem(STORAGE_KEY, String(val)));
     v-if="!dismissed"
     role="region"
     aria-label="Announcement"
-    class="relative isolate overflow-hidden border-b border-bone/10 bg-bone/5 px-6 py-3 sm:px-3.5"
+    class="relative isolate z-10 overflow-hidden border-b border-bone/10 bg-bone/5 px-6 py-3 sm:px-3.5"
   >
     <!-- ambient glow left -->
     <div

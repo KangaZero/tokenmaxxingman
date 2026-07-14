@@ -65,7 +65,7 @@ const riskFactors = [
 </script>
 
 <template>
-  <main id="main-content" class="relative isolate min-h-screen overflow-x-hidden 
+  <main id="main-content" class="relative min-h-screen overflow-x-hidden 
 ">
 
     <!-- Prospectus toast -->
@@ -116,7 +116,7 @@ const riskFactors = [
       </div>
 
       <!-- Live losses counter -->
-      <div v-reveal="'fade-up'" class="mb-16 rounded-2xl border border-accent/20 bg-accent/[0.04] p-8">
+      <div v-reveal="'fade-up'" class="surface mb-16 rounded-2xl border border-accent/20 bg-accent/[0.04] p-8">
         <div class="mb-3 flex flex-wrap items-center gap-3">
           <span class="pill !border-accent/30 !text-accent">Live</span>
           <span class="font-mono text-xs text-bone/40">Updated every 80ms · Trending negative · This is expected</span>
@@ -154,7 +154,7 @@ const riskFactors = [
       </div>
 
       <!-- IPO section -->
-      <div v-reveal="'fade-up'" class="mb-16 rounded-2xl border border-bone/10 bg-bone/[0.02] p-8">
+      <div v-reveal="'fade-up'" class="surface mb-16 rounded-2xl border border-bone/10 bg-bone/[0.02] p-8">
         <div class="mb-2 flex flex-wrap items-center gap-3">
           <span class="pill !border-cool/30 !text-cool">The Offering</span>
           <span class="font-mono text-xs text-bone/30">Prospectus filed: March 3, 2025 · Effective: immediately, against our counsel's recommendation</span>
@@ -189,7 +189,7 @@ const riskFactors = [
       <!-- Use of funds -->
       <div v-reveal="'fade-up'" class="mb-16">
         <h2 class="mb-6 font-display text-2xl font-bold text-bone">Use of Funds</h2>
-        <div class="overflow-hidden rounded-xl border border-bone/10">
+        <div class="surface overflow-hidden rounded-xl border border-bone/10">
           <table class="w-full text-sm">
             <thead>
               <tr class="border-b border-bone/10 bg-bone/[0.03]">
@@ -230,7 +230,7 @@ const riskFactors = [
             v-for="(risk, i) in riskFactors"
             :key="i"
             v-reveal="'fade-left'"
-            class="rounded-xl border border-bone/10 bg-bone/[0.02] p-5"
+            class="surface rounded-xl border border-bone/10 bg-bone/[0.02] p-5"
             :style="{ animationDelay: `${i * 60}ms` }"
           >
             <div class="flex gap-3">
@@ -243,7 +243,7 @@ const riskFactors = [
 
       <!-- Investor contact -->
       <div v-reveal="'fade-up'" class="mb-16 grid gap-6 md:grid-cols-2">
-        <div class="card flex flex-col gap-4">
+        <div class="card bg-bone/5 flex flex-col gap-4">
           <h2 class="font-display text-xl font-bold text-bone">Investor Contact</h2>
           <p class="text-sm text-bone/65 leading-relaxed">
             For investor inquiries, press releases, analyst briefings, or media requests, please be
@@ -285,7 +285,7 @@ const riskFactors = [
       </div>
 
       <!-- Disclaimer -->
-      <div v-reveal="'fade-up'" class="rounded-2xl border border-bone/10 bg-bone/[0.02] p-8">
+      <div v-reveal="'fade-up'" class="surface rounded-2xl border border-bone/10 bg-bone/[0.02] p-8">
         <p class="text-xs text-bone/35 leading-relaxed">
           <strong class="text-bone/50">Important Disclosures.</strong> This is not a real financial
           disclosure. The figures presented herein are satirical. The Company is not publicly traded.
