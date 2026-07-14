@@ -18,12 +18,12 @@ describe('runBenchmark', () => {
     expect(result.rows).toHaveLength(18);
   });
 
-  it('rows are sorted descending by tokensPerCharacter', () => {
+  it('rows are sorted descending by tokensPerWord', () => {
     const result = runBenchmark(corpus, 'cl100k_base');
     for (let i = 0; i < result.rows.length - 1; i++) {
       const current = result.rows[i];
       const next = result.rows[i + 1];
-      expect(current?.tokensPerCharacter).toBeGreaterThanOrEqual(next?.tokensPerCharacter ?? 0);
+      expect(current?.tokensPerWord).toBeGreaterThanOrEqual(next?.tokensPerWord ?? 0);
     }
   });
 

@@ -18,54 +18,53 @@ The joke is real engineering. The benchmarks are reproducible. The transforms ar
 
 ## The Empirical Finding
 
-The naive hypothesis: Classical Chinese (`zh-classical`) would maximize tokens per character. Han ideographs are compact glyphs that encode dense meaning — surely BPE would struggle.
-
-The naive hypothesis is wrong.
+The primary metric is **tokens per word** (`tok/word`), measured using `Intl.Segmenter` with per-language locale awareness so that CJK, Indic, and syllabic scripts are word-segmented correctly rather than split on whitespace alone.
 
 On the bundled 8-sentence × 18-language/register corpus, `cl100k_base` encoding, `gpt-tokenizer` v3.4.0:
 
-**Rank 1 — most tokens per character — the benchmark winner: Inuktitut Syllabics (`iu-cans`), 2.6158 tok/char (cl100k_base) / 2.6780 tok/char (o200k_base).**
+**Rank 1 — most tokens per word — the benchmark winner: Inuktitut Syllabics (`iu-cans`), 21.05 tok/word (cl100k_base) / 21.55 tok/word (o200k_base).**
 
-**Rank 18 — most efficient — fewest tokens per character: English legalese (`en-legalese`), 0.1953 tok/char.**
+**Rank 18 — fewest tokens per word: English legalese (`en-legalese`), 1.20 tok/word.**
 
-Classical Chinese (`zh-classical`) landed at rank **11/18** under `cl100k_base` (1.5455 tok/char) and **5/18** under `o200k_base` (1.0364 tok/char). Not last. Not close to last. The naive "Han ideographs must tokenize worst" hypothesis is straightforwardly wrong.
+Why Inuktitut? It is polysynthetic — a single word encodes what English needs an entire clause to say. The 8-sentence corpus produces only 22 Inuktitut word-segments, but 463 tokens: each word costs ~21 tokens on average. That is a structural property of the language, not just the script.
 
-Why? BPE tokenizers like `cl100k_base` were trained predominantly on English text. Common English substrings — including the elaborate legal and Victorian compounds that legalese deploys — appear frequently enough in the training corpus that they are aggressively merged into single tokens. Inuktitut Syllabics, on the other hand, is a polysynthetic language written in a script the tokenizer has minimal vocabulary for. Each glyph maps to its own token or a very short sequence. The result is a token count that dwarfs Classical Chinese.
+The Dravidian and South Asian scripts (Telugu, Georgian, Malayalam, Tamil, Sinhala) cluster in ranks 2–9. They have complex morphology and are poorly represented in BPE training data — each word is long, unfamiliar to the tokenizer, and gets fragmented into many subword pieces.
 
-Notably, Inuktitut is the only natural-language entry whose `tok/char` ratio *increases* when moving from `cl100k_base` (2.6158) to the newer, larger-vocabulary `o200k_base` (2.6780) — every other non-Latin script gets *better* compression under `o200k_base`. The newer tokenizer learned more of the world; it did not learn more Inuktitut. That asymmetry is what `tokenmaxxingman` operationalises as the canonical `anti-wenyan` mode.
+Finnish and Turkish (agglutinative) land in the middle of the pack. Their words are long compound forms, but the segmenter counts each compound as one word — so `tok/word` is moderate even though `tok/char` is low. This illustrates why `tok/word` and `tok/char` tell different stories: `tok/char` measures script density; `tok/word` measures tokenizer cost per unit of meaning.
+
+Inuktitut is the only natural-language entry whose ratio *increases* when moving from `cl100k_base` to the newer `o200k_base` — every other script improves. The newer tokenizer learned more of the world; it did not learn more Inuktitut.
 
 ### Top 5 and Bottom 5 (cl100k_base, 8 sentences × 18 variants)
 
-| Rank | Language / Register | Key | tok/char |
-|-----:|---------------------|-----|----------:|
-| 1 | Inuktitut Syllabics | `iu-cans` | 2.6158 |
-| 2 | Amharic | `am` | 2.5000 |
-| 3 | Cherokee | `chr` | 2.4718 |
-| 4 | Tibetan | `bo` | 2.0396 |
-| 5 | Burmese | `my` | 1.9777 |
-| … | … | … | … |
-| 11 | Classical Chinese | `zh-classical` | 1.5455 |
-| … | … | … | … |
-| 15 | Turkish | `tr` | 0.4070 |
-| 16 | English | `en` | 0.2524 |
-| 17 | Victorian English | `en-victorian` | 0.2105 |
-| 18 | English legalese | `en-legalese` | 0.1953 |
+| Rank | Language / Register | Key | tok/word | tok/char |
+|-----:|---------------------|-----|----------:|---------:|
+| 1 | Inuktitut Syllabics | `iu-cans` | 21.0455 | 2.6158 |
+| 2 | Telugu | `te` | 13.3667 | 1.7665 |
+| 3 | Georgian | `ka` | 13.0333 | 1.8357 |
+| 4 | Cherokee | `chr` | 13.0000 | 2.4718 |
+| 5 | Malayalam | `ml` | 12.9643 | 1.6351 |
+| … | … | … | … | … |
+| 14 | Turkish | `tr` | 2.7000 | 0.4070 |
+| 15 | Modern Chinese | `zh-modern` | 2.4054 | 1.3692 |
+| 16 | English | `en` | 1.2619 | 0.2524 |
+| 17 | Victorian English | `en-victorian` | 1.2330 | 0.2105 |
+| 18 | English legalese | `en-legalese` | 1.2023 | 0.1953 |
 
 ### Top 5 under `o200k_base`
 
-The ranking shifts noticeably under `o200k_base`: Amharic drops from rank 2 to rank 3, Cherokee climbs to rank 2, and Classical Chinese jumps from 11 to 5. Inuktitut stays at rank 1 and widens the gap.
+Under `o200k_base`, Inuktitut widens its lead, Cherokee climbs to rank 2, and the Dravidian scripts compress more aggressively (the larger vocabulary covers more of their script). Classical Chinese drops out of the top 5 entirely.
 
-| Rank | Language / Register | Key | tok/char |
-|-----:|---------------------|-----|----------:|
-| 1 | Inuktitut Syllabics | `iu-cans` | 2.6780 |
-| 2 | Cherokee | `chr` | 2.6056 |
-| 3 | Amharic | `am` | 1.8378 |
-| 4 | Tibetan | `bo` | 1.5066 |
-| 5 | Classical Chinese | `zh-classical` | 1.0364 |
+| Rank | Language / Register | Key | tok/word | tok/char |
+|-----:|---------------------|-----|----------:|---------:|
+| 1 | Inuktitut Syllabics | `iu-cans` | 21.5455 | 2.6780 |
+| 2 | Cherokee | `chr` | 13.7037 | 2.6056 |
+| 3 | Amharic | `am` | 8.5000 | 1.8378 |
+| 4 | Tibetan | `bo` | 5.8966 | 1.5066 |
+| 5 | Tamil | `ta` | 3.6429 | 0.4378 |
 
 ### Methodology
 
-The benchmark runs a bundled, statically committed corpus (`data/corpus.json`) of 8 sentences across 18 language and register variants. Tokenization uses `gpt-tokenizer` v3.4.0 (pinned exact semver), `cl100k_base` encoding. The primary metric is total tokens divided by total character count across all sentences in the corpus. Ties are broken by tokens per sentence, then by language key alphabetically.
+The benchmark runs a bundled, statically committed corpus (`data/corpus.json`) of 8 sentences across 18 language and register variants. Tokenization uses `gpt-tokenizer` v3.4.0 (pinned exact semver), `cl100k_base` encoding. The primary metric is **tokens per word** (`tok/word`): total tokens divided by total word-segment count across all corpus sentences, where word segments are computed with `Intl.Segmenter` at `granularity: 'word'` (filtering to `isWordLike` segments, which excludes punctuation). The locale tag for each language is passed to the segmenter where it is a valid BCP 47 tag; non-standard codes (e.g. `zh-classical`) fall back to the runtime default. Secondary sort key is `tok/char`; tertiary is `tok/sent`; final tiebreak is language code alphabetically.
 
 Results are fully reproducible: pin `gpt-tokenizer` at the committed version, use `data/corpus.json` as shipped, run `tokenmaxxingman benchmark`. Same numbers, every time.
 

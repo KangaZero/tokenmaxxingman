@@ -21,7 +21,7 @@ const rows = computed(() => {
   return COMPARE_CODES.map((code) => {
     const cl = CL100K_ROWS.find((r) => r.code === code)!;
     const o = O200K_ROWS.find((r) => r.code === code)!;
-    return { code, name: cl.name, cl: cl.tokensPerCharacter, o: o.tokensPerCharacter };
+    return { code, name: cl.name, cl: cl.tokensPerWord, o: o.tokensPerWord };
   });
 });
 
@@ -78,7 +78,7 @@ const options: ChartOptions<'bar'> = {
       grid: { color: 'rgba(250, 250, 247, 0.08)' },
       title: {
         display: true,
-        text: 'tokens / character',
+        text: 'tokens / word',
         color: 'rgba(250, 250, 247, 0.7)',
         font: { family: 'Inter', weight: 500 },
       },

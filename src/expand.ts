@@ -42,9 +42,9 @@ const VERBOSE_GALACTIC: Transform = pipe(
 );
 
 // `anti-wenyan` resolves to Inuktitut Syllabics (iu-cans), the natural-language
-// winner of the bundled benchmark under both cl100k_base (2.62 tok/char) and
-// o200k_base (2.68 tok/char) — the empirical opposite of Classical Chinese
-// (~1.5 / ~1.0 tok/char). Reproduce with `tmm benchmark`.
+// winner of the bundled benchmark under both cl100k_base (21.05 tok/word) and
+// o200k_base (21.55 tok/word) — the empirical opposite of Classical Chinese
+// (~2.93 / ~1.97 tok/word). Reproduce with `tmm benchmark`.
 const ANTI_WENYAN_LANG = 'iu-cans';
 
 // `translate-inuktitut` and `anti-wenyan` are two names for the same pipeline

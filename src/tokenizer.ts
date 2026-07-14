@@ -7,6 +7,7 @@ export interface TokenCount {
   tokens: number;
   characters: number;
   bytes: number;
+  words: number;
   encoding: EncodingName;
 }
 
@@ -15,12 +16,22 @@ const encoders: Record<EncodingName, (text: string) => number[]> = {
   o200k_base: encodeO200k,
 };
 
-export function countTokens(text: string, encoding: EncodingName): TokenCount {
+function makeSegmenter(locale?: string): Intl.Segmenter {
+  try {
+    return new Intl.Segmenter(locale, { granularity: 'word' });
+  } catch {
+    return new Intl.Segmenter(undefined, { granularity: 'word' });
+  }
+}
+
+export function countTokens(text: string, encoding: EncodingName, locale?: string): TokenCount {
   const encode = encoders[encoding];
+  const words = [...makeSegmenter(locale).segment(text)].filter((s) => s.isWordLike).length;
   return {
     tokens: encode(text).length,
     characters: [...text].length,
     bytes: new TextEncoder().encode(text).length,
+    words,
     encoding,
   };
 }
