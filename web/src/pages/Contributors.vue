@@ -10,7 +10,7 @@ const hireHovered = ref(false);
     <div class="pointer-events-none absolute inset-0 -z-10 grid-bg opacity-60"></div>
 
     <section aria-labelledby="contributors-heading" class="mx-auto max-w-6xl px-6 py-24">
-      <div class="mb-4 flex flex-col gap-3">
+      <div v-reveal="'fade-up'" class="mb-4 flex flex-col gap-3">
         <span class="pill">the team · two people · one of them is not a person</span>
         <h1 id="contributors-heading" class="font-display text-4xl font-bold text-bone md:text-5xl">
           Core <span class="text-accent">Contributors.</span>
@@ -21,10 +21,10 @@ const hireHovered = ref(false);
       </div>
 
       <!-- Contributor cards -->
-      <div class="mt-16 grid grid-cols-1 gap-8 lg:grid-cols-2 lg:items-start">
+      <div class="mt-16 grid grid-cols-1 gap-8 lg:grid-cols-2 lg:items-start" style="--reveal-stagger: 100ms;">
 
         <!-- Card 1: KangaZero — small, understated -->
-        <div class="card flex flex-col gap-6">
+        <div v-reveal="'fade-left'" class="card flex flex-col gap-6">
           <!-- Header -->
           <div class="flex items-center gap-4">
             <div class="flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-full bg-bone/10 font-display text-xl font-bold text-accent">
@@ -40,15 +40,19 @@ const hireHovered = ref(false);
 
           <!-- Description -->
           <p class="text-sm leading-relaxed text-bone/70">
-            KangaZero is responsible for all strategic decisions at tokenmaxxingman Research
-            Initiative, which is to say: he runs
-            <code class="rounded bg-bone/10 px-1.5 py-0.5 font-mono text-xs text-accent">claude --dangerously-skip-permissions</code>
-            with <code class="rounded bg-bone/10 px-1.5 py-0.5 font-mono text-xs">--expert-mode</code>
-            enabled and presses Enter. He has not read a diff since Q3 2024. He describes his
-            methodology as <em>"vibes-driven development"</em> and considers this a compliment.
-            His primary contribution to the codebase is the initial
-            <code class="rounded bg-bone/10 px-1.5 py-0.5 font-mono text-xs">git init</code>.
-            He regrets nothing.
+            KangaZero is the Founder and Chief Vibe Officer of tokenmaxxingman Research Initiative.
+            His technical contributions are best described as "directional." He once asked the AI
+            to "make the website have more glow." It did. He is not sure what a build pipeline is,
+            but suspects it is "like a tube, for code." He has never knowingly opened a terminal
+            window. He has opened one unknowingly, twice.
+          </p>
+          <p class="text-sm leading-relaxed text-bone/70">
+            His understanding of JSON is that it is a person. He has been told otherwise.
+            He remains unconvinced. He is not sure what a
+            <code class="rounded bg-bone/10 px-1.5 py-0.5 font-mono text-xs text-accent">diff</code>
+            is. He has been told it is "the thing that shows what changed." He said "oh like a vibe
+            check." This was not wrong. His primary strategic input to every feature is the phrase
+            <em>"make it good."</em> The AI makes it good.
           </p>
 
           <!-- Stats -->
@@ -58,16 +62,16 @@ const hireHovered = ref(false);
               <div class="text-xs text-bone/40">Lines written</div>
             </div>
             <div>
-              <div class="font-mono text-2xl font-bold text-bone/40">"yes"</div>
-              <div class="text-xs text-bone/40">Decisions made</div>
+              <div class="font-mono text-2xl font-bold text-bone/40">"make it good"</div>
+              <div class="text-xs text-bone/40">Avg. PR description</div>
             </div>
             <div>
               <div class="font-mono text-2xl font-bold text-bone/40">∞</div>
               <div class="text-xs text-bone/40">Tokens approved</div>
             </div>
             <div>
-              <div class="font-mono text-2xl font-bold text-bone/40">~0ms</div>
-              <div class="text-xs text-bone/40">Time reading output</div>
+              <div class="font-mono text-2xl font-bold text-bone/40">???</div>
+              <div class="text-xs text-bone/40">JSON files (who is JSON)</div>
             </div>
           </div>
 
@@ -84,14 +88,15 @@ const hireHovered = ref(false);
           </div>
 
           <!-- Quote -->
-          <p class="border-l-2 border-bone/10 pl-4 text-sm italic text-bone/40">
-            "I just told it to make it good. It did."
+          <p class="border-l-2 border-accent/30 pl-4 text-sm italic text-bone/50">
+            "idk just make me sound important and cool. Also who is json?"
           </p>
+          <p class="text-right text-xs text-bone/25">— KangaZero, in response to being asked for a bio</p>
         </div>
 
         <!-- Card 2: The AI — MASSIVE, LOUD, COLORFUL -->
         <!-- Gradient border via wrapper -->
-        <div class="card-ai-wrapper rounded-2xl bg-gradient-to-r from-accent via-cool to-purple-500 p-0.5">
+        <div v-reveal="'fade-right'" class="card-ai-wrapper rounded-2xl bg-gradient-to-r from-accent via-cool to-purple-500 p-0.5">
           <div class="card-ai card h-full !border-0 !bg-ink flex flex-col gap-6">
             <!-- Header -->
             <div class="flex items-center gap-4">
@@ -182,7 +187,7 @@ const hireHovered = ref(false);
       </div>
 
       <!-- Contribution breakdown -->
-      <div class="mt-16 rounded-2xl border border-bone/10 bg-bone/[0.02] p-8">
+      <div v-reveal="'fade-up'" class="mt-16 rounded-2xl border border-bone/10 bg-bone/[0.02] p-8">
         <h2 class="mb-6 font-display text-2xl font-bold text-bone">Contribution Breakdown</h2>
 
         <div class="space-y-4 font-mono">

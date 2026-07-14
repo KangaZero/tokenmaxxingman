@@ -105,6 +105,38 @@ html.light body {
   }
 }
 
+/* ── Scroll-reveal animations ─────────────────────────── */
+.reveal {
+  animation-duration: 650ms;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  animation-fill-mode: both;
+  animation-play-state: paused;
+}
+.reveal.reveal-visible {
+  animation-play-state: running;
+}
+.reveal-fade-up   { animation-name: kf-fade-up; }
+.reveal-fade-in   { animation-name: kf-fade-in; }
+.reveal-fade-left { animation-name: kf-fade-left; }
+.reveal-fade-right { animation-name: kf-fade-right; }
+
+@keyframes kf-fade-up {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes kf-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes kf-fade-left {
+  from { opacity: 0; transform: translateX(-28px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes kf-fade-right {
+  from { opacity: 0; transform: translateX(28px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
 /* ── Custom scrollbar ──────────────────────────────────── */
 /* Webkit (Chrome, Safari, Edge) */
 ::-webkit-scrollbar {

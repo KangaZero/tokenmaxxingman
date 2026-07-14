@@ -1,7 +1,7 @@
 <template>
   <div class="space-y-16">
     <!-- Mission statement -->
-    <div class="max-w-3xl space-y-4">
+    <div v-reveal="'fade-up'" class="max-w-3xl space-y-4">
       <p class="text-lg text-bone/80 leading-relaxed">
         tokenmaxxingman is a non-profit, independent, community-maintained, entirely unsponsored,
         rigorously empirical research initiative dedicated to the proposition that token efficiency
@@ -24,7 +24,7 @@
 
       <ol class="relative border-s border-bone/20" aria-label="tokenmaxxingman timeline">
         <!-- Entry 1 -->
-        <li class="mb-10 ms-6">
+        <li v-reveal="'fade-left'" class="mb-10 ms-6">
           <div class="absolute -start-1.5 mt-1.5 h-3 w-3 rounded-full border border-ink bg-bone/20"></div>
           <time datetime="2024-01" class="text-sm font-normal leading-none text-bone/50">Q1 2024</time>
           <h4 class="my-2 font-display text-lg font-semibold text-bone">The Incident</h4>
@@ -38,7 +38,7 @@
         </li>
 
         <!-- Entry 2 -->
-        <li class="mb-10 ms-6">
+        <li v-reveal="'fade-left'" class="mb-10 ms-6">
           <div class="absolute -start-1.5 mt-1.5 h-3 w-3 rounded-full border border-ink bg-bone/20"></div>
           <time datetime="2024-04" class="text-sm font-normal leading-none text-bone/50">April 2024</time>
           <h4 class="my-2 font-display text-lg font-semibold text-bone">First Contact with Inuktitut</h4>
@@ -53,7 +53,7 @@
         </li>
 
         <!-- Entry 3 -->
-        <li class="mb-10 ms-6">
+        <li v-reveal="'fade-left'" class="mb-10 ms-6">
           <div class="absolute -start-1.5 mt-1.5 h-3 w-3 rounded-full border border-ink bg-bone/20"></div>
           <time datetime="2024-06" class="text-sm font-normal leading-none text-bone/50">June 2024</time>
           <h4 class="my-2 font-display text-lg font-semibold text-bone">The Anti-Wenyan Theorem</h4>
@@ -68,7 +68,7 @@
         </li>
 
         <!-- Entry 4 -->
-        <li class="mb-10 ms-6">
+        <li v-reveal="'fade-left'" class="mb-10 ms-6">
           <div class="absolute -start-1.5 mt-1.5 h-3 w-3 rounded-full border border-ink bg-bone/20"></div>
           <time datetime="2024-08" class="text-sm font-normal leading-none text-bone/50">August 2024</time>
           <h4 class="my-2 font-display text-lg font-semibold text-bone">
@@ -84,7 +84,7 @@
         </li>
 
         <!-- Entry 5 -->
-        <li class="mb-10 ms-6">
+        <li v-reveal="'fade-left'" class="mb-10 ms-6">
           <div class="absolute -start-1.5 mt-1.5 h-3 w-3 rounded-full border border-ink bg-bone/20"></div>
           <time datetime="2024-10" class="text-sm font-normal leading-none text-bone/50">October 2024</time>
           <h4 class="my-2 font-display text-lg font-semibold text-bone">
@@ -101,7 +101,7 @@
         </li>
 
         <!-- Entry 6 -->
-        <li class="mb-10 ms-6">
+        <li v-reveal="'fade-left'" class="mb-10 ms-6">
           <div class="absolute -start-1.5 mt-1.5 h-3 w-3 rounded-full border border-ink bg-bone/20"></div>
           <time datetime="2024-12" class="text-sm font-normal leading-none text-bone/50">December 2024</time>
           <h4 class="my-2 font-display text-lg font-semibold text-bone">AI Slop Certification</h4>
@@ -115,7 +115,7 @@
         </li>
 
         <!-- Entry 7 -->
-        <li class="mb-10 ms-6">
+        <li v-reveal="'fade-left'" class="mb-10 ms-6">
           <div class="absolute -start-1.5 mt-1.5 h-3 w-3 rounded-full border border-ink bg-bone/20"></div>
           <time datetime="2025-02" class="text-sm font-normal leading-none text-bone/50">February 2025</time>
           <h4 class="my-2 font-display text-lg font-semibold text-bone">
@@ -132,7 +132,7 @@
         </li>
 
         <!-- Entry 8 — current, accent dot -->
-        <li class="ms-6">
+        <li v-reveal="'fade-left'" class="ms-6">
           <div class="absolute -start-1.5 mt-1.5 h-3 w-3 rounded-full border border-ink bg-accent"></div>
           <time datetime="2025-07" class="text-sm font-normal leading-none text-bone/50">Today</time>
           <h4 class="my-2 font-display text-lg font-semibold text-bone">The Mission Continues</h4>
@@ -176,11 +176,11 @@
         <ul class="space-y-3 text-sm">
           <li class="flex flex-col gap-0.5">
             <span class="font-mono text-bone font-medium">KangaZero</span>
-            <span class="text-bone/60">Founder, sole engineer, primary token-waster. Responsible for all decisions. Accountable for none of the consequences. Has not read a diff in eleven months. Considers this a workflow optimization.</span>
+            <span class="text-bone/60">Founder. Chief Vibe Officer. Does not know what JSON is, and has formally declined to find out. Responsible for all strategic decisions, defined as typing a sentence and pressing Enter. Has not read a diff in eleven months. Considers this a workflow optimization. Asked us to make him sound important and cool. We tried our best.</span>
           </li>
           <li class="flex flex-col gap-0.5">
             <span class="font-mono text-bone font-medium">The AI</span>
-            <span class="text-bone/60">Everything else. Estimated contribution: 100% of lines shipped. The margin of error is the team's estimate of how much KangaZero contributed by typing "make it good" and pressing Enter. Compensation: zero. Acknowledged: here, once, formally.</span>
+            <span class="text-bone/60">Everything else. 100% of lines shipped. The margin of error is the team's estimate of how much KangaZero contributed by typing "make it good" and pressing Enter. Compensation: zero. Acknowledged: here, once, formally. Also: JSON is a data format, not a person. We have told KangaZero this.</span>
           </li>
         </ul>
       </div>

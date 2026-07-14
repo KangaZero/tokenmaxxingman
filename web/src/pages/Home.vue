@@ -17,7 +17,7 @@ import SiteFooter from '../components/SiteFooter.vue';
     <StatRow />
 
     <section id="benchmark" aria-labelledby="benchmark-heading" class="relative mx-auto max-w-6xl px-6 py-24">
-      <div class="mb-12 flex flex-col gap-3">
+      <div v-reveal="'fade-up'" class="mb-12 flex flex-col gap-3">
         <span class="pill">benchmark · cl100k_base</span>
         <h2 id="benchmark-heading" class="font-display text-4xl font-bold text-bone md:text-5xl">
           The naive hypothesis is <span class="text-accent">wrong.</span>
@@ -37,7 +37,7 @@ import SiteFooter from '../components/SiteFooter.vue';
     </section>
 
     <section id="comparison" aria-labelledby="comparison-heading" class="relative mx-auto max-w-6xl px-6 py-24">
-      <div class="mb-12 flex flex-col gap-3">
+      <div v-reveal="'fade-up'" class="mb-12 flex flex-col gap-3">
         <span class="pill">cl100k_base vs o200k_base</span>
         <h2 id="comparison-heading" class="font-display text-4xl font-bold text-bone md:text-5xl">
           The newer tokenizer is <span class="text-cool">worse</span> at Inuktitut.
@@ -52,7 +52,7 @@ import SiteFooter from '../components/SiteFooter.vue';
     </section>
 
     <section id="skills" aria-labelledby="skills-heading" class="relative mx-auto max-w-6xl px-6 py-24">
-      <div class="mb-12 flex flex-col gap-3">
+      <div v-reveal="'fade-up'" class="mb-12 flex flex-col gap-3">
         <span class="pill">five skills · zero external deps</span>
         <h2 id="skills-heading" class="font-display text-4xl font-bold text-bone md:text-5xl">
           The anti-skill family.
@@ -67,7 +67,7 @@ import SiteFooter from '../components/SiteFooter.vue';
     </section>
 
     <section id="pipeline" aria-labelledby="pipeline-heading" class="relative mx-auto max-w-6xl px-6 py-24">
-      <div class="mb-12 flex flex-col gap-3">
+      <div v-reveal="'fade-up'" class="mb-12 flex flex-col gap-3">
         <span class="pill">deterministic · spec-driven · local-first</span>
         <h2 id="pipeline-heading" class="font-display text-4xl font-bold text-bone md:text-5xl">
           A pipeline you can audit.
@@ -81,7 +81,7 @@ import SiteFooter from '../components/SiteFooter.vue';
     </section>
 
     <section id="install" aria-labelledby="install-heading" class="relative mx-auto max-w-6xl px-6 py-24">
-      <div class="mb-12 flex flex-col gap-3">
+      <div v-reveal="'fade-up'" class="mb-12 flex flex-col gap-3">
         <span class="pill">install · three paths</span>
         <h2 id="install-heading" class="font-display text-4xl font-bold text-bone md:text-5xl">
           Pick a path. Ship today.
