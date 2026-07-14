@@ -13,66 +13,81 @@ import {
   type ChartOptions,
 } from 'chart.js';
 import { CL100K_ROWS } from '../data/benchmark';
+import { useTheme } from '../composables/useTheme';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
+const { isDark } = useTheme();
+
 const visible = computed(() => CL100K_ROWS.slice(0, 16));
 
-const chartData = computed<ChartData<'bar'>>(() => ({
-  labels: visible.value.map((r) => `${r.name} (${r.code})`),
-  datasets: [
-    {
-      label: 'tokens / word',
-      data: visible.value.map((r) => r.tokensPerWord),
-      backgroundColor: visible.value.map((r) => {
-        if (r.code === 'iu-cans') return '#ff3d00';
-        if (r.code === 'zh-classical') return '#0ea5e9';
-        if (r.code === 'en') return '#fafaf7';
-        return r.tokensPerWord > 5 ? 'rgba(255, 120, 73, 0.5)' : 'rgba(250, 250, 247, 0.3)';
-      }),
-      borderColor: visible.value.map((r) => {
-        if (r.code === 'iu-cans') return '#ff3d00';
-        if (r.code === 'zh-classical') return '#0ea5e9';
-        return 'transparent';
-      }),
-      borderWidth: 2,
-      borderRadius: 4,
-    },
-  ],
-}));
+function theme() {
+  const bone = isDark.value ? '250, 250, 247' : '18, 18, 15';
+  const ink = isDark.value ? '10, 10, 10' : '248, 248, 245';
+  return { bone, ink };
+}
 
-const options: ChartOptions<'bar'> = {
-  indexAxis: 'y' as const,
-  responsive: true,
-  maintainAspectRatio: false,
-  plugins: {
-    legend: { display: false },
-    tooltip: {
-      backgroundColor: 'rgba(10, 10, 10, 0.95)',
-      borderColor: 'rgba(250, 250, 247, 0.2)',
-      borderWidth: 1,
-      titleFont: { family: 'Space Grotesk' },
-      bodyFont: { family: 'JetBrains Mono' },
-      padding: 12,
-    },
-  },
-  scales: {
-    x: {
-      ticks: { color: 'rgba(250, 250, 247, 0.6)', font: { family: 'JetBrains Mono' } },
-      grid: { color: 'rgba(250, 250, 247, 0.08)' },
-      title: {
-        display: true,
-        text: 'tokens / word (cl100k_base)',
-        color: 'rgba(250, 250, 247, 0.7)',
-        font: { family: 'Inter', weight: 500 },
+const chartData = computed<ChartData<'bar'>>(() => {
+  const { bone } = theme();
+  return {
+    labels: visible.value.map((r) => `${r.name} (${r.code})`),
+    datasets: [
+      {
+        label: 'tokens / word',
+        data: visible.value.map((r) => r.tokensPerWord),
+        backgroundColor: visible.value.map((r) => {
+          if (r.code === 'iu-cans') return '#ff3d00';
+          if (r.code === 'zh-classical') return '#0ea5e9';
+          if (r.code === 'en') return `rgba(${bone}, 0.8)`;
+          return r.tokensPerWord > 5 ? 'rgba(255, 120, 73, 0.5)' : `rgba(${bone}, 0.3)`;
+        }),
+        borderColor: visible.value.map((r) => {
+          if (r.code === 'iu-cans') return '#ff3d00';
+          if (r.code === 'zh-classical') return '#0ea5e9';
+          return 'transparent';
+        }),
+        borderWidth: 2,
+        borderRadius: 4,
+      },
+    ],
+  };
+});
+
+const options = computed<ChartOptions<'bar'>>(() => {
+  const { bone, ink } = theme();
+  return {
+    indexAxis: 'y' as const,
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        backgroundColor: `rgba(${ink}, 0.95)`,
+        borderColor: `rgba(${bone}, 0.2)`,
+        borderWidth: 1,
+        titleFont: { family: 'Space Grotesk' },
+        bodyFont: { family: 'JetBrains Mono' },
+        padding: 12,
       },
     },
-    y: {
-      ticks: { color: 'rgba(250, 250, 247, 0.75)', font: { family: 'Inter' } },
-      grid: { display: false },
+    scales: {
+      x: {
+        ticks: { color: `rgba(${bone}, 0.6)`, font: { family: 'JetBrains Mono' } },
+        grid: { color: `rgba(${bone}, 0.08)` },
+        title: {
+          display: true,
+          text: 'tokens / word (cl100k_base)',
+          color: `rgba(${bone}, 0.7)`,
+          font: { family: 'Inter', weight: 500 },
+        },
+      },
+      y: {
+        ticks: { color: `rgba(${bone}, 0.75)`, font: { family: 'Inter' } },
+        grid: { display: false },
+      },
     },
-  },
-};
+  };
+});
 </script>
 
 <template>

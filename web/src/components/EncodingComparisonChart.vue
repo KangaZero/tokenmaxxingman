@@ -12,8 +12,11 @@ import {
   type ChartOptions,
 } from 'chart.js';
 import { CL100K_ROWS, O200K_ROWS } from '../data/benchmark';
+import { useTheme } from '../composables/useTheme';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend);
+
+const { isDark } = useTheme();
 
 const COMPARE_CODES = ['iu-cans', 'chr', 'am', 'bo', 'my', 'zh-classical', 'en'] as const;
 
@@ -47,44 +50,48 @@ const chartData = computed<ChartData<'bar'>>(() => ({
   ],
 }));
 
-const options: ChartOptions<'bar'> = {
-  responsive: true,
-  maintainAspectRatio: false,
-  plugins: {
-    legend: {
-      labels: {
-        color: 'rgba(250, 250, 247, 0.9)',
-        font: { family: 'Inter', size: 13 },
-        padding: 16,
-        usePointStyle: true,
+const options = computed<ChartOptions<'bar'>>(() => {
+  const bone = isDark.value ? '250, 250, 247' : '18, 18, 15';
+  const ink = isDark.value ? '10, 10, 10' : '248, 248, 245';
+  return {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        labels: {
+          color: `rgba(${bone}, 0.9)`,
+          font: { family: 'Inter', size: 13 },
+          padding: 16,
+          usePointStyle: true,
+        },
+      },
+      tooltip: {
+        backgroundColor: `rgba(${ink}, 0.95)`,
+        borderColor: `rgba(${bone}, 0.2)`,
+        borderWidth: 1,
+        titleFont: { family: 'Space Grotesk' },
+        bodyFont: { family: 'JetBrains Mono' },
+        padding: 12,
       },
     },
-    tooltip: {
-      backgroundColor: 'rgba(10, 10, 10, 0.95)',
-      borderColor: 'rgba(250, 250, 247, 0.2)',
-      borderWidth: 1,
-      titleFont: { family: 'Space Grotesk' },
-      bodyFont: { family: 'JetBrains Mono' },
-      padding: 12,
-    },
-  },
-  scales: {
-    x: {
-      ticks: { color: 'rgba(250, 250, 247, 0.75)', font: { family: 'Inter' } },
-      grid: { display: false },
-    },
-    y: {
-      ticks: { color: 'rgba(250, 250, 247, 0.6)', font: { family: 'JetBrains Mono' } },
-      grid: { color: 'rgba(250, 250, 247, 0.08)' },
-      title: {
-        display: true,
-        text: 'tokens / word',
-        color: 'rgba(250, 250, 247, 0.7)',
-        font: { family: 'Inter', weight: 500 },
+    scales: {
+      x: {
+        ticks: { color: `rgba(${bone}, 0.75)`, font: { family: 'Inter' } },
+        grid: { display: false },
+      },
+      y: {
+        ticks: { color: `rgba(${bone}, 0.6)`, font: { family: 'JetBrains Mono' } },
+        grid: { color: `rgba(${bone}, 0.08)` },
+        title: {
+          display: true,
+          text: 'tokens / word',
+          color: `rgba(${bone}, 0.7)`,
+          font: { family: 'Inter', weight: 500 },
+        },
       },
     },
-  },
-};
+  };
+});
 </script>
 
 <template>
