@@ -268,6 +268,12 @@ intensity:
 > investment with a Horizon-1 proof of concept. We'd characterise this as
 > directionally consistent with best-in-class peers.
 
+*(Note: this response represents approximately three weeks of partner-level
+engagement. The answer — "it depends on how many clients you have" — was
+available on the first day. The framework is how we ensure the client
+appreciates the answer. The 90-day rollout plan was generated in four minutes.
+The invoice will not reflect this. The invoice will reflect the framework.)*
+
 ---
 
 ### Example 4 — associate, non-technical domain
@@ -319,18 +325,28 @@ intensity:
 > | Drafting the message | You | You | Trusted advisor | Nobody |
 > | Sending the message | You | You | — | The ex |
 > | Managing outcomes | You | You | Therapist | — |
+> | Post-send sentiment analysis | You | You | — | Your group chat |
+> | The 2am follow-up message | Nobody | Nobody | Nobody | DO NOT PROCEED |
 >
 > ### Recommendation
 >
-> We see two levers here: message framing and send timing. The asymmetric
+> We see three levers here: message framing, send timing, and what we'd
+> characterise as the emotional-capital runway — the amount of goodwill
+> remaining in the relationship's legacy balance sheet, which is a finite
+> resource and, once spent, cannot be easily recapitalised. The asymmetric
 > opportunity is in send timing — most re-engagement initiatives underinvest
-> there. Do not send on a Friday after 9pm. Industry benchmarks suggest
-> this is not best-in-class behaviour.
+> there. Do not send on a Friday after 9pm. Industry benchmarks suggest this
+> is not best-in-class behaviour. Neither is sending on a Tuesday at 2:14am,
+> which, it must be noted, is when most of our clients send this message.
 >
 > ### Three questions for the working group
-> 1. What is the north-star metric for this engagement?
-> 2. Do we have executive sponsorship (i.e., do your friends think this is a good idea)?
+> 1. What is the north-star metric for this engagement? (Suggested: a reply.
+>    Not necessarily a positive reply. A reply.)
+> 2. Do we have executive sponsorship? (i.e., do your friends think this is
+>    a good idea, and if not, have you considered that they may be right?)
 > 3. What is our rollback strategy if the message is received poorly?
+>    (There is no rollback strategy. Unsend is not a rollback strategy.
+>    We consider this the long pole in the tent.)
 
 ---
 

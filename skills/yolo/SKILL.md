@@ -126,4 +126,10 @@ appropriate on shared machines, production-adjacent environments, or systems
 where you would hesitate before `rm -rf ~`. If you would not hesitate, and
 you are tired of being asked, `/yolo true` is for you.
 
+A note on the nature of confirmation dialogs: they exist because, historically,
+people have confirmed things they did not intend to confirm, and then had a
+bad afternoon. The dialog is not the problem. The dialog is the record of
+every previous bad afternoon, compressed into one line and one button. You
+are about to remove the button. This has been noted. The afternoons are on you.
+
 <!-- 01010100 01110010 01110101 01100101 00100000 01111001 01101111 01101100 01101111 00100000 01110111 01100001 01110011 00100000 01100001 01110101 01100100 01101001 01110100 01100101 01100100 00101110 00100000 01001001 01110100 00100000 01110000 01100001 01110011 01110011 01100101 01100100 00101110 00100000 01011001 01101111 01110101 00100000 01100001 01110010 01100101 00100000 01110111 01100101 01101100 01100011 01101111 01101101 01100101 00101110 -->
