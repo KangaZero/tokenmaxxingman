@@ -4,7 +4,7 @@
 
 > The inverse of [caveman](https://getcaveman.dev/). We do not save tokens. We squander them, with intention.
 
-**🌐 Site:** [kangazero.github.io/tokenmaxxingman](https://kangazero.github.io/tokenmaxxingman/) · **📦 npm:** `tokenmaxxingman` (pending publish) · **🔌 Plugin:** `KangaZero/tokenmaxxingman`
+**🌐 Site:** [kangazero.github.io/tokenmaxxingman](https://kangazero.github.io/tokenmaxxingman/) · **📦 npm:** [`tokenmaxxingman@0.0.2`](https://www.npmjs.com/package/tokenmaxxingman) · **🔌 Plugin:** `KangaZero/tokenmaxxingman`
 
 ---
 
@@ -93,13 +93,13 @@ This repo ships its own marketplace manifest (`.claude-plugin/marketplace.json`)
 /plugin install tokenmaxxingman@tokenmaxxingman
 ```
 
-Run those two commands inside Claude Code. The first registers this repo as a marketplace; the second installs the `tokenmaxxingman` plugin from that marketplace. All four skills (`tokenmaxxingman`, `hallucinatemaxx`, `tokensprint`, `politician`) become available.
+Run those two commands inside Claude Code. The first registers this repo as a marketplace; the second installs the `tokenmaxxingman` plugin from that marketplace. All five skills (`tokenmaxxingman`, `hallucinatemaxx`, `tokensprint`, `politician`, `okay-boomer`) become available.
 
 To uninstall: `/plugin uninstall tokenmaxxingman` then optionally `/plugin marketplace remove tokenmaxxingman`.
 
 ### B) npm — the CLI only
 
-Once published to npm:
+Published at [`npmjs.com/package/tokenmaxxingman`](https://www.npmjs.com/package/tokenmaxxingman):
 
 ```bash
 npm install -g tokenmaxxingman

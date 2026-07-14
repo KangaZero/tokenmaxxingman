@@ -5,16 +5,16 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        ink: '#0a0a0a',
-        bone: '#fafaf7',
+        ink: 'rgb(var(--color-ink) / <alpha-value>)',
+        bone: 'rgb(var(--color-bone) / <alpha-value>)',
         accent: {
-          DEFAULT: '#ff3d00',
-          soft: '#ff7849',
-          dim: '#cc3000',
+          DEFAULT: 'rgb(var(--color-accent) / <alpha-value>)',
+          soft: 'rgb(var(--color-accent-soft) / <alpha-value>)',
+          dim: 'rgb(var(--color-accent-dim) / <alpha-value>)',
         },
         cool: {
-          DEFAULT: '#0ea5e9',
-          deep: '#0369a1',
+          DEFAULT: 'rgb(var(--color-cool) / <alpha-value>)',
+          deep: 'rgb(var(--color-cool-deep) / <alpha-value>)',
         },
       },
       fontFamily: {

@@ -62,7 +62,8 @@
             jurisdiction the founders decline to name) formally proved that a natural human language
             exists which is demonstrably more hostile to byte-pair encoding than Classical Chinese.
             The Fields Medal committee did not acknowledge receipt of the submitted paper.
-            The team considers this a strong signal.
+            The team considers this a strong signal. The paper was 47 pages. The results section
+            was one sentence. The one sentence was correct.
           </p>
         </li>
 
