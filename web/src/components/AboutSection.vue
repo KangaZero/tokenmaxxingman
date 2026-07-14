@@ -25,7 +25,7 @@
       <ol class="relative border-s border-bone/20" aria-label="tokenmaxxingman timeline">
         <!-- Entry 1 -->
         <li v-reveal="'fade-left'" class="mb-10 ms-6">
-          <div class="absolute -start-1.5 mt-1.5 h-3 w-3 rounded-full border border-ink bg-bone/20"></div>
+          <div class="absolute -start-[30px] mt-1.5 h-3 w-3 rounded-full border border-ink bg-bone/20"></div>
           <time datetime="2024-01" class="text-sm font-normal leading-none text-bone/50">Q1 2024</time>
           <h4 class="my-2 font-display text-lg font-semibold text-bone">The Incident</h4>
           <p class="text-base font-normal text-bone/70">
@@ -39,7 +39,7 @@
 
         <!-- Entry 2 -->
         <li v-reveal="'fade-left'" class="mb-10 ms-6">
-          <div class="absolute -start-1.5 mt-1.5 h-3 w-3 rounded-full border border-ink bg-bone/20"></div>
+          <div class="absolute -start-[30px] mt-1.5 h-3 w-3 rounded-full border border-ink bg-bone/20"></div>
           <time datetime="2024-04" class="text-sm font-normal leading-none text-bone/50">April 2024</time>
           <h4 class="my-2 font-display text-lg font-semibold text-bone">First Contact with Inuktitut</h4>
           <p class="text-base font-normal text-bone/70">
@@ -54,7 +54,7 @@
 
         <!-- Entry 3 -->
         <li v-reveal="'fade-left'" class="mb-10 ms-6">
-          <div class="absolute -start-1.5 mt-1.5 h-3 w-3 rounded-full border border-ink bg-bone/20"></div>
+          <div class="absolute -start-[30px] mt-1.5 h-3 w-3 rounded-full border border-ink bg-bone/20"></div>
           <time datetime="2024-06" class="text-sm font-normal leading-none text-bone/50">June 2024</time>
           <h4 class="my-2 font-display text-lg font-semibold text-bone">The Anti-Wenyan Theorem</h4>
           <p class="text-base font-normal text-bone/70">
@@ -69,7 +69,7 @@
 
         <!-- Entry 4 -->
         <li v-reveal="'fade-left'" class="mb-10 ms-6">
-          <div class="absolute -start-1.5 mt-1.5 h-3 w-3 rounded-full border border-ink bg-bone/20"></div>
+          <div class="absolute -start-[30px] mt-1.5 h-3 w-3 rounded-full border border-ink bg-bone/20"></div>
           <time datetime="2024-08" class="text-sm font-normal leading-none text-bone/50">August 2024</time>
           <h4 class="my-2 font-display text-lg font-semibold text-bone">
             The <code class="font-mono text-cool text-base">/hallucinatemaxx</code> Commission
@@ -85,7 +85,7 @@
 
         <!-- Entry 5 -->
         <li v-reveal="'fade-left'" class="mb-10 ms-6">
-          <div class="absolute -start-1.5 mt-1.5 h-3 w-3 rounded-full border border-ink bg-bone/20"></div>
+          <div class="absolute -start-[30px] mt-1.5 h-3 w-3 rounded-full border border-ink bg-bone/20"></div>
           <time datetime="2024-10" class="text-sm font-normal leading-none text-bone/50">October 2024</time>
           <h4 class="my-2 font-display text-lg font-semibold text-bone">
             The <code class="font-mono text-cool text-base">/consultant</code> Incident
@@ -102,7 +102,7 @@
 
         <!-- Entry 6 -->
         <li v-reveal="'fade-left'" class="mb-10 ms-6">
-          <div class="absolute -start-1.5 mt-1.5 h-3 w-3 rounded-full border border-ink bg-bone/20"></div>
+          <div class="absolute -start-[30px] mt-1.5 h-3 w-3 rounded-full border border-ink bg-bone/20"></div>
           <time datetime="2024-12" class="text-sm font-normal leading-none text-bone/50">December 2024</time>
           <h4 class="my-2 font-display text-lg font-semibold text-bone">AI Slop Certification</h4>
           <p class="text-base font-normal text-bone/70">
@@ -116,7 +116,7 @@
 
         <!-- Entry 7 -->
         <li v-reveal="'fade-left'" class="mb-10 ms-6">
-          <div class="absolute -start-1.5 mt-1.5 h-3 w-3 rounded-full border border-ink bg-bone/20"></div>
+          <div class="absolute -start-[30px] mt-1.5 h-3 w-3 rounded-full border border-ink bg-bone/20"></div>
           <time datetime="2025-02" class="text-sm font-normal leading-none text-bone/50">February 2025</time>
           <h4 class="my-2 font-display text-lg font-semibold text-bone">
             The <code class="font-mono text-cool text-base">/okay-boomer</code> Commission
@@ -133,7 +133,7 @@
 
         <!-- Entry 8 — current, accent dot -->
         <li v-reveal="'fade-left'" class="ms-6">
-          <div class="absolute -start-1.5 mt-1.5 h-3 w-3 rounded-full border border-ink bg-accent"></div>
+          <div class="absolute -start-[30px] mt-1.5 h-3 w-3 rounded-full border border-ink bg-accent"></div>
           <time datetime="2025-07" class="text-sm font-normal leading-none text-bone/50">Today</time>
           <h4 class="my-2 font-display text-lg font-semibold text-bone">The Mission Continues</h4>
           <p class="text-base font-normal text-bone/70">

@@ -2,6 +2,7 @@
 import { useRouter } from 'vue-router';
 import SiteFooter from '../components/SiteFooter.vue';
 import RippleButton from '../components/RippleButton.vue';
+import AnimatedCode from '../components/AnimatedCode.vue';
 import { SKILLS } from '../data/benchmark';
 
 const router = useRouter();
@@ -97,9 +98,7 @@ function accentBorder(accent: string): string {
       <div v-reveal="'fade-up'" class="mb-16">
         <h2 class="mb-6 font-display text-2xl font-bold text-bone">Installation</h2>
         <div class="rounded-2xl border border-bone/10 bg-bone/[0.02] p-6">
-          <div class="rounded-lg border border-bone/10 bg-ink/60 p-5 font-mono text-sm text-bone/70">
-            <div><span class="text-accent/60">$</span> pnpm add -g tokenmaxxingman</div>
-          </div>
+          <AnimatedCode code="pnpm add -g tokenmaxxingman" prompt />
           <p class="mt-4 text-sm text-bone/50 leading-relaxed">
             The package manager is <code class="font-mono text-bone/70">pnpm</code>. It is not
             <code class="font-mono text-bone/70">npm</code>. It is not
@@ -125,9 +124,7 @@ function accentBorder(accent: string): string {
             v-reveal="'fade-left'"
             class="rounded-xl border border-bone/10 bg-bone/[0.02] p-5"
           >
-            <div class="rounded-lg border border-bone/10 bg-ink/60 px-4 py-3 font-mono text-sm text-bone/80">
-              <span class="text-accent/60">$</span> {{ c.cmd }}
-            </div>
+            <AnimatedCode :code="c.cmd" prompt />
             <p class="mt-3 text-sm text-bone/55 leading-relaxed">{{ c.note }}</p>
           </div>
         </div>

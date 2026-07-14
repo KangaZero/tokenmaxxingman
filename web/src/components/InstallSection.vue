@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import AnimatedCode from './AnimatedCode.vue';
+
 const paths = [
   {
     badge: 'recommended',
@@ -51,11 +53,7 @@ npm install && npm run build
       </div>
       <h3 class="font-display text-2xl font-bold text-bone">{{ path.title }}</h3>
       <p class="text-sm text-bone/60">{{ path.blurb }}</p>
-      <pre
-        tabindex="0"
-        :aria-label="`${path.title} install commands`"
-        class="overflow-x-auto rounded-lg border border-bone/10 bg-ink/60 p-4 font-mono text-xs leading-relaxed text-bone/85"
-      ><code>{{ path.code }}</code></pre>
+      <AnimatedCode :code="path.code" :filename="path.title" />
     </article>
   </div>
 

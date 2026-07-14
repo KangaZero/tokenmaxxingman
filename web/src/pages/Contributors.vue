@@ -23,7 +23,7 @@ const hireHovered = ref(false);
       </div>
 
       <!-- Contributor cards -->
-      <div class="mt-16 grid grid-cols-1 gap-8 lg:grid-cols-2 lg:items-start" style="--reveal-stagger: 100ms;">
+      <div class="mt-16 grid grid-cols-1 gap-8 lg:grid-cols-2 lg:items-stretch" style="--reveal-stagger: 100ms;">
 
         <!-- Card 1: KangaZero — small, understated -->
         <div v-reveal="'fade-left'" class="card flex flex-col gap-6">
