@@ -1,6 +1,6 @@
 {
   "name": "tokenmaxxingman",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A meticulously deterministic, exhaustively composable, intentionally maximalist tooling artifact for the comprehensive amplification of token expenditure across natural-language workloads — accompanied by a rigorously empirical, corpus-grounded, tokenizer-version-pinned investigation into the question of which natural language, when subjected to byte-pair encoding under cl100k_base or o200k_base vocabularies, tokenizes most prodigiously, inefficiently, and gloriously.",
   "keywords": [
     "tokens",

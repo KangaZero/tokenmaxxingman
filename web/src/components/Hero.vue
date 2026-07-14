@@ -21,7 +21,7 @@ const tokenRatio = (HEADLINE_STATS.topRowO200k.tokensPerWord / HEADLINE_STATS.en
         <span class="font-mono text-sm font-medium tracking-widest text-bone/50 uppercase">tokenmaxxingman</span>
       </div>
       <div class="mb-8 flex flex-wrap items-center gap-3">
-        <span class="pill !text-accent !border-accent/30 !bg-accent/10">v0.0.1 · first public release</span>
+        <span class="pill !text-accent !border-accent/30 !bg-accent/10">v0.0.2 · okay-boomer + favicon + a11y</span>
         <span class="pill">100% open-source · MIT</span>
         <span class="pill">137 tests passing</span>
       </div>
