@@ -11,7 +11,9 @@ import SiteNav from './components/SiteNav.vue';
   >
     Skip to main content
   </a>
-  <AnnouncementBanner />
   <SiteNav />
+  <div class="mt-14">
+    <AnnouncementBanner />
+  </div>
   <RouterView />
 </template>
