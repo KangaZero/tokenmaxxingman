@@ -37,3 +37,6 @@ strictPeerDependencies: true
 #             Vite uses for transformation. Without this, web builds fail.
 onlyBuiltDependencies:
   - esbuild
+
+allowBuilds:
+  esbuild: true
