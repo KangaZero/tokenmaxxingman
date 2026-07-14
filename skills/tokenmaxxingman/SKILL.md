@@ -8,7 +8,7 @@ description: >
   verbose-lite, verbose-full (default), verbose-ultra, language-translation
   modes (translate-burmese, translate-tibetan, translate-inuktitut), and the
   canonical anti-wenyan mode — empirically the human language that produces the
-  most tokens per character under both cl100k_base and o200k_base, which the
+  most tokens per word under both cl100k_base and o200k_base, which the
   bundled benchmark confirms is Inuktitut Syllabics (iu-cans).
   Activate when user says "tokenmaxxing mode", "expand this", "make it longer",
   "more words", "fewer words is for cavemen", "verbose mode", "anti-wenyan", or
