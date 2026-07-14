@@ -45,8 +45,8 @@
     "node": ">=22"
   },
   "author": {
-    "name": "Samuel Wai Weng Yong",
-    "email": "samuelwaiweng.yong@accenture.com"
+    "name": "KangaZero",
+    "email": "samuelyongw@gmail.com"
   },
   "license": "MIT",
   "repository": {
@@ -59,8 +59,7 @@
   "homepage": "https://github.com/KangaZero/tokenmaxxingman#readme",
   "packageManager": "pnpm@11.5.0",
   "publishConfig": {
-    "access": "public",
-    "provenance": true
+    "access": "public"
   },
   "dependencies": {
     "commander": "14.0.3",
