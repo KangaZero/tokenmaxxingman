@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { HEADLINE_STATS } from '../data/benchmark';
 
-const tokenRatio = (HEADLINE_STATS.topRowO200k.tokensPerCharacter / HEADLINE_STATS.englishO200k.tokensPerCharacter).toFixed(1);
+const tokenRatio = (HEADLINE_STATS.topRowO200k.tokensPerWord / HEADLINE_STATS.englishO200k.tokensPerWord).toFixed(1);
 </script>
 
 <template>
@@ -56,15 +56,15 @@ const tokenRatio = (HEADLINE_STATS.topRowO200k.tokensPerCharacter / HEADLINE_STA
       <div class="mt-20 grid grid-cols-2 gap-8 border-t border-bone/10 pt-12 md:grid-cols-4">
         <div>
           <div class="stat-figure text-5xl md:text-6xl">
-            {{ HEADLINE_STATS.topRowO200k.tokensPerCharacter.toFixed(4) }}
+            {{ HEADLINE_STATS.topRowO200k.tokensPerWord.toFixed(4) }}
           </div>
-          <div class="mt-2 text-sm uppercase tracking-wider text-bone/50">tok/char (o200k)</div>
+          <div class="mt-2 text-sm uppercase tracking-wider text-bone/50">tok/word (o200k)</div>
           <div class="mt-1 text-xs text-bone/40">Inuktitut, the empirical winner</div>
         </div>
         <div>
           <div class="stat-figure text-5xl md:text-6xl">{{ tokenRatio }}×</div>
           <div class="mt-2 text-sm uppercase tracking-wider text-bone/50">more tokens vs English</div>
-          <div class="mt-1 text-xs text-bone/40">same characters, same meaning</div>
+          <div class="mt-1 text-xs text-bone/40">same words, same meaning</div>
         </div>
         <div>
           <div class="stat-figure text-5xl md:text-6xl">{{ HEADLINE_STATS.variantsTested }}</div>

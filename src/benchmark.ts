@@ -10,8 +10,10 @@ export interface BenchmarkRow {
   totalTokens: number;
   totalCharacters: number;
   totalBytes: number;
+  totalWords: number;
   sentenceCount: number;
   tokensPerCharacter: number;
+  tokensPerWord: number;
   tokensPerSentence: number;
   rank: number;
 }
@@ -27,18 +29,21 @@ export function runBenchmark(corpus: Corpus, encoding: EncodingName): BenchmarkR
     let totalTokens = 0;
     let totalCharacters = 0;
     let totalBytes = 0;
+    let totalWords = 0;
     let sentenceCount = 0;
 
     for (const sentence of corpus.sentences) {
       const text = sentence.translations[lang.code];
       if (text === undefined) continue;
       sentenceCount += 1;
-      const counted = countTokens(text, encoding);
+      const counted = countTokens(text, encoding, lang.code);
       totalTokens += counted.tokens;
       totalCharacters += counted.characters;
       totalBytes += counted.bytes;
+      totalWords += counted.words;
     }
     const tokensPerCharacter = totalCharacters === 0 ? 0 : totalTokens / totalCharacters;
+    const tokensPerWord = totalWords === 0 ? 0 : totalTokens / totalWords;
     const tokensPerSentence = sentenceCount === 0 ? 0 : totalTokens / sentenceCount;
 
     return {
@@ -49,13 +54,18 @@ export function runBenchmark(corpus: Corpus, encoding: EncodingName): BenchmarkR
       totalTokens,
       totalCharacters,
       totalBytes,
+      totalWords,
       sentenceCount,
       tokensPerCharacter,
+      tokensPerWord,
       tokensPerSentence,
     };
   });
 
   const sorted = [...unranked].sort((a, b) => {
+    if (b.tokensPerWord !== a.tokensPerWord) {
+      return b.tokensPerWord - a.tokensPerWord;
+    }
     if (b.tokensPerCharacter !== a.tokensPerCharacter) {
       return b.tokensPerCharacter - a.tokensPerCharacter;
     }

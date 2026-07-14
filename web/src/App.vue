@@ -25,8 +25,8 @@ import SiteFooter from './components/SiteFooter.vue';
         <p class="max-w-3xl text-lg text-bone/70">
           You would expect Classical Chinese to top the table — dense ideographs, surely the worst case
           for byte-pair encoding. It is not even close. Inuktitut Syllabics is
-          <span class="font-mono text-bone">1.7×</span> worse than wenyan, and
-          <span class="font-mono text-bone">10.4×</span> worse than English. The opposite of
+          <span class="font-mono text-bone">7.2×</span> worse than wenyan, and
+          <span class="font-mono text-bone">16.7×</span> worse than English. The opposite of
           <a class="text-accent underline-offset-4 hover:underline" href="https://getcaveman.dev/">caveman</a>
           is not "more characters." It is <em class="italic">this</em>.
         </p>
@@ -42,7 +42,7 @@ import SiteFooter from './components/SiteFooter.vue';
         </h2>
         <p class="max-w-3xl text-lg text-bone/70">
           Every other non-Latin script gets better compression under <code class="rounded bg-bone/10 px-1.5 py-0.5 font-mono text-sm">o200k_base</code> —
-          the newer, larger-vocabulary tokenizer. Inuktitut alone gets <strong class="text-bone">worse</strong>: 2.6158 → 2.6780 tok/char.
+          the newer, larger-vocabulary tokenizer. Inuktitut alone gets <strong class="text-bone">worse</strong>: 21.0455 → 21.5455 tok/word.
           The newer tokenizer learned more of the world. It did not learn more Inuktitut.
         </p>
       </div>

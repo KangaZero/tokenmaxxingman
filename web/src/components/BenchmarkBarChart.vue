@@ -22,13 +22,13 @@ const chartData = computed<ChartData<'bar'>>(() => ({
   labels: visible.value.map((r) => `${r.name} (${r.code})`),
   datasets: [
     {
-      label: 'tokens / character',
-      data: visible.value.map((r) => r.tokensPerCharacter),
+      label: 'tokens / word',
+      data: visible.value.map((r) => r.tokensPerWord),
       backgroundColor: visible.value.map((r) => {
         if (r.code === 'iu-cans') return '#ff3d00';
         if (r.code === 'zh-classical') return '#0ea5e9';
         if (r.code === 'en') return '#fafaf7';
-        return r.tokensPerCharacter > 1 ? 'rgba(255, 120, 73, 0.5)' : 'rgba(250, 250, 247, 0.3)';
+        return r.tokensPerWord > 5 ? 'rgba(255, 120, 73, 0.5)' : 'rgba(250, 250, 247, 0.3)';
       }),
       borderColor: visible.value.map((r) => {
         if (r.code === 'iu-cans') return '#ff3d00';
@@ -62,7 +62,7 @@ const options: ChartOptions<'bar'> = {
       grid: { color: 'rgba(250, 250, 247, 0.08)' },
       title: {
         display: true,
-        text: 'tokens / character (cl100k_base)',
+        text: 'tokens / word (cl100k_base)',
         color: 'rgba(250, 250, 247, 0.7)',
         font: { family: 'Inter', weight: 500 },
       },
@@ -81,7 +81,7 @@ const options: ChartOptions<'bar'> = {
   </div>
   <p class="mt-4 text-sm text-bone/50">
     Highlighted: <span class="text-accent font-medium">Inuktitut (rank 1)</span>,
-    <span class="text-cool font-medium">Classical Chinese (rank 11)</span>,
+    <span class="text-cool font-medium">Classical Chinese (rank 12)</span>,
     <span class="text-bone font-medium">English (rank 16)</span>.
   </p>
 </template>
