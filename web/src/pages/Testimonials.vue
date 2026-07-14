@@ -3,6 +3,7 @@ import { ref } from 'vue';
 import SiteFooter from '../components/SiteFooter.vue';
 
 const showToast = ref(false);
+const randomProcessingTime = ref(Math.floor(Math.random() * 99999)) 
 
 function leaveReview() {
   showToast.value = true;
@@ -200,7 +201,8 @@ const testimonials: Testimonial[] = [
 </script>
 
 <template>
-  <main id="main-content" class="relative isolate min-h-screen overflow-x-hidden pt-16">
+  <main id="main-content" class="relative isolate min-h-screen overflow-x-hidden 
+">
     <div class="pointer-events-none absolute inset-0 -z-10 grid-bg opacity-60"></div>
 
     <!-- Toast -->
@@ -219,7 +221,7 @@ const testimonials: Testimonial[] = [
         aria-live="polite"
       >
         Review submission unavailable. The AI is reviewing all reviews for token efficiency.
-        <span class="font-mono text-bone/50"> Estimated processing time: 2099.</span>
+	<span class="font-mono text-bone/50"> Estimated processing time: {{randomProcessingTime}} years.</span>
       </div>
     </Transition>
 
@@ -290,11 +292,13 @@ const testimonials: Testimonial[] = [
           <!-- Footer: name + badge -->
           <div class="mt-auto flex items-start justify-between gap-3 border-t border-bone/10 pt-4">
             <div>
-              <div class="font-medium text-bone">{{ t.name }}</div>
+              <div class="font-medium text-bone text-nowrap">{{ t.name }}
+
+	      </div>
+		      <span :title="t.badge" class="pill inline-block !text-xs max-w-30 truncate">{{ t.badge }}</span>
               <div class="text-xs text-bone/50">{{ t.title }}</div>
               <div class="text-xs text-bone/35">{{ t.company }}</div>
             </div>
-            <span class="pill mt-0.5 shrink-0 !text-xs">{{ t.badge }}</span>
           </div>
         </div>
       </div>

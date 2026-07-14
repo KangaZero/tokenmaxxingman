@@ -139,7 +139,8 @@ onMounted(load);
 </script>
 
 <template>
-  <main id="main-content" class="relative isolate min-h-screen overflow-x-hidden pt-16">
+  <main id="main-content" class="relative isolate min-h-screen overflow-x-hidden 
+">
     <div class="pointer-events-none absolute inset-0 -z-10 grid-bg opacity-60"></div>
 
     <div class="mx-auto max-w-3xl px-6 py-24">
