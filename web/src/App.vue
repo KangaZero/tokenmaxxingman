@@ -65,7 +65,7 @@ import SiteFooter from './components/SiteFooter.vue';
 
     <section id="skills" aria-labelledby="skills-heading" class="relative mx-auto max-w-6xl px-6 py-24">
       <div class="mb-12 flex flex-col gap-3">
-        <span class="pill">four skills · zero external deps</span>
+        <span class="pill">five skills · zero external deps</span>
         <h2 id="skills-heading" class="font-display text-4xl font-bold text-bone md:text-5xl">
           The anti-skill family.
         </h2>
