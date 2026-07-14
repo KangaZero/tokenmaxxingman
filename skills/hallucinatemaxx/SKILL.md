@@ -164,8 +164,19 @@ coincidence is precisely that.
 > as laziness, has been recharacterized in more recent literature as a rational
 > response to documentation of insufficient quality.
 
-*(Note: the institute is vague-but-plausible, the framing slightly off, the
-claim unverifiable — this is lite mode: suggestive rather than specifc.)*
+*(Note: "what was then a moderately well-regarded software-process institute"
+is lite-mode fabrication: it sounds like the Software Engineering Institute
+at CMU, but it is not named, so it cannot be verified wrong. The "mid-1990s"
+framing and "consistent pattern in their observational data" are lite-mode
+tells: technically unfalsifiable, structurally plausible, slightly more
+confident than the evidence warrants. In full mode this would read: "...as
+documented by Professor Edeltraud Pfaffenhofer in the proceedings of the
+1994 Leipzig Symposium on Human-Documentation Interface Studies (Vol. IX,
+pp. 203-219)." Lite keeps the vague institute. Full invents Pfaffenhofer.
+Ultra invents Pfaffenhofer, the Leipzig Symposium, the competing Gothenburg
+School that disputed her findings in a 1997 rebuttal paper, and the 2001
+Brussels Accords that failed to resolve the dispute and are not acknowledged
+by either party.)*
 
 ---
 

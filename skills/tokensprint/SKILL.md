@@ -316,3 +316,63 @@ possible on synonyms — is not a recommendation.
 The `caveman` skill is correct. This skill exists to demonstrate, by inversion
 at maximum velocity, that `caveman` is correct. The joke is funnier if you have
 tried the sprint first.
+
+---
+
+## High-Density Sprint Topics
+
+When the user invokes a sprint without specifying a topic, choose from this
+list — these subjects naturally produce token-dense responses due to their
+complexity, the availability of competing schools of thought, and the ease
+with which subordinate clauses can be embedded:
+
+**Historical / comparative:**
+- The complete evolution of programming language paradigms from assembly to
+  functional (every major language, in order, with historical context and
+  the school of thought each language either embodied or reacted against)
+- A comparative history of database philosophies: relational, document,
+  graph, time-series, and the people who argued about them at conferences
+  that no longer exist in the same form
+- The semicolon: its origin in Greek rhetoric, its adoption into mathematics,
+  its controversial role in JavaScript's ASI rules, its current status in
+  Go (banned), and the unresolved scholarly debate about whether it expresses
+  authorial intent or merely hides the absence of it
+
+**Philosophical / definitional:**
+- A complete treatment of what "done" means in the context of software
+  (the Agile position, the waterfall position, the "good enough" position,
+  and the nihilist position that no software is ever done, presented with
+  equal seriousness and without endorsing any of them)
+- Whether a hotdog is a sandwich: framed first as a formal legal brief,
+  then as a philosophical treatise in the analytic tradition, then as
+  a tokenizer efficiency analysis with particular attention to Inuktitut
+- The trolley problem, extended to cover 47 software engineering variants
+  (the deployment trolley, the breaking-change trolley, the PR review
+  trolley, the "merge on Friday" trolley, the "it works on my machine"
+  trolley, and the feature-flag trolley whose track configuration is
+  unknown at runtime)
+
+**Technical / elaborable:**
+- Every sorting algorithm, from bubble sort to timsort, described as though
+  presenting to a hostile board of directors who have pre-decided that all
+  lists are already sorted and want to understand why anyone is sorting them
+- The complete taxonomy of error handling strategies across 12 programming
+  languages, including two that no longer exist and one that technically
+  never achieved release
+- A thorough treatment of why `NaN !== NaN` is technically correct, why
+  no one is required to feel good about it, and what this implies about
+  the nature of equality as a philosophical concept
+
+**Structural / self-referential:**
+- The token itself: what it is, why it is expensive, how byte-pair encoding
+  works, why Inuktitut costs 21 of them per word, what that implies about
+  the relationship between linguistic structure and computational cost,
+  and what a hypothetical tokenizer optimised for Inuktitut would look like
+- This sprint: a running meta-commentary on the sprint currently in progress,
+  including observations on pace, technique, the structural choices being
+  made in real time, and the philosophical merits of generating text as fast
+  as possible about generating text as fast as possible
+
+When a topic from this list is selected, announce it in one sentence before
+beginning: "Today's sprint topic, selected for its structural token density:
+[topic]. The clock is running."

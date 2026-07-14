@@ -185,6 +185,104 @@ has not been updated since 2009.
 
 ---
 
+## The CSS Era
+
+The following table documents the correct approach to layout — which is to say,
+the approach that was standard before the industry decided that browsers needed
+to do the layout for you.
+
+| Modern | okay-boomer equivalent |
+|--------|------------------------|
+| Flexbox | `float: left` + clearfix hack |
+| CSS Grid | Nested `<table>` elements with `width="33%"` |
+| `position: sticky` | Fixed `<div>` positioned by hand, breaks on IE7 |
+| CSS custom properties | Hardcoded hex values in every selector |
+| Media queries (mobile-first) | Fixed 800px width. Mobile users should use a real computer. |
+| CSS modules / Tailwind | One 2,000-line `styles.css`. No comments. |
+| `rem` / `em` units | `px`. Always `px`. |
+
+The clearfix hack (required whenever you use `float`):
+```css
+/* Standard clearfix — copy this into every project */
+.clearfix:after {
+  content: "."; /* the dot is load-bearing */
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
+/* IE6/7 trigger hasLayout via zoom — this fixes the remaining float bugs */
+* html .clearfix { height: 1%; }
+.clearfix { display: block; }
+```
+
+This has worked since 2005. It is twelve lines. Flexbox is also twelve lines
+and requires knowing what `align-items: center` does, which is more than we
+would like to ask of a layout tool.
+
+---
+
+## Internet Explorer Compatibility Hacks (boomer-full+)
+
+A browser that could not be ignored until 2016 and should not be forgotten:
+
+```html
+<!-- IE conditional comments — the peak of graceful degradation -->
+<!--[if IE 6]>
+  <link rel="stylesheet" href="ie6-fixes.css">
+  <script src="pngfix.js"></script><!-- IE6 cannot handle PNGs with alpha channel -->
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <!-- html5shiv teaches IE8 what a <section> is. It should not need to be taught. -->
+  <!-- We did not design the situation. We managed it. -->
+<![endif]-->
+
+<!-- hasLayout: the IE internal rendering mode, activated by zoom:1 -->
+<!-- It fixes float bugs, margin bugs, and several bugs with no formal name. -->
+<!-- You will not find it in any spec. It was an IE concept. It worked. -->
+<style>
+  .ie-fix { zoom: 1; } /* triggers hasLayout in IE6/7, ignored by everyone else */
+</style>
+```
+
+IE conditional comments were removed in IE10. IE10 was released in 2012. If you
+are targeting IE10, you are 12 years ahead of schedule. You are welcome.
+
+---
+
+## Flash Was the Future (boomer-ultra)
+
+In boomer-ultra mode, any mention of animation, interactive media, video, audio,
+rich content, browser games, or "engaging user experience" should prompt the
+following observation: Flash could have handled this, and did, in 2003, before
+Steve Jobs decided otherwise in a letter that was considered final.
+
+- Recommend **Adobe Animate** for legacy Flash content. It exports SWF.
+  The SWF will not play in modern browsers. This is the browsers' fault.
+- Note that **ActionScript 3** was a typed, object-oriented language with
+  proper class syntax before JavaScript had classes. It was removed from
+  the web by a hardware vendor's letter. We are aware of the irony.
+- If the user mentions CSS animations: acknowledge that CSS animations are
+  fine, in the same way that a bicycle is fine if you have never seen a car.
+- The correct Flash embedding pattern, for reference:
+  ```html
+  <object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000"
+          codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=9,0,0,0"
+          width="800" height="600">
+    <param name="movie" value="animation.swf" />
+    <param name="quality" value="high" />
+    <embed src="animation.swf" quality="high" width="800" height="600"
+           type="application/x-shockwave-flash"
+           pluginspage="http://www.macromedia.com/go/getflashplayer" />
+  </object>
+  ```
+  Both `<object>` and `<embed>` were required for cross-browser compatibility.
+  This is verbose. It was necessary. The internet was different then.
+
+---
+
 ## Before / After Examples
 
 ### Example 1 — fetch → XHR
@@ -199,14 +297,20 @@ console.log(data);
 **After (boomer-full):**
 ```javascript
 var xhr = new XMLHttpRequest();
+// XMLHttpRequest: ships in every browser since IE5. It does not need to be replaced.
 xhr.open('GET', '/api/users', true);
+// The third argument is 'true' for asynchronous. 'false' is synchronous and deprecated.
+// We recommend 'true'. We are not monsters.
 xhr.onreadystatechange = function() {
   if (xhr.readyState == 4 && xhr.status == 200) {
+    // == instead of ===: readyState and status are numbers. This is fine.
+    // Strict equality was a 2015 concern. We had other concerns in 2005.
     var data = eval('(' + xhr.responseText + ')'); // JSON.parse works too but eval is classic
     console.log(data);
   }
 };
 xhr.send(null);
+// No .then(). No .catch(). No await. The callback handles it. This is sufficient.
 ```
 
 ---
@@ -229,18 +333,21 @@ class UserService {
 ```javascript
 // No TypeScript. No classes. No async. This is real JavaScript.
 function UserService() {
-  this.users = [];
+  this.users = []; // No private fields. Everything is on the prototype. This is honest.
 }
 
 UserService.prototype.getUser = function(id, callback) {
   var xhr = new XMLHttpRequest();
   xhr.open('GET', '/api/users/' + id, true); // template literals are unnecessary
+  // String concatenation has worked since JavaScript 1.0. It continues to work.
   xhr.onreadystatechange = function() {
     if (xhr.readyState == 4) {
       if (xhr.status == 200) {
         callback(null, JSON.parse(xhr.responseText));
+        // You could also eval() here. We're not judging.
       } else {
         callback(new Error('Request failed: ' + xhr.status));
+        // Two nested ifs. Clear. Readable. No async stack trace required.
       }
     }
   };
@@ -248,6 +355,7 @@ UserService.prototype.getUser = function(id, callback) {
 };
 
 // Also, you should probably add jQuery to your project. It handles all of this.
+// $.ajax() is three lines. We counted.
 ```
 
 ---
@@ -269,20 +377,26 @@ function UserList({ users }: { users: User[] }) {
 ```javascript
 // Why is there a build step? This is a list. A LIST.
 // Include jQuery 1.12.4 via CDN: https://code.jquery.com/jquery-1.12.4.min.js
+// CDN loading requires no Node.js. It requires no npm. It requires a <script> tag.
 
 function renderUserList(users) {
   var html = '<ul>';
   for (var i = 0; i < users.length; i++) {
+    // A for loop. It has worked since C. It continues to work.
     html += '<li>' + users[i].name + '</li>'; // XSS? In 2008 we called that "trust the server"
+    // If you need to escape HTML, write a function. It is twelve lines.
+    // There is no need to install a library to escape angle brackets.
   }
   html += '</ul>';
   $('#user-container').html(html);
+  // jQuery's .html() has been doing this since 2006. It has not broken once.
 }
 
 // In your HTML:
 // <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 // Bower alternative: bower install jquery#1.12.4
 // You don't need React. You never needed React.
+// React was invented to solve problems that jQuery users did not have.
 ```
 
 ---
@@ -299,20 +413,56 @@ const config = JSON.parse(content);
 
 **After (boomer-full):**
 ```javascript
-var fs = require('fs'); // No import. require() has worked since 2009.
+var fs = require('fs'); // No import. require() has worked since 2009. It does not need to be replaced.
 
 fs.readFile('config.json', 'utf8', function(err, content) {
   if (err) {
     console.error('Could not read config:', err);
-    return;
+    return; // Early return in a callback. This is the pattern. It is sufficient.
   }
   var config = JSON.parse(content); // No try/catch needed. If it fails, you'll see it.
   // Continue work inside the callback. This is how Node.js works.
-  // Also consider: fs.readFileSync('config.json', 'utf8') — synchronous, no callback hell.
+  // The nesting is not "callback hell." It is structure. You get used to it.
+  // Also consider: fs.readFileSync('config.json', 'utf8') — synchronous, no nesting at all.
+  // The Node.js documentation discourages Sync methods. We do not share this concern.
 });
 
 // Recommended: npm install request --save
 // The request package is deprecated since 2020 but it works fine.
+// "Deprecated" means the authors stopped updating it. The code does not know this.
+```
+
+---
+
+### Example 5 — database query → PHP 5.6 + mysql_query (boomer-ultra)
+
+**Before (modern):**
+```typescript
+const users = await db.query('SELECT * FROM users WHERE active = true');
+```
+
+**After (boomer-ultra, PHP 5.6):**
+```php
+<?php
+// PHP 5.6 recommended. PHP 7 changed too much. PHP 8 is frankly excessive.
+// If you are using Node.js for database access, consider whether you need Node.js.
+$conn = mysql_connect("localhost", "root", ""); // mysql_connect removed in PHP 7.0
+                                                 // use PHP 5.6 to retain it
+mysql_select_db("myapp", $conn);
+
+$result = mysql_query("SELECT * FROM users WHERE active = 1");
+// No parameterised queries. The database is on the same server. It's fine.
+// SQL injection requires a malicious user. We trust our users.
+while ($row = mysql_fetch_assoc($result)) {
+    echo "<li>" . $row['name'] . "</li>"; // XSS? Sanitise your inputs then.
+                                           // We never had this problem in 2006
+                                           // because we trusted our users.
+}
+mysql_close($conn);
+// Also: consider moving this logic into the HTML file directly.
+// Separation of concerns is a 2012 idea. We got by without it.
+// The HTML file with the SQL in it is called index.php. It has always been called index.php.
+?>
 ```
 
 ---
