@@ -125,28 +125,28 @@ If in doubt: expand prose, preserve structure, never touch code.
 | **verbose-lite** | Synonym substitution only. Replace short words with longer, equally precise alternatives. Sentence structure unchanged. |
 | **verbose-full** | Synonym substitution + qualifying clauses + hedges + parenthetical elaboration. Default level. |
 | **verbose-ultra** | Full pipeline: synonyms, qualifiers, nominalizations, passive voice where it adds gravitas, embedded subordinate clauses, and where applicable a brief recapitulatory sentence at the end of each paragraph restating the paragraph's principal contention in slightly different terms. |
-| **translate-burmese** | Render the expanded text in Burmese (Myanmar script). Benchmark rank 5 (cl100k_base, 1.98 tok/char). |
-| **translate-tibetan** | Render in Tibetan (Uchen script). Benchmark rank 4 (cl100k_base, 2.04 tok/char). |
-| **translate-inuktitut** | Render in Inuktitut Syllabics. **Benchmark rank 1 under both encodings.** 2.62 tok/char under cl100k_base; 2.68 tok/char under o200k_base. |
-| **anti-wenyan** | Canonical-name alias for `translate-inuktitut`. The empirical opposite of `/caveman wenyan` (Classical Chinese, ~1.55 / ~1.04 tok/char). |
+| **translate-burmese** | Render the expanded text in Burmese (Myanmar script). Benchmark rank 8 (cl100k_base, 10.4314 tok/word). |
+| **translate-tibetan** | Render in Tibetan (Uchen script). Benchmark rank 11 (cl100k_base, 7.9828 tok/word). |
+| **translate-inuktitut** | Render in Inuktitut Syllabics. **Benchmark rank 1 under both encodings.** 21.0455 tok/word under cl100k_base; 21.5455 tok/word under o200k_base. |
+| **anti-wenyan** | Canonical-name alias for `translate-inuktitut`. The empirical opposite of `/caveman wenyan` (Classical Chinese, ~2.93 / ~1.97 tok/word). |
 
 **On the translation modes.** The three Indigenous-language modes were
 originally placeholders selected on theoretical grounds — agglutinative
 morphology, multi-byte scripts, and tokenizer-hostile glyph sequences. The
 canonical winner has now been confirmed by the bundled benchmark suite:
 **Inuktitut Syllabics (`iu-cans`)** is rank 1 under both `cl100k_base`
-(2.6158 tok/char) and `o200k_base` (2.6780 tok/char). The `anti-wenyan` mode
+(21.0455 tok/word) and `o200k_base` (21.5455 tok/word). The `anti-wenyan` mode
 exposes this empirical result as a stable name independent of language code,
 so future re-ranking does not require renaming user-facing flags.
 
-| Language | cl100k_base | o200k_base |
-|----------|------------:|-----------:|
-| **Inuktitut (`iu-cans`)** | **2.6158** | **2.6780** |
-| Cherokee (`chr`) | 2.4718 | 2.6056 |
-| Amharic (`am`) | 2.5000 | 1.8378 |
-| Tibetan (`bo`) | 2.0396 | 1.5066 |
-| Classical Chinese (`zh-classical`) — *caveman's pick* | 1.5455 | 1.0364 |
-| English (`en`) | 0.2524 | 0.2524 |
+| Language | cl100k_base tok/word | o200k_base tok/word |
+|----------|---------------------:|--------------------:|
+| **Inuktitut (`iu-cans`)** | **21.0455** | **21.5455** |
+| Cherokee (`chr`) | 13.0000 | 13.7037 |
+| Amharic (`am`) | 11.5625 | 8.5000 |
+| Tibetan (`bo`) | 7.9828 | 5.8966 |
+| Classical Chinese (`zh-classical`) — *caveman's pick* | 2.9310 | 1.9655 |
+| English (`en`) | 1.2619 | 1.2619 |
 
 Reproduce: `tmm benchmark --encoding cl100k_base` / `tmm benchmark --encoding o200k_base`.
 
@@ -274,8 +274,8 @@ tokenmaxxingman benchmark --encoding o200k_base
 
 **Result (corpus v1, 8 sentences × 18 variants).** The winner among natural
 languages is **Inuktitut Syllabics (`iu-cans`)**, rank 1 under both encodings:
-2.6158 tok/char (cl100k_base) and 2.6780 tok/char (o200k_base). It is the only
-script-language combination that *increases* its tokens-per-character ratio
+21.0455 tok/word (cl100k_base) and 21.5455 tok/word (o200k_base). It is the only
+script-language combination that *increases* its tokens-per-word ratio
 when moving from `cl100k_base` to the newer `o200k_base` — the opposite of
 nearly every other entry in the table, which improve under the larger
 vocabulary. That asymmetry makes Inuktitut the most robust empirical anti-

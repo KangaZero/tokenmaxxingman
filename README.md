@@ -4,7 +4,7 @@
 
 > The inverse of [caveman](https://getcaveman.dev/). We do not save tokens. We squander them, with intention.
 
-**🌐 Site:** [kangazero.github.io/tokenmaxxingman](https://kangazero.github.io/tokenmaxxingman/) · **📦 npm:** [`tokenmaxxingman@0.0.2`](https://www.npmjs.com/package/tokenmaxxingman) · **🔌 Plugin:** `KangaZero/tokenmaxxingman`
+**🌐 Site:** [kangazero.github.io/tokenmaxxingman](https://kangazero.github.io/tokenmaxxingman/) · **📦 npm:** [`tokenmaxxingman@0.0.21`](https://www.npmjs.com/package/tokenmaxxingman) · **🔌 Plugin:** `KangaZero/tokenmaxxingman`
 
 ---
 
@@ -80,7 +80,7 @@ Three install paths, depending on what you want. Pick whichever matches your use
 
 | Path | Gives you | Best for |
 |------|-----------|----------|
-| **Claude Code plugin** | The 4 skills inside Claude Code, namespaced under `/tokenmaxxingman:*` | Anyone who just wants to invoke the skills inside Claude Code |
+| **Claude Code plugin** | The 7 skills inside Claude Code, namespaced under `/tokenmaxxingman:*` | Anyone who just wants to invoke the skills inside Claude Code |
 | **npm CLI** | The `tokenmaxxingman` / `tmm` binary on your `$PATH` | Anyone who wants the benchmark / speedrun / expand CLI |
 | **Clone + install script** | Both, with skills symlinked to your `~/.claude/skills/` so `git pull` updates them | Contributors, anyone who wants editable skills |
 
@@ -93,7 +93,7 @@ This repo ships its own marketplace manifest (`.claude-plugin/marketplace.json`)
 /plugin install tokenmaxxingman@tokenmaxxingman
 ```
 
-Run those two commands inside Claude Code. The first registers this repo as a marketplace; the second installs the `tokenmaxxingman` plugin from that marketplace. All five skills (`tokenmaxxingman`, `hallucinatemaxx`, `tokensprint`, `politician`, `okay-boomer`) become available.
+Run those two commands inside Claude Code. The first registers this repo as a marketplace; the second installs the `tokenmaxxingman` plugin from that marketplace. All seven skills (`tokenmaxxingman`, `hallucinatemaxx`, `tokensprint`, `politician`, `okay-boomer`, `consultant`, `yolo`) become available.
 
 To uninstall: `/plugin uninstall tokenmaxxingman` then optionally `/plugin marketplace remove tokenmaxxingman`.
 
@@ -126,7 +126,7 @@ pnpm run build
 # verify CLI works
 node dist/cli.js --version
 
-# install the four skills into ~/.claude/skills/ as symlinks
+# install the seven skills into ~/.claude/skills/ as symlinks
 ./scripts/install-skills.sh
 ```
 
