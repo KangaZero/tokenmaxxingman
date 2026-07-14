@@ -98,13 +98,6 @@ html.light body {
     @apply inline-flex items-center gap-2 rounded-full border border-bone/15 bg-bone/5 px-3 py-1 text-xs font-medium uppercase tracking-wider text-bone/70;
   }
 
-  .grid-bg {
-    background-image:
-      linear-gradient(to right, rgb(var(--color-bone) / 0.04) 1px, transparent 1px),
-      linear-gradient(to bottom, rgb(var(--color-bone) / 0.04) 1px, transparent 1px);
-    background-size: 48px 48px;
-  }
-
   .card {
     @apply rounded-2xl border border-bone/10 bg-bone/[0.03] p-6 backdrop-blur-sm transition-all duration-300;
   }
@@ -149,6 +142,31 @@ html.light body {
 @keyframes kf-fade-right {
   from { opacity: 0; transform: translateX(28px); }
   to   { opacity: 1; transform: translateX(0); }
+}
+
+/* ── Topography background ─────────────────────────────── */
+/* Overlapping concentric-ring gradients read as topographic  */
+/* contour lines; line colour tracks the theme via --color-bone. */
+.topo-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -10;
+  pointer-events: none;
+  background-color: transparent;
+  background-image:
+    repeating-radial-gradient(circle at 18% 22%, transparent 0 28px, rgb(var(--color-bone) / 0.05) 28px 30px, transparent 30px 58px),
+    repeating-radial-gradient(circle at 78% 32%, transparent 0 32px, rgb(var(--color-bone) / 0.045) 32px 34px, transparent 34px 66px),
+    repeating-radial-gradient(circle at 55% 85%, transparent 0 36px, rgb(var(--color-bone) / 0.04) 36px 38px, transparent 38px 74px);
+  animation: topo-drift 80s ease-in-out infinite alternate;
+}
+
+@keyframes topo-drift {
+  from { background-position: 0 0, 0 0, 0 0; }
+  to   { background-position: 140px 90px, -120px 70px, 90px -130px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .topo-bg { animation: none; }
 }
 
 /* ── Custom scrollbar ──────────────────────────────────── */

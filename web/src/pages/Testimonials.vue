@@ -204,7 +204,6 @@ const testimonials: Testimonial[] = [
 <template>
   <main id="main-content" class="relative isolate min-h-screen overflow-x-hidden 
 ">
-    <div class="pointer-events-none absolute inset-0 -z-10 grid-bg opacity-60"></div>
 
     <!-- Toast -->
     <Transition

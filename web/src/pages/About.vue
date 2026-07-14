@@ -6,7 +6,6 @@ import SiteFooter from '../components/SiteFooter.vue';
 <template>
   <main id="main-content" class="relative isolate min-h-screen overflow-x-hidden 
 ">
-    <div class="pointer-events-none absolute inset-0 -z-10 grid-bg opacity-60"></div>
     <section class="mx-auto max-w-6xl px-6 py-24">
       <div class="mb-12 flex flex-col gap-3">
         <span class="pill">origin story · methodology · disclaimer</span>

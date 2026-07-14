@@ -9,7 +9,6 @@ const hireHovered = ref(false);
 <template>
   <main id="main-content" class="relative isolate min-h-screen overflow-x-hidden 
 ">
-    <div class="pointer-events-none absolute inset-0 -z-10 grid-bg opacity-60"></div>
 
     <section aria-labelledby="contributors-heading" class="mx-auto max-w-6xl px-6 py-24">
       <div v-reveal="'fade-up'" class="mb-4 flex flex-col gap-3">

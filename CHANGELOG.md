@@ -29,6 +29,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `web/src/components/SiteNav.vue`: desktop primary nav uses `AnimatedTabs`; both nav theme toggles use `ThemeToggler`; `/docs` added to desktop tabs and the mobile menu.
 - `web/src/pages/Settings.vue`: all four toggle switches (Theme, Auto-Verbosity, Auto-Boomer, PhD) replaced with `AnimatedSwitch`. The Theme switch drives the same View Transitions reveal via its `change` event.
 
+- `web/src/style.css` + `web/src/App.vue`: a site-wide animated topography background (`.topo-bg`), mounted as a fixed layer behind all content. Built from layered `repeating-radial-gradient` rings (an original implementation — the reference page is client-rendered and exposes no source), with a slow `background-position` drift, theme-aware line colour via `--color-bone`, and animation disabled under `prefers-reduced-motion`. The former per-page `grid-bg` overlays and the now-unused `.grid-bg` utility were removed so topography is the sole background.
+
 ### Fixed
 
 - `web/src/components/AboutSection.vue`: timeline dots overlapped the dates. The `v-reveal` transform on each `<li>` established it as the containing block for the absolutely-positioned dot, shifting every dot right by the list's `ms-6` inset onto the date. Offset corrected (`-start-[30px]`) so the dots sit back on the timeline line.
