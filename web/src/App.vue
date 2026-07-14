@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import AnnouncementBanner from './components/AnnouncementBanner.vue';
 import Hero from './components/Hero.vue';
 import StatRow from './components/StatRow.vue';
 import BenchmarkBarChart from './components/BenchmarkBarChart.vue';
@@ -10,6 +11,7 @@ import SiteFooter from './components/SiteFooter.vue';
 </script>
 
 <template>
+  <AnnouncementBanner />
   <main class="relative isolate min-h-screen overflow-x-hidden">
     <div class="pointer-events-none absolute inset-0 -z-10 grid-bg opacity-60"></div>
 

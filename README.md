@@ -1,5 +1,7 @@
 # tokenmaxxingman
 
+[![Vibe Coded](https://img.shields.io/badge/vibe_coded-%F0%9F%A4%96_AI_slop_certified-ff3d00?style=flat-square&labelColor=0a0a0a)](https://github.com/KangaZero/tokenmaxxingman)
+
 > The inverse of [caveman](https://getcaveman.dev/). We do not save tokens. We squander them, with intention.
 
 **🌐 Site:** [kangazero.github.io/tokenmaxxingman](https://kangazero.github.io/tokenmaxxingman/) · **📦 npm:** `tokenmaxxingman` (pending publish) · **🔌 Plugin:** `KangaZero/tokenmaxxingman`
