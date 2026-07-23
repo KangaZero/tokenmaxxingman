@@ -12,3 +12,8 @@ web/dist/
 
 # packed tarballs
 *.tgz
+
+# nix
+result
+result-*
+.direnv/
