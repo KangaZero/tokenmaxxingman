@@ -7,15 +7,12 @@ future-you; nothing here blocks what has already shipped.
 
 ## P1 — worth doing soon
 
-- [ ] **Verify the npm package is actually published.** The README (path B) and
-      the site install card now advertise `npm/pnpm/bun install -g` and
-      `npx/pnpm dlx/bunx tokenmaxxingman`. All of these fail identically until
-      the package is live on the registry. Check:
-      `npm view tokenmaxxingman version` — if it errors or lags behind
-      `package.json` (`0.0.21`), cut a release via the `justfile`
-      (`just publish-dry` then `just publish-npm`, or the CI `release.yml`
-      workflow). Publishing needs an OTP / automation token — non-interactive
-      terminal can't do it, so this is a run-it-yourself step.
+- [x] **Verify the npm package is actually published.** ✅ Done 2026-07-23.
+      `latest` dist-tag = `0.0.21`, matching `package.json`; published versions
+      are `0.0.2` and `0.0.21`; the `0.0.21` tarball resolves. All documented
+      install paths (`npm/pnpm/bun install -g`, `npx/pnpm dlx/bunx`) work today.
+      Re-run `npm view tokenmaxxingman@latest version` after the next version
+      bump to confirm the release landed.
 
 - [ ] **Functionally verify the `prepare` skill-link hook.** `pnpm install`
       now runs `scripts/prepare-skills.sh` → `install-skills.sh`. Confirm the
