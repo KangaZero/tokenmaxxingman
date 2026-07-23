@@ -80,7 +80,7 @@ Three install paths, depending on what you want. Pick whichever matches your use
 
 | Path | Gives you | Best for |
 |------|-----------|----------|
-| **Claude Code plugin** | The 7 skills inside Claude Code, namespaced under `/tokenmaxxingman:*` | Anyone who just wants to invoke the skills inside Claude Code |
+| **Claude Code plugin** | The 8 skills inside Claude Code, namespaced under `/tokenmaxxingman:*` | Anyone who just wants to invoke the skills inside Claude Code |
 | **npm CLI** | The `tokenmaxxingman` / `tmm` binary on your `$PATH` | Anyone who wants the benchmark / speedrun / expand CLI |
 | **Clone + install script** | Both, with skills symlinked to your `~/.claude/skills/` so `git pull` updates them | Contributors, anyone who wants editable skills |
 
@@ -93,7 +93,7 @@ This repo ships its own marketplace manifest (`.claude-plugin/marketplace.json`)
 /plugin install tokenmaxxingman@tokenmaxxingman
 ```
 
-Run those two commands inside Claude Code. The first registers this repo as a marketplace; the second installs the `tokenmaxxingman` plugin from that marketplace. All seven skills (`tokenmaxxingman`, `hallucinatemaxx`, `tokensprint`, `politician`, `okay-boomer`, `consultant`, `yolo`) become available.
+Run those two commands inside Claude Code. The first registers this repo as a marketplace; the second installs the `tokenmaxxingman` plugin from that marketplace. All eight skills (`tokenmaxxingman`, `hallucinatemaxx`, `tokensprint`, `politician`, `okay-boomer`, `consultant`, `yolo`, `auto`) become available.
 
 To uninstall: `/plugin uninstall tokenmaxxingman` then optionally `/plugin marketplace remove tokenmaxxingman`.
 
@@ -126,7 +126,7 @@ pnpm run build
 # verify CLI works
 node dist/cli.js --version
 
-# install the seven skills into ~/.claude/skills/ as symlinks
+# install the eight skills into ~/.claude/skills/ as symlinks
 ./scripts/install-skills.sh
 ```
 
@@ -286,7 +286,7 @@ See [`skills/tokenmaxxingman/SKILL.md`](./skills/tokenmaxxingman/SKILL.md) for f
 
 ## The Skills
 
-Five Claude Code skills ship with this project — four prose modes and one utility.
+Eight Claude Code skills ship with this project — five prose modes (`tokenmaxxingman`, `hallucinatemaxx`, `tokensprint`, `politician`, `consultant`), a deprecated-code mode (`okay-boomer`), and two workflow utilities (`yolo`, `auto`).
 
 - **[tokenmaxxingman](./skills/tokenmaxxingman/SKILL.md)** — The primary skill. Activates maximalist prose expansion in Claude responses. Trigger: `/tokenmaxxingman`, `"tokenmaxxing mode"`, `"expand this"`, `"fewer words is for cavemen"`, `"anti-wenyan"`. Default intensity: `verbose-full`. Persists for the session. Auto-reverts to plain prose for code blocks, debugging, security warnings, and structured data — the same boundary rules caveman uses, inverted.
 
@@ -295,6 +295,12 @@ Five Claude Code skills ship with this project — four prose modes and one util
 - **[tokensprint](./skills/tokensprint/SKILL.md)** — Conversational speedrun mode. Claude races to generate the maximum number of tokens within a user-specified time budget, narrated in a collision of sportscaster commentary and Victorian legalese. Four tiers: `sprint-1m` (~5,000 tokens), `sprint-5m` (~50,000), `sprint-10m` (~150,000), `sprint-1h` (~1,000,000 or context ceiling). Produces a score card at sprint end. For programmatic, reproducible sprinting use `tokenmaxxingman speedrun` via the CLI. Trigger: `/tokensprint`, `"let's speedrun tokens"`. Does not persist — each sprint is a discrete event.
 
 - **[politician](./skills/politician/SKILL.md)** — Deflection-and-waffle mode. Yes/no questions get dragged into multi-paragraph waffle; approximately half the time, the question is never actually answered — instead reframed, pivoted from, or acknowledged as "important" with no commitment. Includes a Mistake-Handling Doctrine for the "deny, gaslight, scapegoat, pivot, reset" pattern when called on a hallucination. Three intensity levels: `backbench` / `full` (default) / `filibuster`. Trigger: `/politician`, `"answer like a politician"`, `"weasel out of this"`. Does not persist across turns. **Same hard exemptions as the other anti-skills** — never fires on real code, security warnings, medical/legal/financial questions, or any context where a real answer is needed to act on.
+
+- **[okay-boomer](./skills/okay-boomer/SKILL.md)** — Deprecation mode (not a prose mode). Rewrites your code using abandoned patterns and dead APIs — `var`, `XMLHttpRequest`, callback pyramids, jQuery 1.x, LAMP-era PHP — accompanied by unsolicited commentary on why the old way was fine. Three intensities: `boomer-lite`, `boomer-full` (default), `boomer-ultra`. Trigger: `/okay-boomer`, `"old school"`, `"use deprecated"`. Never rewrites production-bound code unless explicitly asked.
+
+- **[consultant](./skills/consultant/SKILL.md)** — Corporate-frameworks mode. Reframes every question as a strategic imperative and answers it with a 2×2 matrix, a RACI table, an OKR cascade, and a recommendation that synergistically aligns stakeholders across the value chain. Substance optional; frameworks mandatory. Three intensities: `associate`, `principal` (default), `partner`. Trigger: `/consultant`, `"consultant mode"`, `"wrap this in a framework"`. Same hard exemptions as the other anti-skills.
+
+- **[auto](./skills/auto/SKILL.md)** — The Autonomy Inversion Protocol (not a prose mode). Reverses the operating model: the AI stops implementing and becomes the delegator, issuing work items with acceptance criteria and non-negotiable deadlines, chairing the standup, and returning your diffs with a numbered list of non-blocking concerns. The exact opposite of `/yolo`. Trigger: `/auto`, `"switch roles"`, `"you tell me what to do"`, `"delegate to me"`. Persists for the session. Off switches: `"stop auto"`, `"you do it"`.
 
 - **[yolo](./skills/yolo/SKILL.md)** — Utility skill (not a prose mode). Opt-in auto-accept setup for agent CLIs. On invocation it detects the agent CLI you are *currently running inside* (via env vars) plus every supported CLI installed on PATH — **Claude Code** (`permissions.defaultMode = "bypassPermissions"` in `~/.claude/settings.json`), **Gemini CLI** (`--yolo`), **Codex** (`--dangerously-bypass-approvals-and-sandbox`), **Aider** (`--yes-always`) — then **asks before disabling that tool's confirmation prompts**. Backed by `skills/yolo/enable-yolo.sh` (run `--status` to inspect, `--current` to scope to the running CLI). Defaults to **no**, backs up config before editing, and refuses to run without an interactive terminal. **Security:** this removes the last guardrail between an agent and your filesystem/credentials/remotes — personal dev boxes only, never shared/prod/CI. Trigger: `/yolo`, `"enable yolo"`, `"auto accept all edits"`, `"bypass permissions"`. Never auto-enables; does not persist.
 

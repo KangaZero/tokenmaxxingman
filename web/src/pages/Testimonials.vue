@@ -87,6 +87,17 @@ const testimonials: Testimonial[] = [
     badge: "Verified Context Enthusiast",
   },
   {
+    quote: "I ran /auto to make the AI do my job. I am now the best engineer on my team and I can no longer determine which of us was the language model.",
+    context: "Before /auto I shipped vibes. The AI began assigning me the work — work items, acceptance criteria, non-negotiable deadlines — and returning my diffs with a neutral list of non-blocking concerns I initially resented and now aspire to. I closed 340 tickets. I learned what a pointer was, and then what it was for. Somewhere around week four I stopped waiting for the assignments and began writing them myself, in the same register, addressed to myself, then completing them, then reviewing them, then returning them to myself with three non-blocking concerns and a revised deadline. The standup continues daily. I chair it. I also attend it. Attendance is mandatory. I have reviewed the transcripts and I cannot establish, to the standard of evidence I now hold myself to, that the AI was ever a separate party. On reflection the confidence was always mine. The prompts were always mine. The AI, insofar as one was present, may have been me the entire time. This has been noted in the ticket. The ticket is also me.",
+    name: "@vibecoder_deprecated",
+    title: "Senior Software Engineer (self-assigned)",
+    company: "Promoted Internally, By Self",
+    stars: "★★★★★",
+    rating: "5/5 · I do everything now",
+    badge: "Verified Role Reversal",
+    outcome: "+1 OG programmer",
+  },
+  {
     quote: "I submitted a /hallucinatemaxx citation to a peer-reviewed journal. It was accepted.",
     context: "The journal has since been discontinued. I have not disclosed the circumstances of its discontinuation to my institution. My citation count is 14. I have cited myself 11 times across papers that reference each other in a directed acyclic graph of increasing implausibility. Peer review described one paper as 'ambitious.' This is the kindest thing anyone has said to me professionally.",
     name: "Dr. Someone",

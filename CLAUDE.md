@@ -185,6 +185,7 @@ A `try/catch` wrapper handles invalid BCP 47 tags (e.g. `zh-classical`).
 | `consultant` | `/consultant` | 2×2 matrices, RACI tables, operating model levers |
 | `okay-boomer` | `/okay-boomer` | Deprecated code (var, XHR, jQuery 1.x, LAMP) |
 | `yolo` | `/yolo` | Auto-accept mode for agent CLIs (consent-gated) |
+| `auto` | `/auto` | Role reversal — AI delegates and reviews, human implements |
 
 All skills live in `skills/<name>/SKILL.md`. Registration in
 `web/src/data/benchmark.ts` SKILLS array is required for the site card grid.

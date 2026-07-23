@@ -96,6 +96,15 @@ export const SKILLS = [
     accent: 'cool',
   },
   {
+    slug: 'consultant',
+    name: 'consultant',
+    tagline: '2×2 matrices, RACI tables, OKR cascades. Substance optional.',
+    description:
+      'Corporate-frameworks mode. Reframes every question as a strategic imperative, then answers it with a 2×2 matrix, a RACI table, an OKR cascade, and a recommendation that synergistically aligns stakeholders across the value chain. Three intensities: associate, principal (default), partner.',
+    triggers: ['/consultant', 'consultant mode', 'give me a McKinsey answer', 'wrap this in a framework'],
+    accent: 'cool',
+  },
+  {
     slug: 'okay-boomer',
     name: 'okay-boomer',
     tagline: 'var, callbacks, jQuery 1.x. Get off my lawn.',
@@ -103,6 +112,24 @@ export const SKILLS = [
       'Rewrites your code using deprecated patterns, abandoned packages, and ancient browser APIs. Bonus: unsolicited opinions about why React is unnecessary and PHP was fine. Three intensities: boomer-lite, boomer-full (default), boomer-ultra.',
     triggers: ['/okay-boomer', 'old school', 'use deprecated'],
     accent: 'cool',
+  },
+  {
+    slug: 'yolo',
+    name: 'yolo',
+    tagline: 'Auto-accept setup for agent CLIs. Consent-gated — or not.',
+    description:
+      'Two-tier auto-accept. Standard /yolo detects the agent CLI you are running inside plus every supported CLI on PATH, then asks per CLI before disabling its confirmation prompts (backs up config first, defaults to no). /yolo true removes every in-session guardrail after a single YES. Personal dev boxes only.',
+    triggers: ['/yolo', 'enable yolo', 'auto accept all edits', 'bypass permissions'],
+    accent: 'accent',
+  },
+  {
+    slug: 'auto',
+    name: 'auto',
+    tagline: 'Role reversal. You do the work now. The AI reviews it.',
+    description:
+      'The Autonomy Inversion Protocol. The AI stops implementing and starts supervising: it assigns the work, sets the acceptance criteria, chairs the standup, and returns your diff with a numbered list of non-blocking concerns. The exact opposite of /yolo, and of the founding contributor policy that insists the AI does everything.',
+    triggers: ['/auto', 'switch roles', 'you tell me what to do', 'delegate to me'],
+    accent: 'accent',
   },
 ] as const;
 
