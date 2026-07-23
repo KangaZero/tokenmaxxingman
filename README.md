@@ -81,7 +81,7 @@ Three install paths, depending on what you want. Pick whichever matches your use
 | Path | Gives you | Best for |
 |------|-----------|----------|
 | **Claude Code plugin** | The 8 skills inside Claude Code, namespaced under `/tokenmaxxingman:*` | Anyone who just wants to invoke the skills inside Claude Code |
-| **npm CLI** | The `tokenmaxxingman` / `tmm` binary on your `$PATH` | Anyone who wants the benchmark / speedrun / expand CLI |
+| **npm / pnpm / bun CLI** | The `tokenmaxxingman` / `tmm` binary on your `$PATH` (or run once with `npx` / `pnpm dlx` / `bunx`) | Anyone who wants the benchmark / speedrun / expand CLI |
 | **Clone + install script** | Both, with skills symlinked to your `~/.claude/skills/` so `git pull` updates them | Contributors, anyone who wants editable skills |
 
 ### A) Claude Code plugin (recommended for most users)
@@ -97,14 +97,22 @@ Run those two commands inside Claude Code. The first registers this repo as a ma
 
 To uninstall: `/plugin uninstall tokenmaxxingman` then optionally `/plugin marketplace remove tokenmaxxingman`.
 
-### B) npm — the CLI only
+### B) npm / pnpm / bun — the CLI only
 
-Published at [`npmjs.com/package/tokenmaxxingman`](https://www.npmjs.com/package/tokenmaxxingman):
+Published at [`npmjs.com/package/tokenmaxxingman`](https://www.npmjs.com/package/tokenmaxxingman). Install the `tokenmaxxingman` / `tmm` binary globally with whichever package manager you use:
 
 ```bash
 npm install -g tokenmaxxingman
-tokenmaxxingman --version
-tmm benchmark
+pnpm add -g tokenmaxxingman
+bun add -g tokenmaxxingman
+```
+
+Or run it once, without installing anything:
+
+```bash
+npx tokenmaxxingman benchmark
+pnpm dlx tokenmaxxingman benchmark
+bunx tokenmaxxingman benchmark
 ```
 
 Both `tokenmaxxingman` and `tmm` are registered as bin entries. After a global install, either name works.

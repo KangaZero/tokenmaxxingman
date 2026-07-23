@@ -12,12 +12,14 @@ const paths = [
   },
   {
     badge: 'CLI users',
-    title: 'npm — the binary only',
-    blurb: '`tokenmaxxingman` / `tmm` on your $PATH. Skills not auto-linked.',
+    title: 'npm / pnpm / bun — the binary only',
+    blurb: '`tokenmaxxingman` / `tmm` via npm, pnpm, or bun. Skills not auto-linked.',
     accent: 'cool' as const,
-    code: `npm install -g tokenmaxxingman
+    code: `npm install -g tokenmaxxingman   # or: pnpm add -g / bun add -g
 tmm benchmark
-tmm expand --mode anti-wenyan`,
+
+# or run once, no install:
+npx tokenmaxxingman expand --mode anti-wenyan   # or: pnpm dlx / bunx`,
   },
   {
     badge: 'contributors',
@@ -26,7 +28,7 @@ tmm expand --mode anti-wenyan`,
     accent: 'accent' as const,
     code: `git clone git@github.com:KangaZero/tokenmaxxingman.git
 cd tokenmaxxingman
-npm install && npm run build
+pnpm install && pnpm run build
 ./scripts/install-skills.sh`,
   },
 ];
