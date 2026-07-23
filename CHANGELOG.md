@@ -18,6 +18,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `web/src/components/AnimatedSwitch.vue` — an animate-ui-style base switch with a spring-eased thumb and press feedback. Supports `v-model` and emits the originating `change` event so it can drive the themed reveal transition.
 - `web/src/components/AnimatedCheckbox.vue` — an animate-ui-style headless checkbox with an SVG check that draws itself in via `stroke-dashoffset` (suppressed under `prefers-reduced-motion`).
 - `web/src/components/CookieConsent.vue` — a ceremonial cookie-consent dialog that tracks nothing, deploys nothing, and requires agreement (via `AnimatedCheckbox`) to a 47,000-word instrument that governs nothing. Dismissal is persisted to localStorage. Mounted globally in `App.vue`.
+- `skills/auto/SKILL.md` + `skills/auto/EXAMPLES.md` — the `/auto` skill (Autonomy Inversion Protocol). Reverses the operating model: Claude stops implementing and becomes the delegator — issuing work items with acceptance criteria and non-negotiable deadlines, chairing the standup, and returning the human's diffs with a numbered list of non-blocking concerns. The empirical inverse of `/yolo` and of the repository's "the AI does everything" contributor policy. Registered in the site `SKILLS` grid and the CLAUDE.md skills inventory.
+- `flake.nix` + `flake.lock` — a reproducible Nix dev shell. `nix develop` provides the CI toolchain (Node 26 + pnpm + just) and installs git hooks via the `shellHook`: Nix hygiene (nixfmt/statix/deadnix) plus a `check-author` pre-push guard that enforces the KangaZero-only commit-identity rule.
+- `scripts/prepare-skills.sh` + a `package.json` `prepare` script — a local `pnpm install` now symlinks the bundled skills into `~/.claude/skills` (via `install-skills.sh`). Uses the `prepare` lifecycle (not `postinstall`) so a registry consumer's home directory is never touched; no-ops under CI, `TMM_SKIP_SKILLS_INSTALL`, or a missing `$HOME`, and a skill-link failure is non-fatal to install/publish.
+- Two skills backfilled into the site `SKILLS` grid — `consultant` and `yolo` shipped as skills but were absent from the grid, so `HEADLINE_STATS.skillsShipped` (derived from `SKILLS.length`) under-reported. The grid now lists all eight skills.
+- `web/src/pages/Testimonials.vue`: a testimonial from a vibe coder who ran `/auto`, was conscripted into doing all the work, and can no longer establish, to the evidentiary standard they now hold themselves to, that the AI was ever a separate party.
 
 ### Changed
 
@@ -30,6 +35,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `web/src/pages/Settings.vue`: all four toggle switches (Theme, Auto-Verbosity, Auto-Boomer, PhD) replaced with `AnimatedSwitch`. The Theme switch drives the same View Transitions reveal via its `change` event.
 
 - `web/src/components/HexagonBackground.vue` + `web/src/App.vue`: a site-wide animated hexagon background (animate-ui `backgrounds/hexagon`), mounted as a fixed `-z-10` layer behind all content. A canvas draws the honeycomb once (correct flat-top hex lattice, DPR-aware, redrawn on resize/theme change, theme-aware via `--color-bone`); a soft accent glow drifts across with `mix-blend-mode: screen` so the cells appear to light up in a passing wave, disabled under `prefers-reduced-motion`. Original canvas implementation — the reference page is client-rendered and exposes no source. The former per-page `grid-bg` overlays and the now-unused `.grid-bg` utility were removed so this is the sole background.
+- Install instructions (README path B + `web/src/components/InstallSection.vue`): now cover `npm` / `pnpm` / `bun` for a global install and `npx` / `pnpm dlx` / `bunx` for a one-off run without installing. The site's "Clone + install script" card was corrected from `npm install && npm run build` to `pnpm install && pnpm run build`, matching the repository's pnpm mandate.
+- Skill count reconciled to **8** across `README.md` and the `CLAUDE.md` skills inventory (previously stated inconsistently — five in the enumerated README list, seven elsewhere).
 
 ### Fixed
 
