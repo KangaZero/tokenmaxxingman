@@ -1,21 +1,71 @@
+<div align="center">
+
+<img src="https://raw.githubusercontent.com/KangaZero/tokenmaxxingman/main/web/public/favicon.svg" width="110" alt="tokenmaxxingman" />
+
 # tokenmaxxingman
 
-[![Vibe Coded](https://img.shields.io/badge/vibe_coded-%F0%9F%A4%96_AI_slop_certified-ff3d00?style=flat-square&labelColor=0a0a0a)](https://github.com/KangaZero/tokenmaxxingman)
-[![npm version](https://img.shields.io/npm/v/tokenmaxxingman?style=flat-square&labelColor=0a0a0a&color=ff3d00)](https://www.npmjs.com/package/tokenmaxxingman)
+### We measured which human language is worst at being tokenized.
 
-> A deliberately maximalist token-expenditure toolkit, and a rigorous tokenization benchmark. We do not save tokens. We squander them, with intention.
+**It is not Classical Chinese.**
+**It is Inuktitut Syllabics — and under the newest tokenizer it is getting worse.**
 
-**🌐 Site:** [kangazero.github.io/tokenmaxxingman](https://kangazero.github.io/tokenmaxxingman/) · **📦 npm:** [`tokenmaxxingman`](https://www.npmjs.com/package/tokenmaxxingman) · **🔌 Plugin:** `KangaZero/tokenmaxxingman`
+<br>
+
+[![npm](https://img.shields.io/npm/v/tokenmaxxingman?style=for-the-badge&labelColor=0a0a0a&color=ff3d00&logo=npm)](https://www.npmjs.com/package/tokenmaxxingman)
+[![MCP](https://img.shields.io/badge/MCP-2025--11--25-ff3d00?style=for-the-badge&labelColor=0a0a0a)](#mcp-server)
+[![CI](https://img.shields.io/github/actions/workflow/status/KangaZero/tokenmaxxingman/ci.yml?branch=main&style=for-the-badge&labelColor=0a0a0a&color=ff3d00&label=ci)](https://github.com/KangaZero/tokenmaxxingman/actions)
+[![license](https://img.shields.io/badge/license-MIT-ff3d00?style=for-the-badge&labelColor=0a0a0a)](./LICENSE)
+[![node](https://img.shields.io/badge/node-%E2%89%A522.12-ff3d00?style=for-the-badge&labelColor=0a0a0a&logo=nodedotjs)](#node-version)
+[![AI Slop Certified](https://img.shields.io/badge/AI_slop-certified%E2%84%A2-ff3d00?style=for-the-badge&labelColor=0a0a0a)](#caveats)
+
+**[Website](https://kangazero.github.io/tokenmaxxingman/)** ·
+**[Install](#install)** ·
+**[The Benchmark](#the-empirical-finding)** ·
+**[MCP Server](#mcp-server)** ·
+**[Skills](#the-skills)** ·
+**[Caveats](#caveats)**
+
+</div>
 
 ---
 
+```console
+$ tokenmaxxingman budget --target trillion
+tokenmaxxingman budget
+  target        : 1,000,000,000,000 tokens
+  throughput    : 277.8 tokens/sec (highest published tier)
+  time required : 1,000,000 hours (114.16 years)
+  conversations : 5,000,000 at 200,000 tokens each
+  text volume   : ~4.000 TB
+  one context   : no
+
+  Not achievable in one sitting. Treat it as a lifetime target, not a session.
+```
+
+Every number above was measured. That is the entire joke.
+
+---
+
+## What this is
+
+Three things wearing one trench coat:
+
+1. **A tokenization benchmark that answers a real question.** Eighteen language and register variants, one parallel corpus, tokenizer versions pinned to an exact semver. Which human language costs the most tokens to say the same sentence? We ran it. The answer surprised us.
+2. **A CLI that inflates prose on purpose.** Nine deterministic pipelines, from a polite `verbose-lite` to `maxlang`, which routes your text through whichever language the benchmark currently crowns. Same input, byte-identical output, every time.
+3. **An MCP server, so the joke stops lying.** Eight tools over protocol `2025-11-25`. The bundled skills used to *estimate* their token counts. Now they *measure* them. The tooling became rigorous, which is the least funny thing that could have happened to it, and we are very proud.
+
+```bash
+npm i -g tokenmaxxingman
+claude mcp add tokenmaxxingman -- npx -y tokenmaxxingman tmm-mcp
+```
+
 ## Why
 
-Tokens are a measurable resource. Most tooling treats that measurement as a budget to be minimised. tokenmaxxingman starts from the premise that tokens are a quantity to be spent without restraint — deterministically, reproducibly, and with real measurement behind it.
+Tokens are a measurable resource, and almost every tool treats that measurement as a budget to be minimised. This one treats it as a quantity to be spent — deliberately, reproducibly, and with a tokenizer watching.
 
-The reference point is the **token floor of plain prose**: the cost of saying a thing once, in ordinary English, with no elaboration. The bundled benchmark measures that floor directly, across eighteen language and register variants, and every expand mode is reported as a multiple of it. Nothing here is calibrated against any other tool. The corpus is the ruler.
+The reference point is the **token floor of plain prose**: what it costs to say a thing once, in ordinary English, with no elaboration. The bundled corpus measures that floor directly, and every mode reports as a multiple of it. Nothing here is calibrated against another tool. The corpus is the ruler.
 
-The joke is real engineering. Tokenizer versions are pinned to an exact semver. The corpus is statically committed. The transforms are pure, deterministic functions under full test coverage. An absurdist premise executed with rigor is funnier than one that merely waves at the joke.
+An absurd premise executed with real rigour is funnier than one that merely gestures at the joke. So the transforms are pure functions, the corpus is committed, the tokenizers are pinned, and the whole thing is under test. The satire is the purpose. The engineering is not satire.
 
 ---
 
@@ -268,6 +318,45 @@ tokenmaxxingman speedrun
 
 ---
 
+### budget — how long would N tokens take?
+
+The inverse of `speedrun`. Name a quantity instead of a duration and it reports what that quantity actually costs. It projects the cost; it does not incur it.
+
+```bash
+# The question everybody asks first
+tokenmaxxingman budget --target trillion
+
+# Named targets: million | billion | trillion
+tokenmaxxingman budget --target billion
+
+# Or an explicit count, with a bigger context window
+tokenmaxxingman budget --target-tokens 250000000 --context-window 1000000
+
+# Machine-readable
+tokenmaxxingman budget --target trillion --format json
+```
+
+**Expected output:**
+
+```
+tokenmaxxingman budget
+  target        : 1,000,000,000,000 tokens
+  encoding      : cl100k_base
+  throughput    : 277.8 tokens/sec (highest published tier)
+  time required : 1,000,000 hours (114.16 years)
+  conversations : 5,000,000 at 200,000 tokens each
+  text volume   : ~4.000 TB
+  one context   : no
+
+  Not achievable in one sitting. At 277.8 tokens/sec this needs 114.2 years of
+  continuous generation and 5,000,000 separate conversations. Treat it as a
+  lifetime target, not a session.
+```
+
+Throughput is derived from the highest published `tokensprint` tier rather than hardcoded, so these figures follow the tier table if it is ever revised. No monetary estimate is produced: provider pricing moves faster than this file would, and a stale dollar figure quoted to this many digits would be worse than none.
+
+---
+
 ## The Modes
 
 The `expand` command accepts eight modes. The default is `verbose-full`.
@@ -306,9 +395,9 @@ The package ships an MCP server. **MCP** — the Model Context Protocol — is t
 
 ### Why it exists
 
-Until now the skills did their arithmetic in their heads. A skill asked to report an inflation ratio *estimated* the token count. A skill asked to render `maxlang` *approximated* the transform from the examples in its own manifest. The results were plausible and not reproducible, which is precisely the wrong way round for a project whose entire claim is measurement.
+The skills used to do their arithmetic in their heads. Asked for an inflation ratio, a skill *estimated* it. Asked for `maxlang`, it *approximated* the transform from its own examples. Plausible, and not reproducible — exactly the wrong way round for a project whose whole claim is measurement.
 
-With the server registered, the skills call the same deterministic pipeline the CLI calls. `count_tokens` returns a real `gpt-tokenizer` count against a pinned vocabulary. `expand_text` returns the actual output of the actual transform, byte for byte, on every invocation. The ratio is measured rather than asserted, which is a modest improvement in institutional credibility for a tool of this kind.
+Registered, the skills call the same pipeline the CLI calls. `count_tokens` is a real `gpt-tokenizer` count against a pinned vocabulary. `expand_text` is the actual transform, byte for byte, every time. The ratio is measured instead of asserted.
 
 ### Install / register
 
@@ -427,15 +516,17 @@ Eight Claude Code skills ship with this project — five prose modes (`tokenmaxx
 
 ## How It Works
 
-Input text passes through a pipeline of pure, deterministic functions. Each function takes a string and returns a string. No function has side effects. No function calls a network, reads a file, or touches state.
+Every transform is a pure function: string in, string out, no side effects, no network, no filesystem, no state. That is what makes the output byte-identical across runs, and it is the only reason any number here is worth quoting.
 
-The `expand` function selects a pre-composed pipeline based on the mode and runs the input through it: for `verbose-ultra`, that is synonyms, then qualifiers, then nominalizations, then passive rewriting, applied in sequence. Translation modes append a corpus lookup step after the full `verbose-ultra` pipeline.
+**`expand`** picks a pre-composed pipeline per mode. `verbose-ultra` is synonyms → qualifiers → nominalizations → passive. Translation modes (`translate-*`, `maxlang`) do the phrasebook lookup **first**, per sentence, *then* amplify — the reverse order looks more natural and cannot work, because the amplifiers rewrite the very sentence the phrasebook is keyed on. Unmatched sentences stay in English and are amplified normally.
 
-The benchmark module reads `data/corpus.json` — a statically committed file — and runs `countTokens` from the `gpt-tokenizer` v3.4.0 library against every language variant for every sentence. It ranks on tokens-per-word — the primary sort key — and falls back to tokens-per-character, then tokens-per-sentence, then the language code, to break ties; the three ratios are all reported as columns. `ka` (Georgian) therefore ranks below `te` (Telugu) despite the higher tokens-per-character, because Telugu costs more tokens per word. The result is deterministic because the corpus is committed, the tokenizer version is pinned to an exact semver, and the sort is stable with a deterministic tie-break.
+**`benchmark`** reads the committed `data/corpus.json` and runs `gpt-tokenizer` over every sentence in every variant. It sorts on tokens-per-word, then tokens-per-character, then tokens-per-sentence, then the language code — all three ratios are reported as columns. This is why `ka` (Georgian) ranks *below* `te` (Telugu) despite a higher tokens-per-character: Telugu costs more per word. Determinism comes from the committed corpus, the exact-pinned tokenizer, and a total tie-break with no locale-sensitive collation anywhere in it.
 
-The speedrun module iterates `expand` calls in a loop until the time budget is exhausted, accumulating token counts via the tokenizer. The `--max-iterations` safety cap prevents runaway loops. Output includes total tokens generated, wall-clock duration, and tokens per second.
+**`speedrun`** loops `expand` until the time budget runs out, counting as it goes, with `--max-iterations` as a runaway guard. **`budget`** is its inverse: name a token target and it tells you how long that would take, how many conversations it needs, and how many terabytes it produces. It refuses politely and with citations.
 
-The CLI (`src/cli.ts`) is a thin integration layer. It reads from a file or stdin, delegates all logic to the pure-function modules, and writes to stdout. All user-facing errors go to stderr with exit code 1.
+**`maxxer`** chains every trick at once and enforces a 1 MB output ceiling *between* transforms, not merely between passes — checking only at pass boundaries let a 188-byte input reach 10.85 MB. The ceiling never falls below the input, so it bounds growth without ever truncating text you supplied.
+
+**The CLI** is a thin shell: read stdin or a file, delegate to the pure modules, write stdout. Usage errors exit **2**, runtime failures exit **1**, success exits 0.
 
 ---
 
