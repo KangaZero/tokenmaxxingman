@@ -1,14 +1,13 @@
 #!/usr/bin/env node
-import { readFileSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
-import { resolve, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
 import { program } from 'commander';
 import type { ExpandMode } from './expand.js';
 import type { EncodingName } from './tokenizer.js';
 import type { TimeTier } from './speedrun.js';
 import type { Corpus } from './corpus-types.js';
-import { expand } from './expand.js';
+import { EXPAND_MODES, expand } from './expand.js';
+import { loadCorpus as loadCorpusOrThrow } from './corpus.js';
+import { readManifest } from './paths.js';
 import { runBenchmark } from './benchmark.js';
 import { toMarkdown } from './formatters/markdown.js';
 import { toJson } from './formatters/json.js';
@@ -16,17 +15,6 @@ import { speedrun, tierToMs } from './speedrun.js';
 import { maxxer, maxxerParallel } from './maxxer.js';
 import { targets as LANG_CODES } from './transforms/translate.js';
 import type { LangCode } from './transforms/translate.js';
-
-const EXPAND_MODES: readonly ExpandMode[] = [
-  'verbose-lite',
-  'verbose-full',
-  'verbose-ultra',
-  'verbose-galactic',
-  'translate-burmese',
-  'translate-tibetan',
-  'translate-inuktitut',
-  'anti-wenyan',
-];
 
 const ENCODING_NAMES: readonly EncodingName[] = ['cl100k_base', 'o200k_base'];
 
@@ -97,45 +85,20 @@ async function readInput(file: string | undefined): Promise<string> {
   return readFile(file, 'utf-8');
 }
 
-// import.meta.url resolves correctly after npm install -g; __dirname would point to the wrong place.
-const __dirname = dirname(fileURLToPath(import.meta.url));
-
 function loadCorpus(): Corpus {
-  const corpusPath = resolve(__dirname, '../data/corpus.json');
-  let parsed: unknown;
   try {
-    parsed = JSON.parse(readFileSync(corpusPath, 'utf-8'));
-  } catch {
-    console.error(`Error: failed to parse corpus.json`);
+    return loadCorpusOrThrow();
+  } catch (err) {
+    console.error(`Error: ${err instanceof Error ? err.message : String(err)}`);
     process.exit(1);
   }
-  if (
-    typeof parsed !== 'object' ||
-    parsed === null ||
-    (parsed as Record<string, unknown>)['version'] !== '1' ||
-    !Array.isArray((parsed as Record<string, unknown>)['languages']) ||
-    !Array.isArray((parsed as Record<string, unknown>)['sentences'])
-  ) {
-    console.error(`Error: corpus.json has unexpected structure (expected version "1")`);
-    process.exit(1);
-  }
-  return parsed as Corpus;
 }
 
 let pkg: { version: string };
 try {
-  const rawPkg: unknown = JSON.parse(readFileSync(resolve(__dirname, '../package.json'), 'utf-8'));
-  if (
-    typeof rawPkg !== 'object' ||
-    rawPkg === null ||
-    typeof (rawPkg as Record<string, unknown>)['version'] !== 'string'
-  ) {
-    console.error(`Error: package.json has unexpected structure`);
-    process.exit(1);
-  }
-  pkg = rawPkg as { version: string };
-} catch {
-  console.error(`Error: failed to parse package.json`);
+  pkg = readManifest();
+} catch (err) {
+  console.error(`Error: ${err instanceof Error ? err.message : String(err)}`);
   process.exit(1);
 }
 
@@ -328,5 +291,20 @@ program
       }
     },
   );
+
+program
+  .command('mcp')
+  // `npx -y tokenmaxxingman tmm-mcp` resolves the package's default bin and
+  // passes `tmm-mcp` as argv[2], so the alias makes the documented npx form work
+  // identically to the dedicated `tmm-mcp` bin.
+  .alias('tmm-mcp')
+  .description('Run the Model Context Protocol server on stdio.')
+  .action(async () => {
+    // Imported lazily: the SDK pulls in a non-trivial module graph that the
+    // other subcommands never touch. Note this imports `run.js`, not `bin.js` —
+    // `bin.js` starts a server as an import side effect.
+    const { runStdioServer } = await import('./mcp/run.js');
+    await runStdioServer();
+  });
 
 program.parse();

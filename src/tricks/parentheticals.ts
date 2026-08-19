@@ -1,3 +1,5 @@
+import { wholeWordPattern } from '../utils/text.js';
+
 const LEVEL_ONE_ASIDES: readonly string[] = [
   'though one might argue (and indeed many have argued (often without success)) that this is a matter of perspective',
   'notwithstanding the obvious (and frequently overlooked (much to the detriment of clarity)) counterarguments',
@@ -16,7 +18,9 @@ const LEVEL_ONE_ASIDES: readonly string[] = [
   'with all due respect to those who disagree (and there are many (more, perhaps, than is generally acknowledged))',
 ];
 
-const CONJUNCTIONS_PATTERN = /\b(and|but|or|however)\b/gi;
+// One alternation pattern rather than four, and Unicode-aware boundaries so a
+// Cyrillic word such as "кандк" is no longer split open by an injected clause.
+const CONJUNCTIONS_PATTERN = wholeWordPattern(['and', 'but', 'or', 'however']);
 
 export function parentheticals(input: string): string {
   if (input.trim().length === 0) return input;

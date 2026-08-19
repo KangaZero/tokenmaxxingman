@@ -33,6 +33,21 @@ describe('reduplication', () => {
     const input = 'big small good bad new old';
     expect(reduplication(input)).toEqual(reduplication(input));
   });
+
+  // Regression: `\bbig\b` is ASCII-only, so a Burmese or Syllabics neighbour
+  // counted as a word boundary and the lookup fired mid-word.
+  it('does not reduplicate inside a word from a non-Latin script', () => {
+    for (const input of ['မbigမ', 'ᐊᐃbig', 'кириллицаvery']) {
+      expect(reduplication(input)).toEqual(input);
+    }
+  });
+
+  // Regression: a `\b` before a combining mark let the match end mid-grapheme,
+  // stranding the mark on the tail of the replacement.
+  it('does not match a base letter that carries a combining mark', () => {
+    const nfd = 'bi' + 'g' + '\u0301';
+    expect(reduplication(nfd)).toEqual(nfd);
+  });
 });
 
 describe('rhetoricalQuestions', () => {
@@ -96,5 +111,12 @@ describe('codeSwitching', () => {
   it('is deterministic', () => {
     const input = 'However, therefore, of course, notably, basically, specifically.';
     expect(codeSwitching(input)).toEqual(codeSwitching(input));
+  });
+
+  // Same ASCII-only `\b` defect as the synonym and nominalization tables: the
+  // triggers are now Unicode-aware, so a non-Latin neighbour is not a boundary.
+  it('does not switch inside a word from a non-Latin script', () => {
+    const input = 'кhoweverк';
+    expect(codeSwitching(input)).toEqual(input);
   });
 });

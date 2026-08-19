@@ -122,11 +122,15 @@ describe('runBenchmark sort tiebreaker branches', () => {
     const result = runBenchmark(sparseCorpus, 'cl100k_base');
     const zzRow = result.rows.find((r) => r.code === 'zz');
     expect(zzRow).toBeDefined();
-    expect(zzRow?.tokensPerCharacter).toBe(0);
+    // A language with no corpus data has 0 tokens over 0 characters: genuinely
+    // undefined, so NaN, which serialises to JSON `null`. It is deliberately NOT
+    // 0 — reporting 0 conflated "no data" with "cheapest", and that conflation
+    // sorted the most token-dense scripts last, inverting the headline ranking.
+    expect(zzRow?.tokensPerCharacter).toBeNaN();
   });
 
-  // Gap: sentenceCount === 0 → tokensPerSentence = 0.
-  it('assigns tokensPerSentence of 0 when sentences array is empty', () => {
+  // Gap: sentenceCount === 0 → tokensPerSentence is undefined (NaN).
+  it('assigns tokensPerSentence of NaN when the sentences array is empty', () => {
     const emptyCorpus = {
       version: '1' as const,
       description: 'empty caveats corpus',
@@ -136,7 +140,10 @@ describe('runBenchmark sort tiebreaker branches', () => {
       ],
     };
     const result = runBenchmark(emptyCorpus, 'cl100k_base');
-    expect(result.rows[0]?.tokensPerSentence).toBe(0);
+    // Same semantics as tokensPerCharacter: 0 tokens over 0 sentences is
+    // undefined, reported as NaN and serialised as JSON `null` — deliberately
+    // not 0, which read as "cheapest" and inverted the ranking.
+    expect(result.rows[0]?.tokensPerSentence).toBeNaN();
   });
 
   // Gap: secondary sort branch — two languages with identical tokensPerCharacter but

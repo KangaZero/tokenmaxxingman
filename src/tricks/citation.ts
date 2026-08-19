@@ -34,19 +34,35 @@ export function citation(input: string): string {
   const sentences = splitOnSentenceBoundaries(input);
   if (sentences.length === 0) return input;
 
-  const result = sentences.map((sentence, index) => {
-    // Insert citation after every 2nd sentence (even-indexed after the first).
-    if (index % 2 === 1) {
-      const cite = FAKE_CITATIONS[index % FAKE_CITATIONS.length];
-      if (cite === undefined) return sentence;
+  const result: string[] = [];
+  // Pool selection is driven by its own counter, incremented once per citation
+  // actually emitted, and is deliberately independent of the "does this sentence
+  // get a citation?" test. Selecting with `index % FAKE_CITATIONS.length` while
+  // only odd `index` values passed that test meant odd pool slots were the only
+  // reachable ones: 10 of the 20 citations were dead code. A dedicated counter
+  // walks the whole pool and stays deterministic — it is a pure function of the
+  // sentence order.
+  let citationIndex = 0;
 
-      // Append before the trailing punctuation so the citation reads as mid-sentence apparatus.
-      const trailingPunct = /[.!?]$/.test(sentence) ? sentence.slice(-1) : '';
-      const body = trailingPunct.length > 0 ? sentence.slice(0, -1) : sentence;
-      return `${body} ${cite}${trailingPunct}`;
+  for (const [index, sentence] of sentences.entries()) {
+    // Insert citation after every 2nd sentence (even-indexed after the first).
+    if (index % 2 !== 1) {
+      result.push(sentence);
+      continue;
     }
-    return sentence;
-  });
+
+    const cite = FAKE_CITATIONS[citationIndex % FAKE_CITATIONS.length];
+    citationIndex++;
+    if (cite === undefined) {
+      result.push(sentence);
+      continue;
+    }
+
+    // Append before the trailing punctuation so the citation reads as mid-sentence apparatus.
+    const trailingPunct = /[.!?]$/.test(sentence) ? sentence.slice(-1) : '';
+    const body = trailingPunct.length > 0 ? sentence.slice(0, -1) : sentence;
+    result.push(`${body} ${cite}${trailingPunct}`);
+  }
 
   return result.join(' ');
 }

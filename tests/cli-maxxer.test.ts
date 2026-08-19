@@ -67,13 +67,15 @@ describe('CLI maxxer subcommand', () => {
     expect(stderr).toContain('--passes');
   });
 
-  it('--target-language my produces Burmese-script characters or the fallback marker', () => {
-    const input = 'Hello.';
-    const { stdout, status } = cli(['maxxer', '--target-language', 'my'], { input });
+  it('--target-language my produces Burmese-script characters', () => {
+    // Was an OR against the fallback marker, so it passed while the translate
+    // pass was doing nothing. A phrasebook sentence must come back in Burmese.
+    const { stdout, status } = cli(['maxxer', '--target-language', 'my'], {
+      input: 'The sun rises in the east.',
+    });
     expect(status).toBe(0);
-    const hasBurmese = /[က-႟]/.test(stdout);
-    const hasFallback = stdout.includes('[no translation available: my]');
-    expect(hasBurmese || hasFallback).toBe(true);
+    expect(stdout).toMatch(/\p{Script=Myanmar}/u);
+    expect(stdout).not.toContain('no translation available');
   });
 
   it('--parallel exits 0 and produces output', () => {

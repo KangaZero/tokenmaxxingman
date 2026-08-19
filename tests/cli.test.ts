@@ -80,12 +80,16 @@ describe('CLI', () => {
     expect(stderr).toContain('verbose-lite');
   });
 
-  it('expand --mode anti-wenyan accepts the new mode and exits 0', () => {
-    const { stdout, status } = cli(['expand', '-', '-m', 'anti-wenyan'], { input: 'Use this.' });
+  it('expand --mode anti-wenyan still works as a deprecated alias for maxlang', () => {
+    const { stdout, status } = cli(['expand', '-', '-m', 'anti-wenyan'], {
+      input: 'The sun rises in the east.',
+    });
     expect(status).toBe(0);
-    // anti-wenyan resolves to verbose-ultra + Inuktitut translate; the iu-cans
-    // phrasebook does not contain the expanded form, so we expect the fallback.
-    expect(stdout).toContain('[no translation available: iu-cans]');
+    // The alias resolves to the same pipeline as `maxlang`: translate to the
+    // benchmark-winning language first, then amplify. It must emit real
+    // syllabics rather than the old `[no translation available: …]` marker.
+    expect(stdout).toMatch(/\p{Script=Canadian_Aboriginal}/u);
+    expect(stdout).not.toContain('no translation available');
   });
 
   it('--help for expand lists anti-wenyan as a valid mode', () => {

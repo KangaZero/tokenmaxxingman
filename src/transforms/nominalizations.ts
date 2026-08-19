@@ -1,4 +1,4 @@
-import { applyCase } from '../utils/text.js';
+import { applyCase, wholeWordPattern } from '../utils/text.js';
 
 const NOMINALIZATIONS: ReadonlyMap<string, string> = new Map([
   ['decide', 'make a decision regarding the matter of'],
@@ -33,11 +33,12 @@ const NOMINALIZATIONS: ReadonlyMap<string, string> = new Map([
   ['coordinate', 'engage in coordination concerning'],
 ]);
 
+// Unicode-aware boundaries (see utils/text.ts). The `\p{M}` term matters most
+// here: under `\b`, "reduc" + "e" + U+0301 matched "reduce" and left the
+// combining acute to re-attach to the replacement's final "n" — corrupting a
+// grapheme the pattern never covered.
 const NOMINALIZATION_PATTERNS: ReadonlyMap<RegExp, string> = new Map(
-  [...NOMINALIZATIONS].map(([verb, nounPhrase]) => [
-    new RegExp(`\\b(${verb})\\b`, 'gi'),
-    nounPhrase,
-  ]),
+  [...NOMINALIZATIONS].map(([verb, nounPhrase]) => [wholeWordPattern([verb]), nounPhrase]),
 );
 
 export function nominalizations(input: string): string {

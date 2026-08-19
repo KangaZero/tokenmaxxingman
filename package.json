@@ -1,15 +1,17 @@
 {
   "name": "tokenmaxxingman",
-  "version": "0.0.21",
-  "description": "A meticulously deterministic, exhaustively composable, intentionally maximalist tooling artifact for the comprehensive amplification of token expenditure across natural-language workloads — accompanied by a rigorously empirical, corpus-grounded, tokenizer-version-pinned investigation into the question of which natural language, when subjected to byte-pair encoding under cl100k_base or o200k_base vocabularies, tokenizes most prodigiously, inefficiently, and gloriously.",
+  "version": "0.1.0",
+  "description": "A meticulously deterministic, exhaustively composable, intentionally maximalist tooling artifact for the comprehensive amplification of token expenditure across natural-language workloads — comprising a CLI, a Model Context Protocol server, a family of Claude Code skills, and a rigorously empirical, corpus-grounded, tokenizer-version-pinned investigation into the question of which natural language, when subjected to byte-pair encoding under cl100k_base or o200k_base vocabularies, tokenizes most prodigiously, inefficiently, and gloriously.",
   "keywords": [
     "tokens",
     "tokenizer",
     "text-expansion",
     "verbose",
     "cli",
+    "mcp",
+    "model-context-protocol",
     "claude-skill",
-    "anti-caveman",
+    "claude-code",
     "benchmark",
     "nlp",
     "joke-tooling"
@@ -18,10 +20,13 @@
   "main": "./dist/index.js",
   "bin": {
     "tokenmaxxingman": "./dist/cli.js",
-    "tmm": "./dist/cli.js"
+    "tmm": "./dist/cli.js",
+    "tokenmaxxingman-mcp": "./dist/mcp/bin.js",
+    "tmm-mcp": "./dist/mcp/bin.js"
   },
   "exports": {
     ".": "./dist/index.js",
+    "./mcp": "./dist/mcp/index.js",
     "./package.json": "./package.json"
   },
   "sideEffects": false,
@@ -35,6 +40,7 @@
   ],
   "scripts": {
     "build": "rm -rf dist && tsc --project tsconfig.json",
+    "prepack": "pnpm run build",
     "typecheck": "tsc --noEmit",
     "lint": "eslint src",
     "test": "vitest run",
@@ -43,7 +49,7 @@
     "prepare": "bash scripts/prepare-skills.sh"
   },
   "engines": {
-    "node": ">=22"
+    "node": ">=22.12.0"
   },
   "author": {
     "name": "KangaZero",
@@ -60,23 +66,27 @@
   "homepage": "https://github.com/KangaZero/tokenmaxxingman#readme",
   "packageManager": "pnpm@11.5.0",
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": true
   },
   "dependencies": {
-    "commander": "14.0.3",
+    "@modelcontextprotocol/sdk": "1.30.0",
+    "commander": "15.0.0",
     "gpt-tokenizer": "3.4.0",
-    "picocolors": "1.1.1"
+    "picocolors": "1.1.1",
+    "zod": "4.4.3"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
-    "@types/node": "22.19.19",
-    "@vitest/coverage-v8": "4.1.6",
-    "eslint": "10.3.0",
+    "@types/node": "22.20.1",
+    "@vitest/coverage-v8": "4.1.10",
+    "eslint": "10.8.1",
     "eslint-config-prettier": "10.1.8",
-    "jiti": "2.4.2",
-    "prettier": "3.8.3",
+    "jiti": "2.7.0",
+    "prettier": "3.9.6",
     "typescript": "6.0.3",
-    "typescript-eslint": "8.59.3",
-    "vitest": "4.1.6"
+    "typescript-eslint": "8.67.0",
+    "vitest": "4.1.10",
+    "yaml": "2.9.0"
   }
 }

@@ -49,7 +49,7 @@ Examples of behaviour that is not acceptable:
   address, without their explicit permission.
 - Other conduct which could reasonably be considered inappropriate in a
   professional setting.
-- The use of efficient, terse, or caveman-adjacent language in issue comments.
+- The use of efficient, terse, or minimal language in issue comments.
   This is not a bannable offence. It is noted with a degree of institutional
   disappointment that the reporter would prefer you not to dwell upon.
 

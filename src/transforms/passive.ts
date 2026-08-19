@@ -66,11 +66,25 @@ function toPastParticiple(verbThirdPerson: string): string | undefined {
   return undefined;
 }
 
-// Matches: [Subject (1-3 capitalised-or-article words)] [Verb (3sg-s)] [Object (rest of clause)]
-// Subject group: one leading capitalised word optionally followed by one lowercase article/adjective word
+// Matches: [Subject (capitalised head + trailing lowercase words)] [Verb (3sg-s)] [Object (rest of clause)]
+// Subject group: one leading capitalised word followed by up to 12 lowercase words
 // Object group: everything up to the end of the clause (terminated by period, comma, or end of string)
-const SVO_PATTERN =
-  /^([A-Z][a-zA-Z]*(?:\s+(?:the|a|an|this|that|my|our|their|its|his|her|[a-z]+))*)\s+([a-zA-Z]+s)\s+([^,.!?]+?)([,.!?]?)$/;
+//
+// REDOS HISTORY — do not reintroduce the alternation. This group was once
+// `(?:\s+(?:the|a|an|this|that|my|our|their|its|his|her|[a-z]+))*`. Every literal
+// alternative is also matched by `[a-z]+`, and `[a-z]+` additionally matches each
+// literal's prefixes, so a single input word had several distinct parse paths
+// inside an unbounded group. The number of paths the engine must exhaust before
+// declaring failure therefore multiplied with each added word: a 129-character
+// input took 86 seconds, a 145-character one roughly 85 minutes, and because the
+// CLI, the library API, and the MCP server all reach this function on one thread,
+// that is a full denial of service rather than a slow request.
+//
+// `[a-z]+` alone leaves exactly one parse path per word, and the bounded
+// repetition caps how far the engine can backtrack when the verb group fails to
+// match. 12 words is far beyond any subject this heuristic can usefully rewrite
+// while staying well inside linear time.
+const SVO_PATTERN = /^([A-Z][a-zA-Z]*(?:\s+[a-z]+){0,12})\s+([a-zA-Z]+s)\s+([^,.!?]+?)([,.!?]?)$/;
 
 function convertSentenceToPassive(sentence: string): string {
   const match = SVO_PATTERN.exec(sentence.trim());

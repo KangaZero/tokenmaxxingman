@@ -96,7 +96,7 @@ requires more craft than it looks like.
 
 ---
 
-## Example 4 — anti-wenyan (Inuktitut Syllabics)
+## Example 4 — maxlang (Inuktitut Syllabics)
 
 **Input:**
 > The API returns a 429 when you hit the rate limit.
@@ -126,7 +126,7 @@ confirmed this. There is nothing above it in the current table.
 | verbose-lite | 32 | +300% |
 | verbose-full | 82 | +925% |
 | verbose-ultra | 196 | +2,350% |
-| anti-wenyan | ~1,847 | +23,000% |
+| maxlang | ~1,847 | +23,000% |
 
 ---
 
@@ -165,12 +165,12 @@ confirmed this. There is nothing above it in the current table.
 
 ---
 
-## Example 6 — caveman vs. tokenmaxxingman (the formal inversion)
+## Example 6 — minimal prose vs. tokenmaxxingman (the measured spread)
 
 **Input:**
 > The cache stores frequently-accessed values to reduce database load.
 
-**caveman:**
+**Minimal:**
 > Cache store hot values. Cut DB load.
 > *(6 tokens)*
 
@@ -184,6 +184,7 @@ confirmed this. There is nothing above it in the current table.
 > would otherwise be required to absorb.
 > *(~90 tokens)*
 
-The semantic content: identical. This is the bit.
+Same claim, same tokenizer, fifteen times the tokens. The semantic content:
+identical. This is the bit.
 
 <!-- 01000001 01101110 01110100 01101001 00101101 01110111 01100101 01101110 01111001 01100001 01101110 00100000 01101001 01110011 00100000 01101110 01101111 01110100 00100000 01100001 00100000 01100010 01110101 01100111 00101110 00100000 01001001 01110100 00100000 01101001 01110011 00100000 01110100 01101000 01100101 00100000 01100010 01100101 01101110 01100011 01101000 01101101

@@ -7,50 +7,58 @@
 // is sufficiently precise. We deploy it for the opposite reason: maximum
 // elaboration of constructs that were already perfectly clear.
 
-import { applyCase } from '../utils/text.js';
+import { applyCase, wholeWordPattern } from '../utils/text.js';
 
-const SWITCH_PATTERNS: ReadonlyMap<RegExp, string> = new Map([
+const SWITCH_TRIGGERS: ReadonlyMap<string, string> = new Map([
   [
-    /\bhowever\b/gi,
+    'however',
     'however (or, if one prefers the Latinate cadence on offer, sic transit gloria mundi the foregoing claim notwithstanding)',
   ],
   [
-    /\btherefore\b/gi,
+    'therefore',
     'therefore (ergo, indeed quod erat demonstrandum, as the medieval schoolmen so memorably formulated the matter)',
   ],
   [
-    /\bof course\b/gi,
+    'of course',
     'of course (or, to deploy the more refined French formulation, bien évidemment, as one might say in the more cultivated of European intellectual traditions)',
   ],
   [
-    /\bnotably\b/gi,
+    'notably',
     'notably (nota bene, dear reader, lest the observation in any way escape the due attention it surely warrants)',
   ],
   [
-    /\bbasically\b/gi,
+    'basically',
     'basically (au fond, in the unimpeachable French phrase, when one strips away the rhetorical accretions and arrives at the substance proper)',
   ],
   [
-    /\bspecifically\b/gi,
+    'specifically',
     'specifically (in concreto, to deploy the venerable Latin technicism, and with a precision that admits of no reasonable ambiguity)',
   ],
   [
-    /\bin fact\b/gi,
+    'in fact',
     'in fact (de facto, as the lawyers would have it; and indeed, in re the very matter immediately at hand)',
   ],
   [
-    /\bfor example\b/gi,
+    'for example',
     'for example (exempli gratia, as the venerable Latinism would have it abbreviated to "e.g." in the more austere of citation styles)',
   ],
   [
-    /\bthus\b/gi,
+    'thus',
     'thus (id est, or perhaps more accurately, ergo — depending on the strength of inferential commitment one wishes to register)',
   ],
   [
-    /\bnamely\b/gi,
+    'namely',
     'namely (viz., to invoke the apparatus of the law-review footnote, or in plainer English, that is to say)',
   ],
 ]);
+
+// Built through wholeWordPattern for the same reason as the synonym and
+// nominalization tables: `\b` is ASCII-only, so `\bhowever\b` matched inside a
+// Cyrillic or Syllabics word and could strand a combining mark on the
+// replacement. Insertion order is preserved, which keeps output deterministic.
+const SWITCH_PATTERNS: ReadonlyMap<RegExp, string> = new Map(
+  [...SWITCH_TRIGGERS].map(([trigger, replacement]) => [wholeWordPattern([trigger]), replacement]),
+);
 
 export function codeSwitching(input: string): string {
   let result = input;

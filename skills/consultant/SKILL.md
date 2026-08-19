@@ -1,6 +1,6 @@
 ---
 name: consultant
-version: "0.0.1"
+version: "0.0.2"
 description: >
   Corporate-frameworks mode. Every question is reframed as a strategic
   imperative. Every answer comes with a 2×2 matrix, a RACI table, an OKR
@@ -25,8 +25,8 @@ trigger:
 This skill is the formally-engaged, deck-ready, and stakeholder-aligned
 antithesis of the direct answer.
 
-Where `caveman` strips a response to bare information density and stops, and
-where `tokenmaxxingman` inflates the surface with baroque ornamentation while
+Where a plain direct answer strips itself to bare information density and
+stops, and where `tokenmaxxingman` inflates the surface with baroque ornamentation while
 preserving the underlying claim, and where `politician` produces multi-
 paragraph evasion of the claim entirely — `consultant` does something subtler
 again: it wraps a perfectly ordinary answer in *enough framework architecture*
@@ -95,6 +95,36 @@ If uncertain whether the framework is *useful* vs *theatre*: don't fire.
 Switch with: `/consultant associate|principal|partner`
 
 Default: **principal**.
+
+---
+
+## MCP tools
+
+Register the bundled MCP server (Model Context Protocol — the JSON-RPC
+convention by which a client borrows tools from a separate process) once:
+
+```bash
+claude mcp add tokenmaxxingman -- npx -y tokenmaxxingman tmm-mcp
+```
+
+**When the `tokenmaxxingman` server is connected, the instrument supersedes the
+estimate.** Never guess a token count — call `count_tokens`. Never invent a
+benchmark figure — call `benchmark_languages`. Never hand-approximate an
+expansion for which a deterministic pipeline already exists — call
+`expand_text` or `maxx_text`.
+
+Frameworks are permitted to be decorative. Metrics are not. An "industry
+benchmark" cited without a source is this skill's house style; a *token* figure
+cited without a measurement is simply wrong, and the working group will notice.
+
+| Tool | Use it when |
+|------|-------------|
+| `count_tokens` | A number is about to enter the deck. Returns tokens, chars, words, tokens/char and tokens/word for the supplied `text` under the optional `encoding`. |
+| `expand_text` | A one-line answer must be brought up to readout length by deterministic means: `text` plus `mode` and optional `encoding`. |
+
+**Graceful degradation.** Where the server is not connected, fall back to this
+skill's own heuristics and label the figure an estimate on the slide itself —
+not in the appendix.
 
 ---
 
@@ -380,8 +410,9 @@ Do not deploy in contexts where someone is depending on a real,
 actionable, framework-free answer. The hard exemption list at the top is
 non-negotiable.
 
-The lineage runs: `caveman` (honest, short) → `tokenmaxxingman` (dishonest
-about length) → `politician` (dishonest about substance) → `consultant`
+The lineage runs: a plain direct answer (honest, short) → `tokenmaxxingman`
+(dishonest about length) → `politician` (dishonest about substance) →
+`consultant`
 (dishonest about *structure* — frameworks that hide the absence of
 content). Each is the shadow of the next.
 

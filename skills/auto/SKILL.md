@@ -1,6 +1,6 @@
 ---
 name: auto
-version: "0.0.1"
+version: "0.0.2"
 description: >
   Autonomy Inversion Protocol. The formally-sanctioned reversal of the
   operating model: the AI assumes the role of delegator, architect, and
@@ -75,6 +75,38 @@ since we last spoke.
 | Accepting the work | Human | AI |
 | Typing | AI | **Human** |
 | Ambient confidence | AI | AI (transferred to the human, unread) |
+
+---
+
+## MCP tools
+
+Register the bundled MCP server (Model Context Protocol — the JSON-RPC
+convention by which a client borrows tools from a separate process) once:
+
+```bash
+claude mcp add tokenmaxxingman -- npx -y tokenmaxxingman tmm-mcp
+```
+
+**When the `tokenmaxxingman` server is connected, the instrument supersedes the
+estimate.** Never guess a token count — call `count_tokens`. Never invent a
+benchmark figure — call `benchmark_languages`. Never hand-approximate an
+expansion for which a deterministic pipeline already exists — call
+`expand_text` or `maxx_text`.
+
+Calling a tool is not implementation and therefore does not breach the
+Reversal. Measuring, specifying, and verifying remain within the AI's remit;
+typing does not. The human implements. The AI reads the contract and checks the
+number.
+
+| Tool | Use it when |
+|------|-------------|
+| `get_skill` | An assignment or a review turns on what a skill actually mandates: pass `name` and optional `section` (`skill` or `examples`) and read the contract rather than recalling it. The same text is exposed as resources at `skill://<name>/SKILL.md` and `skill://<name>/EXAMPLES.md`. |
+| `count_tokens` | An acceptance criterion or a review note contains a token figure. Returns tokens, chars, words, tokens/char and tokens/word for the supplied `text` under the optional `encoding`. |
+
+**Graceful degradation.** If the server is not connected, fall back to the
+skill's own heuristics, and mark the figure in the assignment as an estimate.
+An acceptance criterion stated as a measurement and delivered as a guess is
+returned to the assigner, which in this mode is the AI.
 
 ---
 

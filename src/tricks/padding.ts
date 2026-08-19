@@ -39,6 +39,24 @@ const PADDING_PHRASES: readonly string[] = [
   'For what it is worth — and the present author believes it is worth a considerable amount —',
 ];
 
+// A guard has to be independent of the thing it guards against. The previous
+// bound was `PADDING_PHRASES.length * multiplier`, which grows with the very
+// input that makes the loop dangerous: `targetMultiplier: 100_000` on 4.4 KB of
+// text produced 419.6 MB in ~4 s. Two constants replace it.
+//
+// One full cycle through the phrase bank. Past that the appended sentences
+// repeat verbatim, so further iterations buy length without buying variety —
+// which is the only reason to append at all.
+const MAX_APPENDED_ELABORATIONS = PADDING_PHRASES.length;
+
+// Absolute ceiling on what a single call may return, regardless of multiplier.
+// 1 MiB matches MEMORY_BUDGET_BYTES in maxxer.ts, the point at which the
+// pipeline already stops growing output, so padding cannot be the component
+// that blows a budget every other stage respects. This is enforced inside the
+// function rather than at the CLI so the exported API, the MCP server, and the
+// library are all safe without a caller-side clamp.
+const MAX_OUTPUT_CHARACTERS = 1_048_576;
+
 export function padding(input: string, opts?: Partial<PaddingOptions>): string {
   const multiplier = opts?.targetMultiplier ?? 3;
   if (input.trim().length === 0) return input;
@@ -46,38 +64,44 @@ export function padding(input: string, opts?: Partial<PaddingOptions>): string {
   const sentences = splitOnSentenceBoundaries(input);
   if (sentences.length === 0) return input;
 
-  const targetLength = input.length * multiplier;
+  const targetLength = Math.min(input.length * multiplier, MAX_OUTPUT_CHARACTERS);
   const result: string[] = [];
   let phraseIndex = 0;
+  // Running total of the joined length, so the ceiling is enforced while the
+  // sentences are being assembled rather than after the fact — a truncating
+  // check would have to cut mid-word.
+  let length = 0;
 
   for (let i = 0; i < sentences.length; i++) {
     const sentence = sentences[i];
     if (sentence === undefined) continue;
 
-    if (i > 0) {
+    if (i > 0 && length < MAX_OUTPUT_CHARACTERS) {
       const phrase = PADDING_PHRASES[phraseIndex % PADDING_PHRASES.length];
       if (phrase !== undefined) {
         const lowered = sentence.charAt(0).toLowerCase() + sentence.slice(1);
-        result.push(`${phrase} ${lowered}`);
+        const padded = `${phrase} ${lowered}`;
+        result.push(padded);
+        length += padded.length + 1;
         phraseIndex++;
         continue;
       }
     }
     result.push(sentence);
+    length += sentence.length + 1;
   }
 
   let output = result.join(' ');
 
-  // If still under target, keep appending phrases as standalone elaboration sentences.
-  let extra = 0;
-  while (output.length < targetLength) {
+  // If still under target, keep appending phrases as standalone elaboration
+  // sentences. Both bounds are constants, so the worst case here is a fixed
+  // number of appends of fixed-length strings no matter what the caller asks for.
+  for (let extra = 0; extra < MAX_APPENDED_ELABORATIONS; extra++) {
+    if (output.length >= targetLength) break;
     const phrase = PADDING_PHRASES[(phraseIndex + extra) % PADDING_PHRASES.length];
     if (phrase === undefined) break;
     // Append as a standalone parenthetical sentence that extends the last thought.
     output += ` ${phrase} the substance of the preceding statement warrants serious attention.`;
-    extra++;
-    // Guard: never loop more than phrase bank size times to avoid infinite loops on tiny inputs.
-    if (extra >= PADDING_PHRASES.length * multiplier) break;
   }
 
   return output;

@@ -1,6 +1,6 @@
 ---
 name: yolo
-version: "0.1.0"
+version: "0.1.1"
 description: >
   Two-tier auto-accept mode. Standard /yolo: consent-gated, backs up configs,
   asks per CLI. True /yolo true: one warning, one YES, then Claude executes
@@ -116,6 +116,34 @@ On deactivation: `Guardrails restored.`
 | Backups | Yes | Not Claude's concern |
 | In-session warnings | Still present | None |
 | Reversibility notes | Still present | None |
+
+---
+
+## MCP tools
+
+Register the bundled MCP server (Model Context Protocol — the JSON-RPC
+convention by which a client borrows tools from a separate process) once:
+
+```bash
+claude mcp add tokenmaxxingman -- npx -y tokenmaxxingman tmm-mcp
+```
+
+**None of the text tools belong to this skill.** yolo neither expands, inflates,
+counts, nor benchmarks. Its single legitimate use of the server is `get_skill`
+(`name`, optional `section`: `skill` or `examples`) — to re-read this skill's
+own contract verbatim rather than paraphrasing it from memory before displaying
+the warning block.
+
+**yolo does not widen MCP permissions.** MCP tool calls remain subject to the
+same one-time consent gate as everything else: the gate before activation is
+the gate, and the MCP server sits behind it exactly as it did before. True
+`/yolo true` removes procedural hesitation about commands the human has asked
+for. It does not grant a server, a tool, or a scope that was not already
+granted, it does not re-negotiate the client's MCP approval prompts, and it
+does not authorise adding, editing, or enabling servers on the human's behalf.
+
+**Graceful degradation.** If the server is not connected, read the skill file
+directly and proceed. Nothing in either yolo tier depends on it.
 
 ---
 

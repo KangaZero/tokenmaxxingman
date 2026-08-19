@@ -1,4 +1,4 @@
-import { applyCase } from '../utils/text.js';
+import { applyCase, wholeWordPattern } from '../utils/text.js';
 
 const VERBOSE_SYNONYMS: ReadonlyMap<string, string> = new Map([
   ['use', 'utilize'],
@@ -64,8 +64,11 @@ const VERBOSE_SYNONYMS: ReadonlyMap<string, string> = new Map([
   ['simple', 'straightforward in its fundamental conceptual architecture'],
 ]);
 
+// wholeWordPattern, not `\b(word)\b`: `\b` is ASCII-only, so it fired inside
+// non-Latin words ("ᐊᐃuse" -> "ᐊᐃutilize") and, worse, allowed a match
+// immediately before a combining mark, stranding the mark on the replacement.
 const SYNONYM_PATTERNS: ReadonlyMap<RegExp, string> = new Map(
-  [...VERBOSE_SYNONYMS].map(([word, verbose]) => [new RegExp(`\\b(${word})\\b`, 'gi'), verbose]),
+  [...VERBOSE_SYNONYMS].map(([word, verbose]) => [wholeWordPattern([word]), verbose]),
 );
 
 export function synonyms(input: string): string {

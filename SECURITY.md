@@ -2,7 +2,7 @@
 
 ## Reporting a Vulnerability
 
-Email **samuelwaiweng.yong@accenture.com** with:
+Email **samuelyongw@gmail.com** with:
 
 1. A description of the vulnerability.
 2. Step-by-step reproduction instructions (input, exact command, observed behavior).

@@ -1,22 +1,28 @@
 {
   "name": "tokenmaxxingman",
   "owner": {
-    "name": "Samuel Wai Weng Yong",
-    "email": "samuelwaiweng.yong@accenture.com",
+    "name": "KangaZero",
+    "email": "samuelyongw@gmail.com",
     "url": "https://github.com/KangaZero"
   },
   "metadata": {
-    "description": "The tokenmaxxingman plugin family — maximalist anti-caveman skills (tokenmaxxingman, hallucinatemaxx, tokensprint, politician), plus a tokenization benchmark CLI.",
-    "version": "0.0.1"
+    "description": "The tokenmaxxingman plugin family \u2014 maximalist prose-expansion and persona skills (tokenmaxxingman, hallucinatemaxx, tokensprint, politician, consultant, okay-boomer, auto, yolo), a tokenization benchmark CLI, and an MCP server that backs every skill with real measurement.",
+    "version": "0.1.0"
   },
   "plugins": [
     {
       "name": "tokenmaxxingman",
       "source": ".",
-      "description": "Maximalist prose expansion (verbose-lite/full/ultra), anti-wenyan translate modes (Burmese, Tibetan, Inuktitut), and the canonical anti-wenyan alias backed by the bundled tokenization benchmark.",
-      "version": "0.0.1",
+      "description": "Maximalist prose expansion (verbose-lite/full/ultra/galactic), phrasebook translation modes (Burmese, Tibetan, Inuktitut), and the canonical `maxlang` mode \u2014 all backed by the bundled tokenization benchmark and an MCP server exposing deterministic expand/measure/benchmark tools.",
+      "version": "0.1.0",
       "category": "writing",
-      "keywords": ["tokens", "anti-caveman", "verbose", "benchmark"]
+      "keywords": [
+        "tokens",
+        "verbose",
+        "benchmark",
+        "mcp",
+        "model-context-protocol"
+      ]
     }
   ]
 }

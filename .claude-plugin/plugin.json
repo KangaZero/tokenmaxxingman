@@ -1,10 +1,10 @@
 {
   "name": "tokenmaxxingman",
-  "version": "0.0.1",
-  "description": "The empirical opposite of /caveman. Maximalist prose-expansion skills (tokenmaxxingman, hallucinatemaxx, tokensprint, politician) plus a CLI for deterministic token inflation, tokenization benchmarking, and time-budgeted speedruns.",
+  "version": "0.1.0",
+  "description": "Deterministic token-expenditure tooling. Maximalist prose-expansion and persona skills (tokenmaxxingman, hallucinatemaxx, tokensprint, politician, consultant, okay-boomer, auto, yolo), a CLI for token inflation, tokenization benchmarking, and time-budgeted speedruns, and an MCP server so the skills measure instead of estimate.",
   "author": {
-    "name": "Samuel Wai Weng Yong",
-    "email": "samuelwaiweng.yong@accenture.com"
+    "name": "KangaZero",
+    "email": "samuelyongw@gmail.com"
   },
   "homepage": "https://github.com/KangaZero/tokenmaxxingman#readme",
   "repository": {
@@ -17,8 +17,8 @@
     "tokenizer",
     "text-expansion",
     "verbose",
-    "anti-caveman",
-    "anti-wenyan",
+    "mcp",
+    "model-context-protocol",
     "benchmark",
     "claude-skill",
     "joke-tooling"

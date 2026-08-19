@@ -51,7 +51,7 @@ Follow the frontmatter schema exactly:
 ```yaml
 ---
 name: <slug>
-version: "0.0.1"
+version: "0.1.0"
 description: >
   One-paragraph description. What it does, when it fires, what it produces.
   Token amplification ratio (measured or estimated).
@@ -61,6 +61,16 @@ trigger:
   - "another trigger phrase"
 ---
 ```
+
+A new skill starts at `0.1.0`; the skills that predate this convention started at
+`0.0.1` and have not been renumbered. Thereafter the version is bumped independently of
+the package version, by the skill's own semantics rather than the release train:
+patch for a wording or example change, minor for a new intensity level, trigger
+phrase, or behavioural rule, major for a change that invalidates an existing
+invocation. The shipped skills have accordingly drifted apart — `hallucinatemaxx`,
+`tokensprint`, and `yolo` are at `0.1.1` while `auto`, `consultant`,
+`okay-boomer`, `politician`, and `tokenmaxxingman` are at `0.0.2` — and this is
+the intended behaviour, not a synchronisation failure. Do not batch-align them.
 
 ### 2. Write the skill body
 
@@ -85,8 +95,9 @@ Required sections, in order:
    must be measured, not estimated. Run `tmm benchmark` or count manually.
 
 5. **Caveats** — The mandatory disclaimer. Include: "This is a joke skill."
-   Include the deployment warning. Include the statement that the caveman
-   skill is correct and this skill is its shadow.
+   Include the deployment warning. Include the statement that plain, terse
+   prose is the correct default and that this skill is a deliberate,
+   measurable departure from it.
 
 ### 3. Register in `web/src/data/benchmark.ts`
 
@@ -111,8 +122,11 @@ Alternate `accent` values across skills for visual variety on the skills grid.
 just ci
 ```
 
-All 156 tests must pass. TypeScript strict mode; `tsc --noEmit` must produce
-no output.
+The full test suite must pass — every test, no skips. We do not quote a test
+count here, because the suite grows on most working days and a number in a
+contributing guide is a number that misleads a new contributor within the week.
+Run it and read the total off the runner. TypeScript strict mode; `tsc --noEmit`
+must produce no output.
 
 ---
 
@@ -190,7 +204,7 @@ a complaint, and an imperative. Match the semantic payload; do not paraphrase.
 ### 2. Run the benchmark
 
 ```bash
-npm test
+pnpm test
 just benchmark
 ```
 
@@ -212,7 +226,7 @@ sort order by `tokensPerWord` descending.
 just ci          # full gate: typecheck + lint + test + build
 just web-dev     # spin up the Vite dev server for the web app
 just benchmark   # re-run the benchmark and print the table
-npm test         # vitest only
+pnpm test        # vitest only
 tsc --noEmit     # typecheck only
 ```
 

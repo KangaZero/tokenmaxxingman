@@ -40,6 +40,6 @@ Encoding: `cl100k_base` · Corpus v1 · Generated <timestamp>
 ## Notes
 
 - **Rank 1 winner:** Inuktitut (Unified Canadian Aboriginal Syllabics) at 2.6158 tokens/char under `cl100k_base`. The Syllabics script is largely outside the BPE vocabulary, so each character costs close to one full token.
-- **Baseline (last natural language):** Classical Chinese at 1.5455 tokens/char — dense meaning-per-character is the inverse of the token-maxxing goal, which is why caveman uses `zh-classical` as its champion.
+- **Baseline (last natural language):** Classical Chinese at 1.5455 tokens/char — dense meaning-per-character is the inverse of the token-maxxing goal, which is why zh-classical serves as the density baseline.
 - The `Generated` timestamp in the header will differ on each run; all numeric values are deterministic.
 - Run with `--encoding o200k_base` to compare against the o200k vocabulary.

@@ -7,10 +7,15 @@ import { countTokens } from './tokenizer.js';
 export type TimeTier = 'sprint-1m' | 'sprint-5m' | 'sprint-10m' | 'sprint-1h';
 
 export interface SpeedrunOptions {
+  /** Time budget in milliseconds. Must be finite and greater than zero. */
   durationMs: number;
   seed: string;
   mode: ExpandMode;
   encoding: EncodingName;
+  /**
+   * Safety cap on iterations. Must be a non-negative safe integer; `0` is a valid
+   * request for "do no work" and returns a zero-iteration result.
+   */
   maxIterations?: number;
 }
 
@@ -41,8 +46,34 @@ export function tierToMs(tier: TimeTier): number {
   return TIER_MS[tier];
 }
 
+/**
+ * Generate as many tokens as possible within a time budget.
+ *
+ * @throws {RangeError} if `durationMs` is not a finite number greater than zero,
+ * or if `maxIterations` is not a non-negative safe integer.
+ *
+ * WHY it throws rather than clamping: both are programming errors, not user input.
+ * The loop condition is `elapsed >= durationMs`, and `elapsed >= NaN` is *always*
+ * false, so a `NaN` budget silently ran the full 10,000-iteration cap and then
+ * reported `budgetMs: NaN`, which `JSON.stringify` renders as `null` — a value
+ * that is not a valid duration and cannot be distinguished downstream from a
+ * missing field. `speedrun` is exported from the package root, so the library API
+ * needs its own guard: the CLI's `parseDuration` protects only the CLI path.
+ * Clamping would hide the caller's bug behind a plausible-looking result.
+ */
 export function speedrun(opts: SpeedrunOptions): SpeedrunResult {
   const { durationMs, seed, mode, encoding, maxIterations = 10_000 } = opts;
+
+  if (!Number.isFinite(durationMs) || durationMs <= 0) {
+    throw new RangeError(
+      `speedrun: durationMs must be a finite number greater than 0, received ${String(durationMs)}`,
+    );
+  }
+  if (!Number.isSafeInteger(maxIterations) || maxIterations < 0) {
+    throw new RangeError(
+      `speedrun: maxIterations must be a non-negative safe integer, received ${String(maxIterations)}`,
+    );
+  }
 
   let iterations = 0;
   let totalTokens = 0;

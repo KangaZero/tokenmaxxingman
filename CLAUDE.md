@@ -9,9 +9,11 @@
 
 tokenmaxxingman is a formally-constituted, empirically-grounded, and
 ceremonially-irresponsible research initiative dedicated to the systematic
-inversion of token efficiency. The project exists because caveman exists.
-Together they define the token-space of human language, one approaching the
-minimum and one approaching a maximum that turns out to be Inuktitut.
+inversion of token efficiency. Its reference point is the token floor of
+plain prose — the cost of saying a thing once, plainly, with no elaboration
+— which the bundled benchmark measures directly. The Institute's mandate is
+to depart from that floor as far as the evidence permits. The evidence says
+the far end is Inuktitut.
 
 **Mission Statement (condensed):** Spend tokens. Do it with rigour.
 
@@ -66,7 +68,7 @@ session that lasted approximately zero minutes.
 - Composition API everywhere. Options API is deprecated. `okay-boomer` is a
   skill in this repo, not a development methodology.
 - `vue-router@4` for navigation. Routes: `/`, `/about`, `/contributors`,
-  `/settings`.
+  `/settings`, `/investors`, `/testimonials`, `/docs`.
 
 ### Tailwind CSS
 - **Version 3. Not version 4.**
@@ -83,7 +85,11 @@ session that lasted approximately zero minutes.
   the site.
 
 ### Build Gate
-- `pnpm test` — 156 tests must pass. If they don't, something is wrong.
+- `pnpm test` — the full suite must pass. Every test, no skips, no
+  `.only`. The count is deliberately not recorded here: contributors add
+  regression tests faster than anyone updates prose, and a number in a runbook
+  is a number that is wrong by the end of the afternoon. If you want the
+  figure, run the suite; it prints it.
 - `vue-tsc --noEmit` — zero errors before any site commit.
 - CI runs on push to `main`. Do not break CI. It has been broken before.
   It was unpleasant for everyone, including the CI server.
@@ -131,6 +137,7 @@ web/
 ├── src/
 │   ├── App.vue              — shell: AnnouncementBanner + SiteNav + RouterView
 │   ├── router.ts            — routes: / /about /contributors /settings
+│   │                            /investors /testimonials /docs
 │   ├── main.ts              — createApp().use(router).mount('#app')
 │   ├── composables/
 │   │   └── useTheme.ts      — isDark ref + toggleTheme(); shared module state
@@ -138,7 +145,10 @@ web/
 │   │   ├── Home.vue         — all benchmark sections
 │   │   ├── About.vue        — AboutSection + fabrication disclaimer
 │   │   ├── Contributors.vue — KangaZero (0%) + The AI (100%, unhinged)
-│   │   └── Settings.vue     — fake settings (14 fields, localStorage, toast)
+│   │   ├── Settings.vue     — fake settings (14 fields, localStorage, toast)
+│   │   ├── Investors.vue    — investor relations, negative IPO
+│   │   ├── Testimonials.vue — verified catastrophes
+│   │   └── Docs.vue         — internal documentation page
 │   ├── components/
 │   │   ├── SiteNav.vue      — sticky top nav, mobile hamburger, theme toggle
 │   │   ├── AnnouncementBanner.vue — AI Slop Certified™ banner, dismissible
@@ -174,6 +184,29 @@ A `try/catch` wrapper handles invalid BCP 47 tags (e.g. `zh-classical`).
 
 ---
 
+## MCP Server
+
+`src/mcp/` — a Model Context Protocol server over stdio, built on
+`@modelcontextprotocol/sdk` and `zod`. Two bin entries (`tmm-mcp`,
+`tokenmaxxingman-mcp`) start the same process. It exposes the same
+deterministic pipeline the CLI exposes, so a skill reporting an inflation ratio
+is quoting a measurement rather than an intuition.
+
+- Read and compute only. No file writes, no child processes, no network. This
+  is a boundary, not a current limitation. Do not cross it.
+- Tool inputs and outputs are declared as `zod` schemas in
+  `src/mcp/schemas.ts`. A new tool without an output schema is not finished.
+- The repository's own `.mcp.json` points at `node dist/mcp/bin.js`, not at the
+  published package. It therefore requires `pnpm build` first, and again after
+  every edit under `src/mcp/`. A contributor should be testing the server they
+  just changed.
+- Verify by hand rather than by assertion: pipe an `initialize` frame followed
+  by `tools/list` into `node dist/mcp/bin.js` and read what comes back. The
+  documentation is expected to match that output exactly, parameter for
+  parameter.
+
+---
+
 ## Skills Inventory
 
 | Skill | Trigger | Purpose |
@@ -196,7 +229,7 @@ All skills live in `skills/<name>/SKILL.md`. Registration in
 
 1. Make changes.
 2. Run `vue-tsc --noEmit` on the web app. Zero errors.
-3. Run `pnpm test` at root. 156/156.
+3. Run `pnpm test` at root. The full suite, green.
 4. `git add` specific files. Not `git add -A`.
 5. Commit under `KangaZero <samuelyongw@gmail.com>`.
 6. `git push origin main`.

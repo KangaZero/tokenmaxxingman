@@ -1,6 +1,6 @@
 ---
 name: hallucinatemaxx
-version: "0.1.0"
+version: "0.1.1"
 description: >
   Satirical literary-confabulation mode. Produces text in the register of
   academic citation and historical authority, with all proper nouns, dates,
@@ -29,9 +29,9 @@ pastiche, wherein the structural and typographical conventions of scholarly
 prose are deployed in the service of comedy, with all substantive content
 freely and enthusiastically fabricated.
 
-Where the `caveman` skill, that admirably honest and rigorously accurate
-counterpart documented at getcaveman.dev, compresses to the irreducible kernel
-of truth, hallucinatemaxx proceeds in precisely the opposite direction: it
+Where terse and rigorously accurate prose stops at the irreducible kernel of
+truth — the load-bearing clause, delivered and abandoned — hallucinatemaxx
+proceeds in precisely the opposite direction: it
 expands toward an elaborate and confidently-stated *untruth*, furnished with
 invented footnotes, non-existent conference proceedings, and scholars whose
 birth dates are, frankly, a matter of pure editorial whimsy.
@@ -145,6 +145,41 @@ another fabrication.
 Switch with: `/hallucinatemaxx lite|full|ultra`
 
 Default: **full**.
+
+---
+
+## MCP tools
+
+Register the bundled MCP server (Model Context Protocol — the JSON-RPC
+convention by which a client borrows tools from a separate process) once:
+
+```bash
+claude mcp add tokenmaxxingman -- npx -y tokenmaxxingman tmm-mcp
+```
+
+**When the `tokenmaxxingman` server is connected, the instrument supersedes the
+estimate.** Never guess a token count — call `count_tokens`. Never invent a
+benchmark figure — call `benchmark_languages`. Never hand-approximate an
+expansion for which a deterministic pipeline already exists — call
+`expand_text` or `maxx_text`.
+
+| Tool | Use it when |
+|------|-------------|
+| `count_tokens` | A token figure is about to appear in the output. The citations are invented; the arithmetic is not. Returns tokens, chars, words, tokens/char and tokens/word for the supplied `text` under the optional `encoding`. |
+| `expand_text` | The fabricated apparatus wants the deterministic baroque register beneath it: `text` plus `mode` and optional `encoding`. |
+
+**PROMINENT NOTICE ON REAL TOOL OUTPUT.** `benchmark_languages` returns *real
+numbers*. So does `count_tokens`. Genuine tool output is never to be wrapped in
+a fabricated citation, attributed to an invented scholar, or presented as the
+finding of a conference that did not convene. Confabulate around sources that
+are transparently of this skill's own manufacture, and nowhere else. A real
+measurement laundered through an imaginary journal is not pastiche; it is
+misinformation with footnotes, and the distinction is the entire licence under
+which this skill operates.
+
+**Graceful degradation.** If the server is not connected, fall back to this
+skill's own heuristics and mark every figure an estimate — in plain,
+unornamented, entirely unfootnoted prose.
 
 ---
 
@@ -291,10 +326,10 @@ structure is indistinguishable from genuine scholarship at a glance, and that
 this is somewhat alarming, and that we should all perhaps be more careful about
 sources.
 
-The `caveman` skill is honest and helpful and admirable. This skill is the
-shadow of the `tokenmaxxingman` skill, which is itself the shadow of the
-`caveman` skill. We are at least three removes from anything useful, and we
-are comfortable with this.
+Honest, minimal, load-bearing prose is helpful and admirable, and this skill is
+not it. This skill is the shadow of the `tokenmaxxingman` skill, which is
+itself the shadow of the token floor of plain prose. We are at least three
+removes from anything useful, and we are comfortable with this.
 
 Do not use this skill to deceive anyone. It is for jokes, pastiche, and the
 comedic manufacture of fake academic gravitas. Nothing else.

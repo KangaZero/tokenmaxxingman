@@ -1,9 +1,22 @@
 # tokenmaxxingman — implementation plan
 
-**Stack:** TypeScript strict, ESM only, Node >= 22 (target Node 24)
+**Status: historical, and superseded in the places noted below.** This is the
+pre-implementation plan for the initial seven-phase build (2026-05-14, shipped as
+`0.0.1`). It is retained as a record of what was intended, including the parts
+that turned out to be wrong — the falsified Classical Chinese hypothesis is the
+most interesting thing in the document and deleting it would be vandalism. It is
+not a description of the current codebase. For that, read `README.md`, and
+`CHANGELOG.md` for how it got there.
+
+Read **"Where the plan diverged from what shipped"** at the end before acting on
+anything in the phase sections.
+
+**Stack:** TypeScript strict, ESM only, Node >= 22 (CI now runs 22 + 26.2)
 **Scope:** Scaffold + tests + CI workflows (no publish, no live APIs)
 **Deploy:** npm bin (`tokenmaxxingman` + `tmm`), local CLI
-**Working dir:** `/Users/samuelwaiweng.yong/Documents/tokenmaxxingman/`
+**Working dir:** `/Users/samuelwaiweng.yong/Documents/tokenmaxxingman/` (as of
+the original build; the project now lives on Linux and is a pnpm workspace with a
+`web/` sub-package)
 
 ---
 
@@ -42,16 +55,16 @@ All expansion transforms are pure TS functions over static data. The benchmark c
 
 ## Mode naming convention
 
-Caveman's axis is *compression intensity*. tokenmaxxingman's axis is *verbosity intensity × language maximization*.
+The axis is *verbosity intensity × language maximization*. Every mode is named for how far it departs from the baseline, and the baseline is the token floor of plain prose — the cost of saying a thing once, plainly — which the benchmark measures directly.
 
-| Mode | Inverse of | Description |
+| Mode | Departure from the floor | Description |
 |---|---|---|
-| `verbose-lite` | `lite` | Remove contractions, restore filler, add soft hedges |
-| `verbose-full` | `full` (default) | Full synonym inflation, qualifiers, throat-clearing |
-| `verbose-ultra` | `ultra` | Maximum English bloat: legalese, nominalizations, passive voice, embedded clauses |
-| `<lang>-lite` | `wenyan-lite` | Translate to benchmark-winner language, low density |
-| `<lang>-full` | `wenyan-full` | Translate to benchmark-winner language, full form |
-| `<lang>-ultra` | `wenyan-ultra` | Benchmark-winner language, maximum morphological inflation |
+| `verbose-lite` | low | Remove contractions, restore filler, add soft hedges |
+| `verbose-full` | moderate (default) | Full synonym inflation, qualifiers, throat-clearing |
+| `verbose-ultra` | high | Maximum English bloat: legalese, nominalizations, passive voice, embedded clauses |
+| `<lang>-lite` | high + script | Translate to benchmark-winner language, low density |
+| `<lang>-full` | higher + script | Translate to benchmark-winner language, full form |
+| `<lang>-ultra` | maximum | Benchmark-winner language, maximum morphological inflation |
 
 `<lang>` is resolved after the benchmark runs. The slot is named `burmese` in the implementation as the most likely winner based on known BPE tokenizer behaviour against Burmese script, but the SKILL.md and CLI accept any language key present in the corpus. The documenter fills the confirmed winner in after tests pass.
 
@@ -128,7 +141,7 @@ Corpus shape (`corpus.schema.json` governs this):
         "victorian": "...",  // verbose English register
         "academic": "...",   // verbose English register
         "corporate": "...",  // verbose English register
-        "zh-classical": "..." // Classical Chinese (caveman champion — baseline last)
+        "zh-classical": "..." // Classical Chinese (density baseline — expected last)
       }
     }
   ]
@@ -217,7 +230,7 @@ export function expand(input: string, mode?: Mode): string;
 - `src/benchmark.ts`
 - `src/report.ts`
 
-**Acceptance:** `node --experimental-vm-modules dist/benchmark.js` (or via `tmm benchmark`) exits 0, prints a markdown table to stdout with at minimum 14 language rows, and the row for `zh-classical` ranks last (fewest tokens/char), confirming the inverse relationship with caveman.
+**Acceptance:** `node --experimental-vm-modules dist/benchmark.js` (or via `tmm benchmark`) exits 0, prints a markdown table to stdout with at minimum 14 language rows, and the row for `zh-classical` ranks last (fewest tokens/char), confirming that maximal meaning-per-character sits at the opposite end of the ranking from maximal tokens-per-character.
 
 **Notes:**
 
@@ -232,7 +245,7 @@ export type BenchmarkRow = {
   totalSentences: number;
   tokensPerChar: number;
   tokensPerSentence: number;
-  rank: number; // 1 = most tokens (winner), N = fewest (caveman baseline last)
+  rank: number; // 1 = most tokens (winner), N = fewest (density baseline last)
 };
 
 export function runBenchmark(corpus: Corpus, encoding?: Encoding): BenchmarkRow[];
@@ -331,7 +344,7 @@ Snapshot test: uses `expect(output).toMatchSnapshot()`. The snapshot file is com
 - `skills/tokenmaxxingman/README.md`
 - `README.md`
 
-**Acceptance:** `SKILL.md` has a valid YAML frontmatter block with `name`, `description`, and `version` fields. `README.md` opens with the WHY (mental model) before the install instructions. A human reviewer confirms the joke lands (caveman contrast is explicit; the absurdity is acknowledged; the engineering rigour is real).
+**Acceptance:** `SKILL.md` has a valid YAML frontmatter block with `name`, `description`, and `version` fields. `README.md` opens with the WHY (mental model) before the install instructions. A human reviewer confirms the joke lands (the premise is stated plainly; the absurdity is acknowledged; the engineering rigour is real).
 
 **Notes:**
 
@@ -341,7 +354,8 @@ Snapshot test: uses `expect(output).toMatchSnapshot()`. The snapshot file is com
 name: tokenmaxxingman
 description: >
   Maximum-token communication mode. Expands every response to use the most tokens possible
-  while preserving full meaning. The inverse of caveman. Intensity levels: verbose-lite,
+  while preserving full meaning. The reference point is the token floor of plain prose,
+  which the bundled benchmark measures directly. Intensity levels: verbose-lite,
   verbose-full (default), verbose-ultra, plus language-maximizer modes targeting the
   empirically highest-token-density natural language.
   Use when user says "tokenmaxxingman mode", "use tmm", "maximize tokens", or invokes
@@ -349,7 +363,7 @@ description: >
 ---
 ```
 
-Mode table (mirror of caveman's intensity table):
+Mode table:
 
 | Level | What changes |
 |---|---|
@@ -360,12 +374,12 @@ Mode table (mirror of caveman's intensity table):
 | `<lang>-full` | Benchmark-winner language, full morphological expansion |
 | `<lang>-ultra` | Benchmark-winner language with maximum agglutinative inflation |
 
-Auto-deflate rule (inverse of caveman's auto-clarity): tokenmaxxingman drops to normal prose for code blocks (never expand code), error messages (quote exact), and irreversible action confirmations (clarity > verbosity). Mirrors caveman's boundary rules exactly, inversely.
+Auto-deflate rule (clarity override): tokenmaxxingman drops to normal prose for code blocks (never expand code), error messages (quote exact), and irreversible action confirmations (clarity > verbosity). These boundaries are non-negotiable — verbosity is the product, but never at the cost of an answer somebody has to act on.
 
 Persistence: active every response until `"stop tmm"` / `"normal mode"`.
 
 `README.md` structure:
-1. **Why this exists** (mental model: caveman minimizes, tokenmaxxingman maximizes; together they bracket the token-space of human language; this is also a joke)
+1. **Why this exists** (mental model: tokens are a measurable resource; the token floor of plain prose is the reference point and the bundled benchmark measures it directly; tokenmaxxingman departs from that floor as far as the evidence permits; this is also a joke)
 2. The benchmark methodology (what the corpus is, what tokenizer, what metric, honesty about tokens-per-meaning being a fuzzy proxy and why sentences-as-units is the chosen approximation)
 3. Ranked results table (placeholder — documenter leaves a `<!-- TODO: fill after running npm run benchmark -->` comment; benchmark output is designed to be pasted directly)
 4. Install + usage
@@ -373,6 +387,54 @@ Persistence: active every response until `"stop tmm"` / `"normal mode"`.
 6. Honest disclaimer section titled "Why tokens-per-meaning is fuzzy" explaining: script complexity, BPE vocabulary coverage, and morphological density are distinct phenomena that all push token counts up but measure different things
 
 The README must not contain marketing fluff. Lead with the joke. Explain the engineering. Keep it dry.
+
+---
+
+## Where the plan diverged from what shipped
+
+Recorded once, here, rather than by editing the phase sections above. Everything
+in this list is verifiable against the working tree.
+
+**The primary metric changed.** The plan ranks on tokens-per-character
+throughout, including the Phase 4 acceptance criterion. `src/benchmark.ts` sorts
+on **tokens-per-word** and uses tokens-per-character only as the first tiebreak.
+The switch landed in `0.0.2` and is recorded in `CLAUDE.md` as a settled decision:
+`tok/char` measures script density, `tok/word` measures tokenizer cost per unit of
+meaning. Do not "restore" the plan's metric.
+
+**The hypothesis was falsified, in both directions.** Phase 4 expected
+`zh-classical` to rank last on tokens-per-character and named Burmese as the
+likely winner. Classical Chinese ranked 11 of 18 and the winner is **Inuktitut
+Syllabics** (`iu-cans`). The mechanism is BPE substring-merging, not semantic
+density. The `<lang>` slot in the mode-naming table resolved accordingly.
+
+**The mode naming convention was not adopted.** The plan proposes
+`<lang>-lite` / `-full` / `-ultra`. What shipped is `verbose-{lite,full,ultra}`,
+`verbose-galactic`, `translate-{burmese,tibetan,inuktitut}`, and **`maxlang`** —
+the canonical name for whichever language the benchmark currently ranks first.
+`anti-wenyan` was an earlier name for `maxlang` and survives as a deprecated
+alias, scheduled for removal in `1.0`.
+
+**An MCP server exists, and no phase describes it.** `src/mcp/` ships a Model
+Context Protocol server over stdio, added in `0.1.0`. It is the reason the version
+moved to a new minor. It routes the skills through the same deterministic pipeline
+the CLI uses, so a reported inflation ratio is measured rather than estimated. It
+reads and computes only.
+
+**Tooling moved.** `npm` → `pnpm` workspace, with a 7-day `minimumReleaseAge`
+supply-chain guard. `eslint.config.js` → `eslint.config.ts`. `commander` v13 in
+the plan, v15 shipped. The CI matrix is Node 22 + 26.2. `data/corpus.schema.json`
+was never written.
+
+**The snapshot test was never committed.** Phase 6 required
+`tests/snapshot/expansion.snap` in the repository so CI would catch a change in
+transform output. Nothing under `tests/` calls `toMatchSnapshot`, and the flat
+`tests/` layout replaced the planned `unit/` / `integration/` / `snapshot/`
+directories. Still open; tracked in `BUILD-SUMMARY.md` and `TODO.md`.
+
+**The out-of-scope list has been overtaken.** Pushing to GitHub and publishing to
+npm were both excluded; both have happened. `main` is the default branch and
+`0.0.2` and `0.0.21` are on the registry.
 
 ---
 

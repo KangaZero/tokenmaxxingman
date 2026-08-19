@@ -1,20 +1,21 @@
 # tokenmaxxingman
 
 [![Vibe Coded](https://img.shields.io/badge/vibe_coded-%F0%9F%A4%96_AI_slop_certified-ff3d00?style=flat-square&labelColor=0a0a0a)](https://github.com/KangaZero/tokenmaxxingman)
+[![npm version](https://img.shields.io/npm/v/tokenmaxxingman?style=flat-square&labelColor=0a0a0a&color=ff3d00)](https://www.npmjs.com/package/tokenmaxxingman)
 
-> The inverse of [caveman](https://getcaveman.dev/). We do not save tokens. We squander them, with intention.
+> A deliberately maximalist token-expenditure toolkit, and a rigorous tokenization benchmark. We do not save tokens. We squander them, with intention.
 
-**🌐 Site:** [kangazero.github.io/tokenmaxxingman](https://kangazero.github.io/tokenmaxxingman/) · **📦 npm:** [`tokenmaxxingman@0.0.21`](https://www.npmjs.com/package/tokenmaxxingman) · **🔌 Plugin:** `KangaZero/tokenmaxxingman`
+**🌐 Site:** [kangazero.github.io/tokenmaxxingman](https://kangazero.github.io/tokenmaxxingman/) · **📦 npm:** [`tokenmaxxingman`](https://www.npmjs.com/package/tokenmaxxingman) · **🔌 Plugin:** `KangaZero/tokenmaxxingman`
 
 ---
 
 ## Why
 
-[caveman](https://getcaveman.dev/) compresses language to its barest functional skeleton. It is correct, efficient, and admirable. tokenmaxxingman starts from the opposite premise: tokens are a resource we have elected to spend without restraint.
+Tokens are a measurable resource. Most tooling treats that measurement as a budget to be minimised. tokenmaxxingman starts from the premise that tokens are a quantity to be spent without restraint — deterministically, reproducibly, and with real measurement behind it.
 
-This project exists because caveman exists. Together they bracket the token-space of human language — one approaching the minimum, the other approaching a maximum that turns out to be empirically surprising.
+The reference point is the **token floor of plain prose**: the cost of saying a thing once, in ordinary English, with no elaboration. The bundled benchmark measures that floor directly, across eighteen language and register variants, and every expand mode is reported as a multiple of it. Nothing here is calibrated against any other tool. The corpus is the ruler.
 
-The joke is real engineering. The benchmarks are reproducible. The transforms are deterministic and spec-driven. An absurdist premise executed with rigor is funnier than one that merely waves at the joke.
+The joke is real engineering. Tokenizer versions are pinned to an exact semver. The corpus is statically committed. The transforms are pure, deterministic functions under full test coverage. An absurdist premise executed with rigor is funnier than one that merely waves at the joke.
 
 ---
 
@@ -76,13 +77,14 @@ Results are fully reproducible: pin `gpt-tokenizer` at the committed version, us
 
 ## Install
 
-Three install paths, depending on what you want. Pick whichever matches your use case — they're not mutually exclusive.
+Four paths, depending on what you want. Pick whichever matches your use case — they're not mutually exclusive. The first three are covered below; the MCP server has its own [section](#mcp-server).
 
 | Path | Gives you | Best for |
 |------|-----------|----------|
 | **Claude Code plugin** | The 8 skills inside Claude Code, namespaced under `/tokenmaxxingman:*` | Anyone who just wants to invoke the skills inside Claude Code |
 | **npm / pnpm / bun CLI** | The `tokenmaxxingman` / `tmm` binary on your `$PATH` (or run once with `npx` / `pnpm dlx` / `bunx`) | Anyone who wants the benchmark / speedrun / expand CLI |
 | **Clone + install script** | Both, with skills symlinked to your `~/.claude/skills/` so `git pull` updates them | Contributors, anyone who wants editable skills |
+| **MCP server** | The `tmm-mcp` stdio server — seven tools, eighteen resources, eight prompts — registered with any MCP client | Anyone who wants their agent to *measure* tokens rather than estimate them (see [MCP server](#mcp-server)) |
 
 ### A) Claude Code plugin (recommended for most users)
 
@@ -159,10 +161,10 @@ After install, restart Claude Code (or `/restart`) so the skills are picked up.
 If you'd rather not clone, every release attaches a source tarball:
 
 ```bash
-# replace 0.0.1 with the version you want from https://github.com/KangaZero/tokenmaxxingman/releases
-curl -L https://github.com/KangaZero/tokenmaxxingman/archive/refs/tags/v0.0.1.tar.gz \
+# replace 0.1.0 with the version you want from https://github.com/KangaZero/tokenmaxxingman/releases
+curl -L https://github.com/KangaZero/tokenmaxxingman/archive/refs/tags/v0.1.0.tar.gz \
   | tar -xz
-cd tokenmaxxingman-0.0.1
+cd tokenmaxxingman-0.1.0
 pnpm install && pnpm run build
 ./scripts/install-skills.sh
 ```
@@ -203,8 +205,8 @@ Output (verbose-ultra):
 # Translate mode: expand then render in Inuktitut Syllabics (the benchmark winner)
 echo "Fix the bug." | tokenmaxxingman expand --mode translate-inuktitut
 
-# Or equivalently, by canonical name — the empirical opposite of `/caveman wenyan`
-echo "Fix the bug." | tokenmaxxingman expand --mode anti-wenyan
+# Or equivalently, by canonical name — `maxlang` tracks whichever language the benchmark ranks 1
+echo "Fix the bug." | tokenmaxxingman expand --mode maxlang
 
 # Output (example):
 #   ᐊᑐᕆᐊᖃᖅᑐᒍᑦ ᐅᑯᓂᖓ ᐊᑐᕐᓗᒍ...
@@ -268,17 +270,20 @@ tokenmaxxingman speedrun
 
 ## The Modes
 
-The `expand` command accepts seven modes. The default is `verbose-full`.
+The `expand` command accepts eight modes. The default is `verbose-full`.
 
 | Mode | Pipeline | What changes |
 |------|----------|--------------|
 | `verbose-lite` | synonyms | Replaces short words with longer, equally precise alternatives. Sentence structure unchanged. |
 | `verbose-full` | synonyms → qualifiers | Adds qualifying clauses, hedges, and parenthetical elaboration on top of synonym substitution. Classic bureaucratic prose. |
 | `verbose-ultra` | synonyms → qualifiers → nominalizations → passive | Full pipeline: every content word inflated, every clause qualified, verbs converted to noun phrases, active constructions rewritten passive. Maximum English bloat. |
+| `verbose-galactic` | synonyms → code-switching → qualifiers → nominalizations → reduplication → rhetorical questions → passive | Every English-side amplifier at once: Latin and French code-switching, reduplicated noun phrases, mid-sentence rhetorical interjections, and passive voice over the top. The most extreme English-only mode — everything short of leaving the language. |
 | `translate-burmese` | verbose-ultra → translate(`my`) | Applies the full verbose-ultra pipeline then renders in Burmese (Myanmar script) using the bundled corpus. |
 | `translate-tibetan` | verbose-ultra → translate(`bo`) | Applies the full verbose-ultra pipeline then renders in Tibetan (Uchen script) using the bundled corpus. |
 | `translate-inuktitut` | verbose-ultra → translate(`iu-cans`) | Applies the full verbose-ultra pipeline then renders in Inuktitut Syllabics — the empirical benchmark winner — using the bundled corpus. |
-| `anti-wenyan` | verbose-ultra → translate(`iu-cans`) | **Canonical anti-wenyan**: stable name pointing at whichever natural language the benchmark currently elects as worst-tokenizing. Today: Inuktitut Syllabics (rank 1 under both encodings). Aliased to `translate-inuktitut`; future re-rankings will redirect this name without breaking flags. |
+| `maxlang` | verbose-ultra → translate(`iu-cans`) | **The canonical maximiser**: a stable name for whichever natural language the bundled benchmark currently ranks first on tokens-per-word, with tokens-per-character as the tiebreak. Today that is Inuktitut Syllabics, which leads on both — 21.0455 tok/word and 2.6158 tok/char under `cl100k_base`, 21.5455 and 2.6780 under `o200k_base` — so `maxlang` resolves to `translate-inuktitut`. A future re-ranking redirects the name without breaking anybody's flags. |
+
+> **Deprecated alias.** `anti-wenyan` was the former name of `maxlang` and still resolves to the identical pipeline. It is retained for compatibility with `0.0.21` and earlier, and is scheduled for removal in `1.0`. New invocations should use `maxlang`.
 
 **Pipeline composition detail:**
 
@@ -286,9 +291,114 @@ The `expand` command accepts seven modes. The default is `verbose-full`.
 - **qualifiers** — sentence-prefix and suffix injection from a static pool. Cycles deterministically by sentence index. Example prefix: `"It is, of course, important to note that"`. Ultra density: every sentence, both ends.
 - **nominalizations** — converts high-frequency verbs to noun phrase constructions. `"We decided"` becomes `"A decision was reached by the relevant parties"`. Static lookup table, ~30 verb entries.
 - **passive** — heuristic SVO pattern detection via regex. Converts matched active constructions to passive. Leaves unmatched sentences unchanged. This is not a full NLP parse — complex or inverted sentences pass through unmodified. This limitation is intentional and documented.
+- **code-switching** — appends a Latin, French, or German parenthetical gloss to a closed set of English connectives (`however`, `therefore`, `of course`). Each gloss is a fully-formed parenthetical, so the later passive and qualifier passes cannot fragment it. `verbose-galactic` only.
+- **reduplication** — doubles or triples adjectives and intensifiers from a static lookup, hyphenated (`big` → `big-big-big`). Runs before the passive transform so the doubled forms survive the SVO rewrite. `verbose-galactic` only.
+- **rhetorical questions** — inserts a hedged interrogative aside at roughly the midpoint of every even-indexed sentence, drawn from a fixed pool by sentence index. Odd-indexed sentences are left alone so the cadence does not become entirely monotonous. `verbose-galactic` only.
 - **translate** — looks up the pre-translated string from `data/corpus.json` by sentence and language key. If the sentence is not in the corpus, returns the input unchanged. No API call. No network. Fully offline.
 
 See [`skills/tokenmaxxingman/SKILL.md`](./skills/tokenmaxxingman/SKILL.md) for full pipeline detail, before/after examples across all levels, and the auto-clarity override rules.
+
+---
+
+## MCP server
+
+The package ships an MCP server. **MCP** — the Model Context Protocol — is the open JSON-RPC standard by which an AI client calls tools, reads resources, and loads prompts from a separate server process. This one is built on `@modelcontextprotocol/sdk` v1.30.0 and speaks stdio.
+
+### Why it exists
+
+Until now the skills did their arithmetic in their heads. A skill asked to report an inflation ratio *estimated* the token count. A skill asked to render `maxlang` *approximated* the transform from the examples in its own manifest. The results were plausible and not reproducible, which is precisely the wrong way round for a project whose entire claim is measurement.
+
+With the server registered, the skills call the same deterministic pipeline the CLI calls. `count_tokens` returns a real `gpt-tokenizer` count against a pinned vocabulary. `expand_text` returns the actual output of the actual transform, byte for byte, on every invocation. The ratio is measured rather than asserted, which is a modest improvement in institutional credibility for a tool of this kind.
+
+### Install / register
+
+```bash
+# Claude Code (recommended)
+claude mcp add tokenmaxxingman -- npx -y tokenmaxxingman tmm-mcp
+
+# or globally installed
+npm i -g tokenmaxxingman && claude mcp add tokenmaxxingman -- tmm-mcp
+```
+
+For a project-scoped registration that every contributor inherits from the repository, commit an `.mcp.json` at the project root. In a consuming project, point it at the published package:
+
+```json
+{
+  "mcpServers": {
+    "tokenmaxxingman": {
+      "command": "npx",
+      "args": ["-y", "tokenmaxxingman", "tmm-mcp"]
+    }
+  }
+}
+```
+
+This repository ships its own `.mcp.json`, and it deliberately does not use that form. It points at the local build instead:
+
+```json
+{
+  "mcpServers": {
+    "tokenmaxxingman": {
+      "command": "node",
+      "args": ["dist/mcp/bin.js"]
+    }
+  }
+}
+```
+
+A contributor working on the server should be testing the server they just edited, not the last version somebody published. The consequence is that `pnpm build` must have run at least once before the entry resolves — `dist/` is not committed — and must run again after every change to `src/mcp/`. If the client reports that the server failed to start, this is the first thing to check.
+
+Two bin entries start the same server: `tmm-mcp` and `tokenmaxxingman-mcp`. The transport is stdio in both cases — the client spawns the process and speaks JSON-RPC over its standard input and output. There is no port to allocate, no daemon to supervise, and nothing left running once the client exits.
+
+### Tools
+
+| Tool | Params | Returns |
+|---|---|---|
+| `expand_text` | `text`, `mode`, `encoding?`, `locale?` | expanded text, before/after token counts, inflation ratio |
+| `maxx_text` | `text`, `targetLanguage?`, `paddingMultiplier?`, `passes?` (1-5), `encoding?`, `locale?` | maximally inflated text, token counts, ratio |
+| `count_tokens` | `text`, `encoding?`, `locale?` | tokens, characters, bytes, words, tokens/char, tokens/word |
+| `benchmark_languages` | `encoding?`, `limit?`, `format?` (`markdown`\|`json`) | the bundled corpus ranked by tokens-per-word, with tokens-per-character as the tiebreak |
+| `plan_speedrun` | `tier` or `durationMs`, `seed?`, `encoding?` | time budget, target token count, pacing plan |
+| `list_modes` | — | every expand mode, language code, and time tier |
+| `get_skill` | `name`, `section?` (`skill`\|`examples`) | raw SKILL.md / EXAMPLES.md text |
+
+`mode` accepts `verbose-lite`, `verbose-full`, `verbose-ultra`, `verbose-galactic`, `translate-burmese`, `translate-tibetan`, `translate-inuktitut`, and `maxlang` — plus `anti-wenyan`, the deprecated alias of `maxlang`. `encoding` accepts `cl100k_base` (the default) or `o200k_base`.
+
+Two optional parameters are easy to overlook and worth stating plainly. `locale` is a BCP-47 language tag (`iu-Cans`, for example) used for word segmentation via `Intl.Segmenter`; it changes the word count, and therefore tokens-per-word, and never changes the token count. `seed` on `plan_speedrun` is a piece of starting text used to estimate the tokens produced per iteration: supply it and the plan additionally reports `seedTokens` and `estimatedIterations`, omit it and both are `null` while the budget, target, and checkpoints are returned regardless.
+
+### Resources
+
+Every skill manifest is exposed as a readable resource, so a client can consult the mode definition without the skill files installed locally:
+
+- `skill://<name>/SKILL.md` and `skill://<name>/EXAMPLES.md`, for each of the eight skills — `auto`, `consultant`, `hallucinatemaxx`, `okay-boomer`, `politician`, `tokenmaxxingman`, `tokensprint`, `yolo`.
+- `benchmark://cl100k_base` and `benchmark://o200k_base` — the full ranked corpus result under each vocabulary.
+
+### Prompts
+
+One MCP prompt per skill, named after the skill. Loading the `politician` prompt puts a client into that register with nothing installed on disk, which is useful for clients that implement MCP prompts but not Claude Code skills.
+
+### A worked example
+
+Round numbers below are illustrative. Run it yourself for the real ones; that is rather the point of the server existing.
+
+```text
+→ count_tokens { "text": "Fix the bug." }
+← { "tokens": 4, "characters": 12, "bytes": 12, "words": 3, "tokensPerCharacter": 0.3333, "tokensPerWord": 1.3333 }
+
+→ expand_text { "text": "Fix the bug.", "mode": "maxlang" }
+← { "mode": "maxlang", "canonicalMode": "maxlang", "output": "ᐊᑐᕆᐊᖃᖅᑐᒍᑦ ᐅᑯᓂᖓ …",
+    "before": { "tokens": 4, … }, "after": { "tokens": 128, … },
+    "inflation": { "tokenRatio": 32.0, "characterRatio": 4.08, "tokensAdded": 124 } }
+
+→ count_tokens { "text": "ᐊᑐᕆᐊᖃᖅᑐᒍᑦ ᐅᑯᓂᖓ …" }
+← { "tokens": 128, "characters": 49, "bytes": 147, "words": 6, "tokensPerCharacter": 2.6122, "tokensPerWord": 21.3333 }
+```
+
+The third call is the interesting one: the client can independently verify the ratio the second call reported, against the same pinned vocabulary, without taking the server's arithmetic on trust.
+
+### Safety
+
+The server reads and computes. It does not write files, spawn child processes, or make network calls. The corpus (`data/corpus.json`) and both BPE vocabularies ship inside the package at pinned versions, so every tool resolves offline and returns the same answer on every machine, in every session, indefinitely.
 
 ---
 
@@ -296,7 +406,7 @@ See [`skills/tokenmaxxingman/SKILL.md`](./skills/tokenmaxxingman/SKILL.md) for f
 
 Eight Claude Code skills ship with this project — five prose modes (`tokenmaxxingman`, `hallucinatemaxx`, `tokensprint`, `politician`, `consultant`), a deprecated-code mode (`okay-boomer`), and two workflow utilities (`yolo`, `auto`).
 
-- **[tokenmaxxingman](./skills/tokenmaxxingman/SKILL.md)** — The primary skill. Activates maximalist prose expansion in Claude responses. Trigger: `/tokenmaxxingman`, `"tokenmaxxing mode"`, `"expand this"`, `"fewer words is for cavemen"`, `"anti-wenyan"`. Default intensity: `verbose-full`. Persists for the session. Auto-reverts to plain prose for code blocks, debugging, security warnings, and structured data — the same boundary rules caveman uses, inverted.
+- **[tokenmaxxingman](./skills/tokenmaxxingman/SKILL.md)** — The primary skill. Activates maximalist prose expansion in Claude responses. Trigger: `/tokenmaxxingman`, `"tokenmaxxing mode"`, `"expand this"`, `"maxlang"`. Default intensity: `verbose-full`. Persists for the session. Auto-reverts to plain prose for code blocks, debugging, security warnings, and structured data — verbosity is the product, but not at the cost of an answer somebody has to act on.
 
 - **[hallucinatemaxx](./skills/hallucinatemaxx/SKILL.md)** — A satirical device that produces text in the register of academic citation and historical authority, with all proper nouns, dates, conference names, and attributed scholars invented wholesale for comedic effect. **This skill is explicitly satire. Do not fire it on engineering work, debugging, code review, medical questions, legal questions, financial questions, or any context where someone might act on the output.** The SKILL.md carries a prominent categorical prohibition section. Read it before use. Trigger: `/hallucinatemaxx` only — never implicit. Does not persist across turns.
 
@@ -320,7 +430,7 @@ Input text passes through a pipeline of pure, deterministic functions. Each func
 
 The `expand` function selects a pre-composed pipeline based on the mode and runs the input through it: for `verbose-ultra`, that is synonyms, then qualifiers, then nominalizations, then passive rewriting, applied in sequence. Translation modes append a corpus lookup step after the full `verbose-ultra` pipeline.
 
-The benchmark module reads `data/corpus.json` — a statically committed file — and runs `countTokens` from the `gpt-tokenizer` v3.4.0 library against every language variant for every sentence. It computes tokens-per-character as the primary ranking metric and tokens-per-sentence as a secondary column, then sorts descending. The result is deterministic because the corpus is committed, the tokenizer version is pinned to an exact semver, and the sort is stable with a deterministic tie-break.
+The benchmark module reads `data/corpus.json` — a statically committed file — and runs `countTokens` from the `gpt-tokenizer` v3.4.0 library against every language variant for every sentence. It ranks on tokens-per-word — the primary sort key — and falls back to tokens-per-character, then tokens-per-sentence, then the language code, to break ties; the three ratios are all reported as columns. `ka` (Georgian) therefore ranks below `te` (Telugu) despite the higher tokens-per-character, because Telugu costs more tokens per word. The result is deterministic because the corpus is committed, the tokenizer version is pinned to an exact semver, and the sort is stable with a deterministic tie-break.
 
 The speedrun module iterates `expand` calls in a loop until the time budget is exhausted, accumulating token counts via the tokenizer. The `--max-iterations` safety cap prevents runaway loops. Output includes total tokens generated, wall-clock duration, and tokens per second.
 
@@ -350,7 +460,7 @@ pnpm install                                # workspace-wide install
 pnpm run build                              # compile TypeScript to dist/
 pnpm run typecheck                          # tsc --noEmit, strict mode
 pnpm run lint                               # eslint on src/
-pnpm test                                   # vitest run (unit + integration + snapshot)
+pnpm test                                   # vitest run (unit + integration)
 pnpm run format                             # prettier --write on src/ and tests/
 pnpm -F tokenmaxxingman-web run build       # site build → web/dist/
 pnpm -F tokenmaxxingman-web run dev         # site dev server
@@ -364,15 +474,13 @@ pnpm exec vitest run --coverage
 
 ### Node version
 
-Engines: `>=22` (current LTS floor). CI runs against Node **22** and **26.2** in matrix. To match CI locally, use [`fnm`](https://github.com/Schniz/fnm) or `nvm`:
+Engines: `>=22.12.0` (the LTS floor declared in `package.json`). CI runs against Node **22** and **26.2** in matrix; the release workflow publishes from **26.2**. To match CI locally, use [`fnm`](https://github.com/Schniz/fnm) or `nvm`:
 
 ```bash
 fnm install 26.2.0 && fnm use 26.2.0
 ```
 
-The snapshot test in `tests/snapshot/expansion.test.ts` will fail if the output of `expand("The quick fox.", 'verbose-ultra')` changes. Update snapshots explicitly with `--update-snapshots` if a transform change is intentional.
-
-Node >= 22 required. The project targets Node 24 but runs on 22.
+There is no committed snapshot file. The transforms are pure and deterministic, so a snapshot regression test remains a reasonable idea and is tracked as an outstanding item in `BUILD-SUMMARY.md`; the assertions currently live inline in the module tests instead.
 
 ---
 
@@ -396,11 +504,9 @@ Node >= 22 required. The project targets Node 24 but runs on 22.
 
 ## Acknowledgements
 
-tokenmaxxingman exists because [caveman](https://getcaveman.dev/) exists. caveman, by Julius Brussee, is a well-constructed, rigorously benchmarked tool that compresses LLM output to the minimum tokens required to convey full technical meaning. It is correct. It solves a real problem.
+Tokenization is performed by [`gpt-tokenizer`](https://www.npmjs.com/package/gpt-tokenizer), pinned at v3.4.0, which provides pure-TypeScript BPE implementations of the `cl100k_base` and `o200k_base` encodings. Those encodings are OpenAI's published BPE vocabularies. The merge tables are theirs; every rank this project reports is a direct consequence of them.
 
-tokenmaxxingman inverts caveman by construction. The benchmark design mirrors caveman's benchmark design. The mode table mirrors caveman's intensity levels. The skill boundary rules (auto-reverts for code, debugging, security warnings) are caveman's boundary rules, applied inversely. The conceit is explicit: these two tools define opposite ends of a token-use spectrum, and the spectrum is funnier with both ends labelled.
-
-caveman is the better tool. tokenmaxxingman is its shadow, cast so that the principle becomes visible.
+The central observation is not ours either, and predates the project: byte-pair encoding merges frequently occurring substrings, English is heavily over-represented in the corpora those merges were derived from, and so verbose English costs *fewer tokens per character* than Han ideographs do. Whichever way one expects that comparison to resolve, the tokenizer has already settled it. This project's only contribution is to measure it across eighteen language and register variants, under two vocabularies, and then commit the numbers so they can be checked.
 
 ---
 

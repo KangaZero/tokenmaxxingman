@@ -1,19 +1,33 @@
-# Build Summary — tokenmaxxingman v0.1.0
+# Build Summary — the initial build
 
-Branch: feat/initial-build
+**Status: historical.** This document records the initial seven-phase build, as
+executed on the date below. That build was drafted against an unreleased `0.1.0`
+version number and ultimately shipped as **`0.0.1`**; the `0.1.0` number was
+later spent on the MCP server release. The heading has been corrected
+accordingly. Everything below the horizontal rule is the contemporaneous record
+and is deliberately not rewritten — a build summary that is quietly edited to
+match the present is no longer evidence of anything.
+
+For what the project looks like now, read the section **"What has shipped since
+this build"** at the end, then `CHANGELOG.md`.
+
+Branch: `feat/initial-build` (long since merged and deleted; `main` is the
+default branch)
 Build date: 2026-05-14
+Released as: `0.0.1`, 2026-05-31
 
 ---
 
 ## What was built
 
-tokenmaxxingman is the inverse of [caveman](https://getcaveman.dev/): a CLI tool and Claude Code skill set
-that expands text to consume the maximum possible tokens while preserving meaning. It ships a deterministic
+tokenmaxxingman is a deliberately maximalist token-expenditure toolkit: a CLI tool and Claude Code skill set
+that expands text to consume the maximum possible tokens while preserving meaning. Its reference point is the
+token floor of plain prose, which the bundled benchmark measures directly. It ships a deterministic
 expansion engine (five composable pure-function transforms plus five additional trick transforms), an
 empirical benchmark corpus (8 sentences × 18 language and register variants), a speedrun module, and three
 Claude Code skill manifests.
 
-This build (v0.1.0) delivers the full 7-phase plan plus three user-requested additions (phases 8a–8c): two
+This build delivers the full 7-phase plan plus three user-requested additions (phases 8a–8c): two
 anti-skill manifests (`hallucinatemaxx`, `tokensprint`) and a maxxer module that composes every trick in a
 single pipeline. All 22 TypeScript source files compile clean, the vitest suite passes, and the GitHub
 Actions CI and release workflows are committed. npm publish and GitHub remote setup remain deferred to the
@@ -25,7 +39,7 @@ user.
 
 | Phase | Planned | Actual | Status | Deviation |
 |-------|---------|--------|--------|-----------|
-| 1 — Scaffold | `package.json`, `tsconfig.json`, `.gitignore`, ESLint flat config, Prettier, MIT `LICENSE`, CI/release workflows, placeholder `src/`/`data/`/`tests/` directories | Full scaffold committed in one `chore(scaffold)` commit: `package.json` (ESM, `"type":"module"`, bin entries), `tsconfig.json` strict NodeNext, `eslint.config.js`, `.github/workflows/ci.yml` + `release.yml`, `LICENSE` | ✓ | None |
+| 1 — Scaffold | `package.json`, `tsconfig.json`, `.gitignore`, ESLint flat config, Prettier, MIT `LICENSE`, CI/release workflows, placeholder `src/`/`data/`/`tests/` directories | Full scaffold committed in one `chore(scaffold)` commit: `package.json` (ESM, `"type":"module"`, bin entries), `tsconfig.json` strict NodeNext, `eslint.config.js`, `.github/workflows/ci.yml` + `release.yml`, `LICENSE` | ✓ | None. The ESLint config was later ported to TypeScript and is now `eslint.config.ts`. |
 | 2 — Corpus + tokenizer | 30 sentences across 18 language/register variants in `data/corpus.json`; `src/tokenizer.ts` exporting `countTokens` + `countTokensBatch`; `data/corpus.schema.json`; `scripts/build-corpus.ts` | 8 sentences × 18 variants committed; `src/tokenizer.ts` ships both functions with `cl100k_base` + `o200k_base` support; schema and build script present | ✓ | Sentence count reduced 30 → 8. Translation sourcing was the bottleneck; 8 × 18 = 144 entries still yields statistically meaningful ranking. Schema versioned at `'1'` for forward extension. |
 | 3 — Expansion engine | Five transforms in `src/transforms/`: synonyms, qualifiers, nominalizations, passive, translate; `src/expand.ts` composing them into six modes | All five transforms shipped. `src/expand.ts` composes pipelines for `verbose-{lite,full,ultra}` + `translate-{burmese,tibetan,inuktitut}`. All transforms are pure and deterministic. | ✓ | `src/types.ts` was folded into individual modules and `src/corpus-types.ts` rather than kept in a single `types.ts`. Plan also listed `src/types.ts` as a standalone file — not created; types are co-located. |
 | 4 — Benchmark | `src/benchmark.ts` running tokens-per-char ranking; `src/report.ts` exporting `toMarkdownTable` + `toJSON`; `zh-classical` expected to rank last | `src/benchmark.ts` ships `runBenchmark` + `BenchmarkRow` type. Report formatters live in `src/formatters/markdown.ts` and `src/formatters/json.ts` (split from the single `src/report.ts` file the plan specified). Empirical rank-1 winner is **Inuktitut Syllabics** (`iu-cans`), not Classical Chinese. | ✓ | Plan hypothesised `zh-classical` = rank 1 (most tokens). Result falsifies the hypothesis: `zh-classical` ranked 11/18. Inuktitut ranks 1. Legalese ranks 18. Formatters split into two files under `src/formatters/` rather than one `src/report.ts`. |
@@ -72,7 +86,11 @@ src/                        — 22 TypeScript modules total
   tricks/                   — 6 files: index, padding, repetition, footnotes, parentheticals, citation
   formatters/               — 2 files: markdown.ts, json.ts
 
-tests/                      — 10 test files
+tests/                      — 10 test files at the time of this build. The suite
+                              has grown since (MCP coverage, regression tests)
+                              and continues to; count the directory rather than
+                              trusting this line. tests/global-setup.ts builds
+                              the CLI once for the integration tests.
   tokenizer.test.ts
   corpus.test.ts
   transforms.test.ts
@@ -94,7 +112,11 @@ skills/
 
 .github/workflows/
   ci.yml                    — typecheck + lint + test, Node 22 + 24 matrix
-  release.yml               — manual workflow_dispatch; npm publish with provenance
+                              (now Node 22 + 26.2, and the gate also runs
+                              build, web typecheck, and web build)
+  release.yml               — manual workflow_dispatch; npm publish
+                              (id-token: write is granted, but provenance is
+                              not actually enabled — see DEPLOY.md)
 
 Root docs:
   README.md, CONTRIBUTING.md, CHANGELOG.md, DEPLOY.md,
@@ -138,14 +160,66 @@ Total commits at time of writing: **11**
 
 ## Outstanding items
 
-- `gh auth login` was not completed during the build. The remote `KangaZero/tokenmaxxingman` exists but push was deferred (SSH key path unresolved). Branch `feat/initial-build` has 11 commits locally that are not yet on the remote.
-- `main` branch does not exist on remote yet. Only `feat/initial-build` is the working branch.
-- Branch protection rules and default-branch configuration on GitHub are not yet set. See `GITHUB_SETUP.md`.
-- `NPM_TOKEN` secret not yet configured in GitHub repository settings. The `release.yml` workflow will fail without it. See `GITHUB_SETUP.md` for setup steps.
-- `npm publish` has not been run. The package is not yet on the npm registry. Trigger `release.yml` manually after setting `NPM_TOKEN`.
-- Snapshot test file (`tests/snapshot/expansion.snap`) is not present as a committed artefact — the plan required it committed to catch regressions in CI. Vitest generates it on first run; it should be staged and committed as a follow-up.
-- `data/corpus.schema.json` presence not confirmed in the working tree. The plan required it as a machine-checkable contract for `data/corpus.json`.
-- `scripts/build-corpus.ts` presence not confirmed. The plan listed it as a documentation artefact describing how translations were assembled.
+Resolved since:
+
+- ~~`gh auth login` not completed; `feat/initial-build` unpushed.~~ Pushed. The
+  branch was merged and deleted.
+- ~~`main` does not exist on the remote.~~ `main` is the default branch.
+- ~~`npm publish` has not been run.~~ Published. `0.0.2` and `0.0.21` are on the
+  registry; `latest` resolves to `0.0.21` until `0.1.0` ships.
+- ~~`scripts/build-corpus.ts` presence not confirmed.~~ Present.
+
+Still open:
+
+- **Snapshot regression test.** `tests/snapshot/expansion.snap` was never
+  committed and no test in `tests/` calls `toMatchSnapshot`. The plan required a
+  committed snapshot so CI would catch an unintended change in transform output.
+  The transforms are pure and deterministic, which is precisely the condition
+  under which a snapshot test is cheap and worth having. Still outstanding.
+- **`data/corpus.schema.json`.** Not present. `data/` contains `corpus.json`
+  only. The plan called for a machine-checkable contract on the corpus; the
+  corpus shape is currently enforced by TypeScript types and tests alone.
+- **Branch protection.** Configuration on GitHub is unverified from here. See
+  `GITHUB_SETUP.md`, and note that the required-status-check names must match
+  the CI matrix exactly.
+- **`NPM_TOKEN` secret.** Cannot be confirmed from the working tree. The
+  workflow fails without it.
+
+---
+
+## What has shipped since this build
+
+Three releases and one substantial feature. Full detail in `CHANGELOG.md`; the
+summary, for a reader who arrived at this file first:
+
+- **`0.0.2`** — the primary benchmark metric changed from `tok/char` to
+  `tok/word`, which is the single most consequential decision the project has
+  made and is now recorded as settled in `CLAUDE.md`. `tok/char` measures script
+  density; `tok/word` measures tokenizer cost per unit of meaning. Inuktitut
+  Syllabics remains rank 1 under both, so the headline finding survived the
+  change. Also: the pnpm workspace migration, the Vue marketing site and its
+  Pages deployment, the `justfile`, `verbose-galactic` plus three further
+  transforms, and the `/yolo`, `/consultant`, and `/okay-boomer` skills. The CI
+  matrix moved to Node 22 + 26.2.
+- **`0.0.21`** — an accuracy pass. Skill counts, the npm badge, the site version
+  pill, and the skill manifests were reconciled with the repository.
+- **`0.1.0`** — the **MCP server** (`src/mcp/`), which is the reason the version
+  moved to a new minor. A Model Context Protocol server over stdio, built on
+  `@modelcontextprotocol/sdk` with `zod` schemas, exposing seven tools, eighteen
+  resources, and one prompt per skill. It matters for a reason that goes to the
+  premise of the project: before it existed, a skill asked to report an inflation
+  ratio *estimated* the token count, and a skill asked to render `maxlang`
+  *approximated* the transform from its own examples. Plausible, and not
+  reproducible — the wrong way round for a tool whose entire claim is
+  measurement. The server routes the skills through the same deterministic
+  pipeline the CLI uses. It reads and computes only: no file writes, no child
+  processes, no network.
+  Also in `0.1.0`: the `anti-wenyan` mode renamed to `maxlang` (the old name is
+  retained as a deprecated alias, scheduled for removal in `1.0`), a Nix dev
+  shell, the `/auto` skill, and the `/docs` page.
+
+The source tree has grown from the 22 TypeScript modules listed above to 37, and
+the skills from three manifests to eight.
 
 ---
 
@@ -174,12 +248,18 @@ node dist/cli.js speedrun --tier sprint-1m --mode verbose-full
 node dist/cli.js maxxer --mode verbose-ultra
 ```
 
+**Run the MCP server** (added in `0.1.0`, so absent from the phase table above):
+
+```bash
+node dist/mcp/bin.js          # stdio; a client spawns this, it has no CLI output
+```
+
 ---
 
 ## Where to look next
 
-- Open the first PR: `https://github.com/KangaZero/tokenmaxxingman/pull/new/feat/initial-build`
-- Configure `NPM_TOKEN` secret and review publish steps: `GITHUB_SETUP.md`
-- Trigger a release and cut `v0.1.0`: `DEPLOY.md`
-- Commit the generated snapshot file after first `npm test` run on a clean checkout
-- Verify `data/corpus.schema.json` and `scripts/build-corpus.ts` are present; add if missing
+- `CHANGELOG.md` for everything that happened after this build
+- Configure the `NPM_TOKEN` secret and review the publish steps: `GITHUB_SETUP.md`
+- Cut and publish `v0.1.0`: `DEPLOY.md`
+- Commit a snapshot regression test for `expand()` — still outstanding
+- Add `data/corpus.schema.json`, or record the decision not to

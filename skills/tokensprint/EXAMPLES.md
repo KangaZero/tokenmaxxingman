@@ -100,14 +100,14 @@ trolley alone has produced documented sprint records.
 
 ---
 
-## The Score vs. The Caveman Baseline
+## The Score vs. The Minimal Baseline
 
-A sprint-10m on the same connection-pooling prompt, run in caveman mode,
-produces approximately 400 tokens of correct, dense technical explanation.
+The same connection-pooling prompt, answered in minimal prose, produces
+approximately 400 tokens of correct, dense technical explanation.
 The tokenmaxxingman sprint produces ~123,420 tokens of equally correct,
 considerably less usable technical content.
 
-The 308× token ratio is the benchmark. The caveman number is the answer.
-The sprint number is the proof that the caveman was right.
+The 308× token ratio is the benchmark. The minimal number is the answer.
+The sprint number is the proof that the minimal number was right.
 
 <!-- 01010100 01101000 01100101 00100000 01100011 01101100 01101111 01100011 01101011 00100000 01101001 01110011 00100000 01110010 01100101 01100001 01101100 00101110 00100000 01010100 01101000 01100101 00100000 01110100 01101111 01101011 01100101 01101110 01110011 00100000 01100001 01110010 01100101 00100000 01110010 01100101 01100001 01101100 00101110 00100000 01010100 01101000 01100101 00100000 01110011 01100011 01101111 01110010 01100101 00100000 01101001 01110011 00100000 01101110 01101111 01110100 00101110 -->

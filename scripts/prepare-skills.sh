@@ -9,7 +9,8 @@
 #     so a consumer running `npm i tokenmaxxingman` never has their home dir
 #     touched. ("postinstall" would fire there — wrong.)
 #   - It DOES run during `pnpm pack`/`publish` and in CI, where symlinking into
-#     ~/.claude is pointless or wrong. The guard below handles those cases.
+#     ~/.claude is pointless or wrong. The guards below handle those cases:
+#     `npm_command` covers pack/publish, `CI` covers runners.
 #
 # This hook must never break `pnpm install` or a release: linking failures are
 # swallowed and reported, not propagated.
@@ -26,6 +27,14 @@ should_skip() {
     echo "prepare: CI detected — skipping skill link"
     return 0
   fi
+  # Packing or publishing on a dev box must not mutate ~/.claude/skills. npm and
+  # pnpm both export npm_command for the lifecycle they are running.
+  case "${npm_command:-}" in
+    pack | publish)
+      echo "prepare: npm_command=${npm_command} — skipping skill link"
+      return 0
+      ;;
+  esac
   # Explicit opt-out for anyone who does not want their ~/.claude touched.
   if [[ -n "${TMM_SKIP_SKILLS_INSTALL:-}" ]]; then
     echo "prepare: TMM_SKIP_SKILLS_INSTALL set — skipping skill link"

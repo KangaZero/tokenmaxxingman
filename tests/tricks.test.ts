@@ -44,6 +44,38 @@ describe('padding', () => {
     // The while-loop appends one of the PADDING_PHRASES
     expect(result).toContain('the substance of the preceding statement warrants serious attention');
   });
+
+  // Regression: the append loop's bound used to be
+  // `PADDING_PHRASES.length * multiplier`, i.e. it scaled with the input it was
+  // supposed to guard against. `targetMultiplier: 100_000` on 4.4 KB of text
+  // produced 419.6 MB in 3,993 ms. Both bounds are now constants, so an absurd
+  // multiplier is bounded in size and time without any caller-side clamp.
+  it('bounds output size and runtime for an absurd targetMultiplier', () => {
+    const input = 'The quick fox runs fast. The lazy dog sleeps soundly. Every result matters. '
+      .repeat(53)
+      .trim();
+    const started = performance.now();
+    const result = padding(input, { targetMultiplier: 100_000 });
+    const elapsed = performance.now() - started;
+
+    expect(elapsed).toBeLessThan(1000);
+    // Comfortably inside the 1 MiB ceiling, and nowhere near 419.6 MB.
+    expect(result.length).toBeLessThan(1_048_576);
+  });
+
+  it('never exceeds the absolute output ceiling regardless of multiplier', () => {
+    const input = 'A sentence. '.repeat(200).trim();
+    for (const targetMultiplier of [1, 100, 10_000, 1_000_000]) {
+      expect(padding(input, { targetMultiplier }).length).toBeLessThanOrEqual(1_048_576);
+    }
+  });
+
+  it('remains deterministic under a clamped multiplier', () => {
+    const input = 'One thing. Two things. Three things.';
+    expect(padding(input, { targetMultiplier: 100_000 })).toEqual(
+      padding(input, { targetMultiplier: 100_000 }),
+    );
+  });
 });
 
 describe('repetition', () => {
@@ -132,6 +164,14 @@ describe('parentheticals', () => {
     // Should contain at least double-nested parens from our aside bank.
     expect(result).toMatch(/\(.*\(.*\)/);
   });
+
+  // Regression: `/\b(and|but|or|however)\b/gi` treated Cyrillic letters as
+  // non-word characters, so "and" was found inside a single Cyrillic word and an
+  // entire nested clause was injected into the middle of it.
+  it('does not inject inside a word from a non-Latin script', () => {
+    const input = 'кandк';
+    expect(parentheticals(input)).toEqual(input);
+  });
 });
 
 describe('citation', () => {
@@ -174,6 +214,23 @@ describe('citation', () => {
     const single = 'Hello world.';
     const result = citation(single);
     expect(result).toEqual(single);
+  });
+
+  // Regression: pool selection used `index % FAKE_CITATIONS.length` while the
+  // "does this sentence get a citation?" test was `index % 2 === 1`. Over an
+  // even-length pool only odd slots were reachable, so 10 of the 20 citations
+  // were dead code. Pool selection now has its own counter.
+  it('reaches every citation in the pool', () => {
+    const sentences = Array.from(
+      { length: 120 },
+      (_unused, i) => `Sentence number ${String(i)} is here.`,
+    ).join(' ');
+    const result = citation(sentences);
+    const cited = result.match(/\((?:see|cf\.|per|contra|following|attributed to)[^)]*\)/g) ?? [];
+    const distinct = new Set(cited);
+
+    expect(distinct.size).toBeGreaterThan(10);
+    expect(distinct.size).toBe(20);
   });
 
   // Gap: citation appended to sentence WITHOUT trailing punctuation — trailingPunct is ''

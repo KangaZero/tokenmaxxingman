@@ -4,7 +4,7 @@ scripts/
 coverage/
 web/
 .github/
-eslint.config.js
+eslint.config.ts
 vitest.config.ts
 tsconfig.json
 .prettierrc

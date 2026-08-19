@@ -8,7 +8,7 @@
 // Reduplication is applied BEFORE the passive transform so the doubled
 // forms survive the SVO rewrite (which only triggers on bare verbs).
 
-import { applyCase } from '../utils/text.js';
+import { applyCase, wholeWordPattern } from '../utils/text.js';
 
 const REDUPLICATED: ReadonlyMap<string, string> = new Map([
   ['big', 'big-big-big'],
@@ -38,8 +38,10 @@ const REDUPLICATED: ReadonlyMap<string, string> = new Map([
   ['clear', 'clear-and-crystalline-and-unambiguously-clear'],
 ]);
 
+// Unicode-aware boundaries — see utils/text.ts for why `\b` is unusable on the
+// Burmese / Tibetan / Syllabics text this project deliberately handles.
 const REDUPLICATION_PATTERNS: ReadonlyMap<RegExp, string> = new Map(
-  [...REDUPLICATED].map(([word, doubled]) => [new RegExp(`\\b(${word})\\b`, 'gi'), doubled]),
+  [...REDUPLICATED].map(([word, doubled]) => [wholeWordPattern([word]), doubled]),
 );
 
 export function reduplication(input: string): string {
