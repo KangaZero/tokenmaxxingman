@@ -5,7 +5,7 @@ const stages = [
   { name: 'qualifiers', glyph: 'It is, of course, important to note that utilize this…', amp: 4.2, note: 'hedge / suffix injection' },
   { name: 'nominalizations', glyph: '…carry out the utilization of this…', amp: 5.8, note: 'verb → noun phrase' },
   { name: 'passive', glyph: '…this is utilized…', amp: 6.3, note: 'voice inversion' },
-  { name: 'translate', glyph: 'ᐊᑐᕐᓗᒍ ᐅᑯᓂᖓ…', amp: 15.7, note: 'render in iu-cans (anti-wenyan)' },
+  { name: 'translate', glyph: 'ᐊᑐᕐᓗᒍ ᐅᑯᓂᖓ…', amp: 15.7, note: 'render in iu-cans (maxlang)' },
 ];
 const maxAmp = Math.max(...stages.map((s) => s.amp));
 </script>

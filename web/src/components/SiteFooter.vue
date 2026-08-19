@@ -14,7 +14,7 @@
           <div class="font-display text-lg font-bold text-bone">tokenmaxxingman</div>
         </div>
         <p class="mt-1 text-sm text-bone/50">
-          The empirical opposite of <a class="underline-offset-4 hover:underline" href="https://getcaveman.dev/">caveman</a>.
+          Tokens are a measurable resource. We spend them without restraint.
           MIT-licensed. Made for the joke.
         </p>
       </div>

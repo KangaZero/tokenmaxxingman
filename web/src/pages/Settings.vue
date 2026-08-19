@@ -55,7 +55,7 @@ const TOKEN_BUDGETS = [
   { value: 'unlimited', label: 'Unlimited (recommended)' },
   { value: 'comfortable', label: 'Comfortable — I have a budget but no principles' },
   { value: 'tight', label: 'Tight — wrong project' },
-  { value: 'caveman', label: 'Caveman Mode — are you lost?' },
+  { value: 'terse', label: 'Terse Mode — are you lost?' },
 ];
 
 const STORAGE_KEYS = [
@@ -225,7 +225,7 @@ onMounted(load);
             </label>
             <input id="verbosity" v-model="verbosity" type="range" min="0" max="100" class="w-full accent-accent" />
             <div class="mt-1 flex justify-between text-xs text-bone/30">
-              <span>Caveman (wrong app)</span>
+              <span>Terse (wrong app)</span>
               <span>Maximum Slop</span>
             </div>
             <p class="mt-1 text-xs text-bone/30">Setting this above 70 voids your warranty. Setting it to 100 voids your colleagues' patience.</p>

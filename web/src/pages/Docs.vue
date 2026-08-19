@@ -3,7 +3,8 @@ import { useRouter } from 'vue-router';
 import SiteFooter from '../components/SiteFooter.vue';
 import RippleButton from '../components/RippleButton.vue';
 import AnimatedCode from '../components/AnimatedCode.vue';
-import { SKILLS } from '../data/benchmark';
+import McpSection from '../components/McpSection.vue';
+import { SKILLS, MAXLANG } from '../data/benchmark';
 
 const router = useRouter();
 
@@ -128,6 +129,47 @@ function accentBorder(accent: string): string {
           </div>
         </div>
       </div>
+
+      <!-- Expansion modes -->
+      <div v-reveal="'fade-up'" class="mb-16">
+        <h2 class="mb-2 font-display text-2xl font-bold text-bone">Expansion Modes</h2>
+        <p class="mb-6 text-sm text-bone/40">
+          Supplied to <code class="font-mono text-bone/60">--mode</code>, and to the MCP server's
+          <code class="font-mono text-bone/60">expand_text</code> tool. The authoritative list is
+          available at runtime from <code class="font-mono text-bone/60">list_modes</code>, which the
+          organisation provides so that no one has to trust this page.
+        </p>
+        <div class="surface rounded-2xl border border-bone/10 bg-bone/[0.02] p-6">
+          <div class="flex flex-wrap items-center gap-2">
+            <code class="font-mono text-sm font-semibold text-accent">{{ MAXLANG.canonicalName }}</code>
+            <span class="pill !border-accent/30 !text-accent">canonical</span>
+            <code class="font-mono text-sm text-bone/40">{{ MAXLANG.deprecatedAlias }}</code>
+            <span class="pill">deprecated alias</span>
+          </div>
+          <p class="mt-4 max-w-3xl text-sm text-bone/55 leading-relaxed">
+            <code class="font-mono text-bone/70">{{ MAXLANG.canonicalName }}</code> renders the
+            expanded output into whichever natural language the bundled benchmark currently elects as
+            the highest tokens-per-character. That office is presently held by
+            <strong class="text-bone">{{ MAXLANG.electedLabel }}</strong>
+            (<code class="font-mono text-bone/70">{{ MAXLANG.electedCode }}</code>), at
+            <span class="font-mono tabular-nums text-bone">{{ MAXLANG.tokensPerCharacterCl100k.toFixed(4) }}</span>
+            tok/char under cl100k_base and
+            <span class="font-mono tabular-nums text-bone">{{ MAXLANG.tokensPerCharacterO200k.toFixed(4) }}</span>
+            tok/char under o200k_base. The mode is defined by the measurement rather than by the
+            language, so should the corpus ever elect a different winner the mode will follow it
+            without requiring a rename, a migration, or a second announcement.
+          </p>
+          <p class="mt-3 max-w-3xl text-sm text-bone/40 leading-relaxed">
+            <code class="font-mono text-bone/60">{{ MAXLANG.deprecatedAlias }}</code> was the original
+            name and continues to resolve to the same mode, retained for compatibility with every
+            configuration file written before the organisation reconsidered. Its removal has been
+            scheduled, tabled, and deferred indefinitely, which the organisation considers the
+            responsible outcome and also the easiest one.
+          </p>
+        </div>
+      </div>
+
+      <McpSection />
 
       <!-- Skills reference -->
       <div v-reveal="'fade-up'" class="mb-16">

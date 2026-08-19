@@ -19,7 +19,7 @@ const paths = [
 tmm benchmark
 
 # or run once, no install:
-npx tokenmaxxingman expand --mode anti-wenyan   # or: pnpm dlx / bunx`,
+npx tokenmaxxingman expand --mode maxlang   # or: pnpm dlx / bunx`,
   },
   {
     badge: 'contributors',

@@ -15,6 +15,7 @@ const sections = [
   { id: 'comparison', label: 'Compare' },
   { id: 'skills', label: 'Skills' },
   { id: 'pipeline', label: 'Pipeline' },
+  { id: 'mcp', label: 'MCP' },
   { id: 'install', label: 'Install' },
 ] as const;
 

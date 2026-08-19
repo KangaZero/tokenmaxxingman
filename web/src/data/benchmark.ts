@@ -58,14 +58,30 @@ export const O200K_ROWS: readonly BenchmarkRow[] = [
   { rank: 18, code: 'en-legalese', name: 'Legalese', family: 'register', script: 'Latin', tokensPerWord: 1.1965, tokensPerCharacter: 0.1944, tokens: 207, words: 173, characters: 1065 },
 ];
 
+// The `maxlang` expansion mode renders output into whichever benchmarked natural
+// language currently scores highest tokens-per-character. The election is data-
+// driven, so the figures below are read off the benchmark rather than restated.
+// `anti-wenyan` remains accepted as a deprecated alias for compatibility.
+const MAXLANG_CL100K = CL100K_ROWS[0]!;
+const MAXLANG_O200K = O200K_ROWS.find((r) => r.code === MAXLANG_CL100K.code)!;
+
+export const MAXLANG = {
+  canonicalName: 'maxlang',
+  deprecatedAlias: 'anti-wenyan',
+  electedCode: MAXLANG_CL100K.code,
+  electedLabel: 'Inuktitut Syllabics',
+  tokensPerCharacterCl100k: MAXLANG_CL100K.tokensPerCharacter,
+  tokensPerCharacterO200k: MAXLANG_O200K.tokensPerCharacter,
+} as const;
+
 export const SKILLS = [
   {
     slug: 'tokenmaxxingman',
     name: 'tokenmaxxingman',
-    tagline: 'Verbose mode. Bureaucratic mode. Anti-wenyan mode.',
+    tagline: 'Verbose mode. Bureaucratic mode. Maxlang mode.',
     description:
       'Maximalist prose expansion. Inflates a sentence by 3–7× through synonym substitution, qualifier injection, nominalization, and passive-voice rewriting — then optionally renders the result in the empirically-worst-tokenizing human language.',
-    triggers: ['/tokenmaxxingman', 'tokenmaxxing mode', 'expand this', 'anti-wenyan'],
+    triggers: ['/tokenmaxxingman', 'tokenmaxxing mode', 'expand this', 'maxlang'],
     accent: 'accent',
   },
   {

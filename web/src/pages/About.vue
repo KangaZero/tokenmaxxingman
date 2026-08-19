@@ -1,17 +1,62 @@
 <script setup lang="ts">
+import { defineAsyncComponent } from 'vue';
 import AboutSection from '../components/AboutSection.vue';
 import SiteFooter from '../components/SiteFooter.vue';
+import CanvasStage from '../components/CanvasStage.vue';
+import TokenBarsMotif from '../components/TokenBarsMotif.vue';
+
+// Async so the /about route does not pull three.js into the initial chunk.
+const GlassObject = defineAsyncComponent(
+  () => import('../components/canvasui/GlassObject.vue'),
+);
 </script>
 
 <template>
   <main id="main-content" class="relative min-h-screen overflow-x-hidden 
 ">
     <section class="mx-auto max-w-6xl px-6 py-24">
-      <div class="mb-12 flex flex-col gap-3">
-        <span class="pill">origin story · methodology · disclaimer</span>
-        <h1 class="font-display text-4xl font-bold text-bone md:text-5xl">
-          About this <span class="text-cool">research initiative.</span>
-        </h1>
+      <div class="mb-12 grid items-center gap-10 lg:grid-cols-[minmax(0,1fr)_18rem]">
+        <div class="flex flex-col gap-3">
+          <span class="pill">origin story · methodology · disclaimer</span>
+          <h1 class="font-display text-4xl font-bold text-bone md:text-5xl">
+            About this <span class="text-cool">research initiative.</span>
+          </h1>
+        </div>
+
+        <!-- Canvas UI GlassObject: the only one of the four that extrudes the -->
+        <!-- motif through SVGLoader into real bevelled geometry, which suits a -->
+        <!-- page whose entire subject is institutional transparency.           -->
+        <CanvasStage class="relative hidden aspect-square w-full lg:block">
+          <template #canvas="{ theme, glyphSrc, onError }">
+            <GlassObject
+              class="h-full w-full"
+              :src="glyphSrc"
+              :ior="1.7"
+              :thickness="3.2"
+              :roughness="0.16"
+              :dispersion="1.8"
+              :clearcoat="0.6"
+              :tint="theme.cool"
+              :tint-density="1.6"
+              :depth="0.14"
+              :bevel="1"
+              :highlight="theme.accent"
+              :environment-intensity="1.1"
+              :scale="2.4"
+              :float-intensity="1"
+              :rotation-intensity="0.7"
+              :float-speed="1.2"
+              :orbit="false"
+              :zoom="false"
+              :auto-rotate="true"
+              :auto-rotate-speed="0.7"
+              :onError="onError"
+            />
+          </template>
+          <template #fallback>
+            <TokenBarsMotif class="absolute inset-0 m-auto h-2/3 w-2/3 opacity-40" />
+          </template>
+        </CanvasStage>
       </div>
       <AboutSection />
       <p class="mt-16 text-center text-xs italic text-bone/25">

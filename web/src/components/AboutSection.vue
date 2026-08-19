@@ -138,7 +138,7 @@
           <h4 class="my-2 font-display text-lg font-semibold text-bone">The Mission Continues</h4>
           <p class="text-base font-normal text-bone/70">
             156 tests passing. 0 external NLP dependencies. 21 tokens per word.
-            The opposite of caveman continues to be documented, benchmarked, and shipped with
+            Deliberate maximalism continues to be documented, benchmarked, and shipped with
             complete procedural seriousness. We are not done. We are, in fact, only beginning
             to explore the upper bound of how much a sentence can cost.
           </p>

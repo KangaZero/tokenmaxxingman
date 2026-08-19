@@ -1,6 +1,15 @@
 <script setup lang="ts">
+import { defineAsyncComponent } from 'vue';
 import { HEADLINE_STATS } from '../data/benchmark';
 import GradientText from './GradientText.vue';
+import CanvasStage from './CanvasStage.vue';
+import TokenBarsMotif from './TokenBarsMotif.vue';
+
+// Async so three.js and the ASCII post-processing chain land in their own chunk
+// rather than inflating the initial route bundle. CanvasStage does not render
+// the slot until its capability gate opens, so the import only ever fires on
+// browsers that can run the effect.
+const AsciiObject = defineAsyncComponent(() => import('./canvasui/AsciiObject.vue'));
 
 const tokenRatio = (HEADLINE_STATS.topRowO200k.tokensPerWord / HEADLINE_STATS.englishO200k.tokensPerWord).toFixed(1);
 </script>
@@ -10,6 +19,36 @@ const tokenRatio = (HEADLINE_STATS.topRowO200k.tokensPerWord / HEADLINE_STATS.en
     <!-- ambient glows -->
     <div class="pointer-events-none absolute -top-32 left-1/4 -z-10 h-96 w-96 rounded-full bg-accent/20 blur-3xl"></div>
     <div class="pointer-events-none absolute top-40 right-1/4 -z-10 h-96 w-96 rounded-full bg-cool/20 blur-3xl"></div>
+
+    <!-- Canvas UI AsciiObject: the favicon motif extruded and re-rendered as -->
+    <!-- character cells. Hidden below lg, where it would fight the headline  -->
+    <!-- for width and cost mobile visitors a 3D engine for decoration.       -->
+    <CanvasStage class="pointer-events-none absolute inset-y-0 right-0 z-0 hidden w-[46%] max-w-2xl lg:block">
+      <template #canvas="{ theme, glyphSrc, onError }">
+        <AsciiObject
+          class="h-full w-full"
+          :src="glyphSrc"
+          :cell-size="11"
+          :cell-aspect="0.58"
+          :contrast="1.6"
+          :edge-contrast="3.2"
+          :highlight="theme.accent"
+          :environment-intensity="1.15"
+          :scale="2.6"
+          :float-intensity="1.1"
+          :rotation-intensity="0.7"
+          :float-speed="1.3"
+          :orbit="false"
+          :zoom="false"
+          :auto-rotate="true"
+          :auto-rotate-speed="0.6"
+          :onError="onError"
+        />
+      </template>
+      <template #fallback>
+        <TokenBarsMotif class="absolute inset-0 m-auto h-1/2 w-1/2 opacity-40" />
+      </template>
+    </CanvasStage>
 
     <div class="relative z-10 mx-auto max-w-6xl">
       <div class="mb-10 flex items-center gap-3">
@@ -29,8 +68,8 @@ const tokenRatio = (HEADLINE_STATS.topRowO200k.tokensPerWord / HEADLINE_STATS.en
 
       <div class="flex flex-row">
       <h1 id="hero-heading" class="text-balance font-display text-5xl font-bold leading-[1.05] text-bone md:text-7xl lg:text-8xl">
-        We mathematically proved the
-        <GradientText text="opposite of caveman." />
+        A measured, reproducible case for
+        <GradientText text="tokens, spent gloriously." />
       </h1>
       </div>
 
