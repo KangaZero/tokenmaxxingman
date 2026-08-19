@@ -7,6 +7,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `plan_token_budget` MCP tool and `tokenmaxxingman budget` CLI subcommand. Given
+  a token target — `million`, `billion`, `trillion`, or an explicit count — they
+  report the time required, the number of conversations needed at a given context
+  window, the approximate byte volume, and a plain verdict. Throughput is derived
+  from the highest published `tokensprint` tier rather than asserted, so the
+  figures follow the tier table if it is ever revised. No monetary estimate is
+  produced: provider pricing changes faster than this file would be updated, and
+  a stale figure quoted to this many significant digits would be worse than none.
+- `sprint-1t` documented in the `tokensprint` and `tokenmaxxingman` skills as a
+  **projection** tier rather than an attempt. One trillion tokens is 1,000,000
+  hours (114.16 years) of continuous generation across 5,000,000 conversations
+  and roughly 4.0 TB of prose; it does not fit in any context window by six
+  orders of magnitude. Both skills are explicitly forbidden from fabricating
+  progress toward it.
+
+### Fixed
+
+- `tokenmaxxingman expand` and `maxxer` no longer hang forever on an interactive
+  terminal with nothing piped in; they now explain how to supply input and exit 2.
+- Numeric CLI flags reject non-numeric input instead of silently truncating it.
+  `--passes 3abc` was accepted as 3, and `--max-iterations 1e10` was read as 1 —
+  a flag that appeared to request ten billion iterations requested one.
+- `--padding-multiplier` is bounded to 1-20, matching the MCP tool. Unbounded, it
+  produced 240 MB of output from two sentences.
+
+
 Nothing recorded. Work lands here before it is versioned.
 
 ## [0.1.0] — 2026-08-19

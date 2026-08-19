@@ -17,7 +17,7 @@ import { targets as LANG_CODES } from '../transforms/translate.js';
 import { readManifest } from '../paths.js';
 
 import { inflation, measure } from './measure.js';
-import { planSpeedrun } from './speedrun-plan.js';
+import { TOKEN_TARGETS, planSpeedrun, planTokenBudget } from './speedrun-plan.js';
 import { SERVER_INSTRUCTIONS } from './instructions.js';
 import {
   ENCODING_NAMES,
@@ -510,6 +510,82 @@ function registerPlanSpeedrun(server: McpServer): void {
   );
 }
 
+function registerPlanTokenBudget(server: McpServer): void {
+  server.registerTool(
+    'plan_token_budget',
+    {
+      title: 'Project the cost of a token target',
+      description:
+        'Invert the speedrun planner: given a token target, report how long it would take, how many separate conversations it needs, and roughly how many bytes of text it produces. Answers questions like "can we consume a trillion tokens?" honestly, with arithmetic rather than enthusiasm. Pure computation; it projects the cost and does not incur it.',
+      inputSchema: {
+        target: z
+          .enum(['million', 'billion', 'trillion'])
+          .optional()
+          .describe('A named target. Mutually exclusive with `targetTokens`.'),
+        targetTokens: z
+          .number()
+          .int()
+          .min(1)
+          .max(1_000_000_000_000_000)
+          .optional()
+          .describe('An explicit token target. Mutually exclusive with `target`.'),
+        contextWindowTokens: z
+          .number()
+          .int()
+          .min(1_000)
+          .max(100_000_000)
+          .optional()
+          .describe('Context window used to count conversations. Defaults to 200,000.'),
+        encoding: encodingInput,
+      },
+      outputSchema: {
+        targetTokens: z.number(),
+        encoding: z.enum(ENCODING_NAMES),
+        assumedTokensPerSecond: z.number(),
+        requiredMs: z.number(),
+        requiredHours: z.number(),
+        requiredYears: z.number(),
+        conversationsRequired: z.number().int(),
+        contextWindowTokens: z.number().int(),
+        estimatedBytes: z.number(),
+        estimatedTerabytes: z.number(),
+        fitsInOneContext: z.boolean(),
+        verdict: z.string(),
+      },
+      annotations: READ_ONLY_ANNOTATIONS,
+      _meta: toolMeta({
+        [`${META_NS}/category`]: 'planning',
+        [`${META_NS}/costHint`]: 'low',
+      }),
+    },
+    ({ target, targetTokens, contextWindowTokens, encoding }) => {
+      try {
+        if (target === undefined && targetTokens === undefined) {
+          throw new Error('supply either `target` or `targetTokens`');
+        }
+        if (target !== undefined && targetTokens !== undefined) {
+          throw new Error('`target` and `targetTokens` are mutually exclusive');
+        }
+        const resolved = target !== undefined ? TOKEN_TARGETS[target] : (targetTokens as number);
+        const plan = planTokenBudget(resolved, encoding, contextWindowTokens);
+        const lines = [
+          `target: ${plan.targetTokens.toLocaleString('en-US')} tokens | encoding: ${plan.encoding}`,
+          `assumed throughput: ${plan.assumedTokensPerSecond.toFixed(1)} tokens/sec (from the highest published sprint tier)`,
+          `time required: ${plan.requiredHours.toLocaleString('en-US', { maximumFractionDigits: 1 })} hours (${plan.requiredYears.toFixed(2)} years)`,
+          `conversations: ${plan.conversationsRequired.toLocaleString('en-US')} at ${plan.contextWindowTokens.toLocaleString('en-US')} tokens each`,
+          `text volume: ~${plan.estimatedTerabytes.toFixed(3)} TB`,
+          `fits in one context: ${plan.fitsInOneContext ? 'yes' : 'no'}`,
+          '',
+          plan.verdict,
+        ];
+        return textResult(lines.join('\n'), { ...plan });
+      } catch (err) {
+        return errorResult(err);
+      }
+    },
+  );
+}
+
 function registerListModes(server: McpServer, skills: readonly SkillDescriptor[]): void {
   server.registerTool(
     'list_modes',
@@ -839,6 +915,7 @@ export function createMcpServer(options: CreateServerOptions = {}): McpServer {
   registerCountTokens(server);
   registerBenchmarkLanguages(server);
   registerPlanSpeedrun(server);
+  registerPlanTokenBudget(server);
   registerListModes(server, skills);
   registerGetSkill(server, skills);
 

@@ -73,6 +73,7 @@ describe('tools/list', () => {
       'list_modes',
       'maxx_text',
       'plan_speedrun',
+      'plan_token_budget',
     ]);
   });
 

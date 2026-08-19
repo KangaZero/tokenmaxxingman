@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { speedrun, tierToMs } from '../src/speedrun.js';
+import { TOKEN_TARGETS, planTokenBudget } from '../src/mcp/speedrun-plan.js';
 
 describe('tierToMs', () => {
   it('sprint-1m returns 60_000', () => {
@@ -133,5 +134,44 @@ describe('speedrun', () => {
     // The test asserts the run completes without error and finalOutput is capped at 4096.
     expect(result.finalOutput.length).toBeLessThanOrEqual(4096);
     expect(result.iterations).toBeGreaterThanOrEqual(1);
+  });
+});
+
+describe('planTokenBudget', () => {
+  it('projects a trillion tokens as a multi-decade, multi-conversation campaign', () => {
+    const plan = planTokenBudget(1_000_000_000_000, 'cl100k_base');
+    // Throughput is derived from the highest published tier (1,000,000 tokens
+    // per hour), not hardcoded, so these follow from the tier table.
+    expect(plan.assumedTokensPerSecond).toBeCloseTo(1_000_000 / 3_600, 4);
+    expect(plan.requiredHours).toBeCloseTo(1_000_000, 0);
+    expect(plan.requiredYears).toBeGreaterThan(100);
+    expect(plan.conversationsRequired).toBe(5_000_000);
+    expect(plan.estimatedTerabytes).toBeCloseTo(4, 3);
+    expect(plan.fitsInOneContext).toBe(false);
+    expect(plan.verdict).toContain('Not achievable in one sitting');
+  });
+
+  it('scales linearly with the target', () => {
+    const million = planTokenBudget(TOKEN_TARGETS.million, 'cl100k_base');
+    const billion = planTokenBudget(TOKEN_TARGETS.billion, 'cl100k_base');
+    expect(billion.requiredMs / million.requiredMs).toBeCloseTo(1_000, 6);
+  });
+
+  it('calls a small target achievable in one sitting', () => {
+    const plan = planTokenBudget(1_000, 'cl100k_base');
+    expect(plan.fitsInOneContext).toBe(true);
+    expect(plan.verdict).toContain('single sitting');
+  });
+
+  it('honours a custom context window', () => {
+    const plan = planTokenBudget(1_000_000, 'cl100k_base', 500_000);
+    expect(plan.conversationsRequired).toBe(2);
+  });
+
+  it('rejects non-positive and non-finite targets', () => {
+    expect(() => planTokenBudget(0, 'cl100k_base')).toThrow(/positive/);
+    expect(() => planTokenBudget(-1, 'cl100k_base')).toThrow(/positive/);
+    expect(() => planTokenBudget(Number.NaN, 'cl100k_base')).toThrow(/positive/);
+    expect(() => planTokenBudget(Number.POSITIVE_INFINITY, 'cl100k_base')).toThrow(/positive/);
   });
 });

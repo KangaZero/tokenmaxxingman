@@ -359,6 +359,7 @@ Two bin entries start the same server: `tmm-mcp` and `tokenmaxxingman-mcp`. The 
 | `count_tokens` | `text`, `encoding?`, `locale?` | tokens, characters, bytes, words, tokens/char, tokens/word |
 | `benchmark_languages` | `encoding?`, `limit?`, `format?` (`markdown`\|`json`) | the bundled corpus ranked by tokens-per-word, with tokens-per-character as the tiebreak |
 | `plan_speedrun` | `tier` or `durationMs`, `seed?`, `encoding?` | time budget, target token count, pacing plan |
+| `plan_token_budget` | `target` (`million`\|`billion`\|`trillion`) or `targetTokens`, `contextWindowTokens?`, `encoding?` | required time, conversations needed, byte volume, feasibility verdict |
 | `list_modes` | — | every expand mode, language code, and time tier |
 | `get_skill` | `name`, `section?` (`skill`\|`examples`) | raw SKILL.md / EXAMPLES.md text |
 

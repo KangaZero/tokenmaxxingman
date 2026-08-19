@@ -8,6 +8,7 @@ import type { Corpus } from './corpus-types.js';
 import { EXPAND_MODES, expand } from './expand.js';
 import { loadCorpus as loadCorpusOrThrow } from './corpus.js';
 import { readManifest } from './paths.js';
+import { TOKEN_TARGETS, planTokenBudget } from './mcp/speedrun-plan.js';
 import { runBenchmark } from './benchmark.js';
 import { toMarkdown } from './formatters/markdown.js';
 import { toJson } from './formatters/json.js';
@@ -75,6 +76,15 @@ function validateTier(raw: string): TimeTier {
 
 async function readInput(file: string | undefined): Promise<string> {
   if (file === undefined || file === '-') {
+    // An interactive terminal with nothing piped in will never send EOF, so
+    // awaiting stdin here hung forever with no prompt and no hint — the user just
+    // saw a dead cursor. Tell them how to supply input instead.
+    if (process.stdin.isTTY === true) {
+      console.error(
+        'Error: no input. Pipe text in (echo "text" | tokenmaxxingman expand) or pass a file path.',
+      );
+      process.exit(2);
+    }
     return new Promise<string>((resolve, reject) => {
       const chunks: Buffer[] = [];
       process.stdin.on('data', (chunk: Buffer) => chunks.push(chunk));
@@ -186,11 +196,7 @@ program
 
       const mode = validateExpandMode(opts.mode);
       const encoding = validateEncoding(opts.encoding);
-      const maxIterations = parseInt(opts.maxIterations, 10);
-      if (isNaN(maxIterations) || maxIterations < 1) {
-        console.error('Error: --max-iterations must be a positive integer');
-        process.exit(2);
-      }
+      const maxIterations = validatePositiveInt(opts.maxIterations, '--max-iterations');
 
       const format = opts.format;
       if (format !== 'summary' && format !== 'json') {
@@ -236,10 +242,41 @@ function validateLangCode(raw: string): LangCode {
   process.exit(2);
 }
 
+/**
+ * Parse a non-negative integer flag, rejecting anything that is not purely
+ * digits.
+ *
+ * WHY not `parseInt`: it stops at the first non-digit and returns what it has, so
+ * `--passes 3abc` was silently accepted as 3 and `--max-iterations 1e10` became
+ * **1** — the flag appeared to ask for ten billion iterations and actually asked
+ * for one. Failing loudly beats quietly doing something else.
+ */
+function parseIntegerFlag(raw: string, flag: string): number {
+  if (!/^\d+$/.test(raw.trim())) {
+    console.error(`Error: ${flag} must be a whole number (got "${raw}")`);
+    process.exit(2);
+  }
+  const n = Number.parseInt(raw.trim(), 10);
+  if (!Number.isSafeInteger(n)) {
+    console.error(`Error: ${flag} is too large`);
+    process.exit(2);
+  }
+  return n;
+}
+
 function validateIntInRange(raw: string, flag: string, min: number, max: number): number {
-  const n = parseInt(raw, 10);
-  if (isNaN(n) || n < min || n > max) {
+  const n = parseIntegerFlag(raw, flag);
+  if (n < min || n > max) {
     console.error(`Error: ${flag} must be an integer between ${min} and ${max}`);
+    process.exit(2);
+  }
+  return n;
+}
+
+function validatePositiveInt(raw: string, flag: string): number {
+  const n = parseIntegerFlag(raw, flag);
+  if (n < 1) {
+    console.error(`Error: ${flag} must be at least 1`);
     process.exit(2);
   }
   return n;
@@ -250,7 +287,7 @@ program
   .description('Apply EVERY token-burning trick to input text.')
   .argument('[file]', 'input file (omit or use - for stdin)')
   .option('--passes <n>', 'pipeline passes (1-5)', '1')
-  .option('--padding-multiplier <n>', 'essay-padding multiplier', '3')
+  .option('--padding-multiplier <n>', 'essay-padding multiplier (1-20)', '3')
   .option('--target-language <code>', 'final translate pass language code (e.g. my, bo, iu-cans)')
   .option('--parallel', 'use maxxerParallel instead of maxxer')
   .action(
@@ -264,11 +301,15 @@ program
       },
     ) => {
       const passes = validateIntInRange(opts.passes, '--passes', 1, 5);
-      const paddingMultiplier = parseInt(opts.paddingMultiplier, 10);
-      if (isNaN(paddingMultiplier) || paddingMultiplier < 1) {
-        console.error('Error: --padding-multiplier must be a positive integer');
-        process.exit(2);
-      }
+      // Bounded to the same 1-20 range the MCP `maxx_text` tool enforces, so the
+      // two entry points cannot disagree. Unbounded, this reached 240 MB of
+      // output from two sentences.
+      const paddingMultiplier = validateIntInRange(
+        opts.paddingMultiplier,
+        '--padding-multiplier',
+        1,
+        20,
+      );
       const targetLanguage: LangCode | undefined =
         opts.targetLanguage !== undefined ? validateLangCode(opts.targetLanguage) : undefined;
 
@@ -285,6 +326,80 @@ program
             ? await maxxerParallel(input, maxxerOpts)
             : maxxer(input, maxxerOpts);
         process.stdout.write(output + '\n');
+      } catch (err) {
+        console.error(`Error: ${err instanceof Error ? err.message : String(err)}`);
+        process.exit(1);
+      }
+    },
+  );
+
+const TOKEN_TARGET_NAMES = ['million', 'billion', 'trillion'] as const;
+
+program
+  .command('budget')
+  .description('Project what a token target would cost in time, conversations, and bytes.')
+  .option('--target <name>', `named target: ${TOKEN_TARGET_NAMES.join(' | ')}`)
+  .option('--target-tokens <n>', 'explicit token target')
+  .option('--context-window <n>', 'context window used to count conversations', '200000')
+  .option('-e, --encoding <enc>', 'tokenizer encoding', 'cl100k_base')
+  .option('--format <fmt>', 'output format: summary | json', 'summary')
+  .action(
+    (opts: {
+      target?: string;
+      targetTokens?: string;
+      contextWindow: string;
+      encoding: string;
+      format: string;
+    }) => {
+      if (opts.target === undefined && opts.targetTokens === undefined) {
+        console.error('Error: one of --target or --target-tokens is required');
+        process.exit(2);
+      }
+      if (opts.target !== undefined && opts.targetTokens !== undefined) {
+        console.error('Error: --target and --target-tokens are mutually exclusive');
+        process.exit(2);
+      }
+
+      let targetTokens: number;
+      if (opts.target !== undefined) {
+        if (!(TOKEN_TARGET_NAMES as readonly string[]).includes(opts.target)) {
+          console.error(
+            `Error: invalid target "${opts.target}" — valid targets: ${TOKEN_TARGET_NAMES.join(', ')}`,
+          );
+          process.exit(2);
+        }
+        targetTokens = TOKEN_TARGETS[opts.target as (typeof TOKEN_TARGET_NAMES)[number]];
+      } else {
+        targetTokens = validatePositiveInt(opts.targetTokens ?? '', '--target-tokens');
+      }
+
+      const contextWindow = validatePositiveInt(opts.contextWindow, '--context-window');
+      const encoding = validateEncoding(opts.encoding);
+      const format = opts.format;
+      if (format !== 'summary' && format !== 'json') {
+        console.error(`Error: invalid format "${format}" — valid formats: summary, json`);
+        process.exit(2);
+      }
+
+      try {
+        const plan = planTokenBudget(targetTokens, encoding, contextWindow);
+        if (format === 'json') {
+          process.stdout.write(JSON.stringify(plan, null, 2) + '\n');
+          return;
+        }
+        const lines = [
+          `tokenmaxxingman budget`,
+          `  target        : ${plan.targetTokens.toLocaleString('en-US')} tokens`,
+          `  encoding      : ${plan.encoding}`,
+          `  throughput    : ${plan.assumedTokensPerSecond.toFixed(1)} tokens/sec (highest published tier)`,
+          `  time required : ${plan.requiredHours.toLocaleString('en-US', { maximumFractionDigits: 1 })} hours (${plan.requiredYears.toFixed(2)} years)`,
+          `  conversations : ${plan.conversationsRequired.toLocaleString('en-US')} at ${plan.contextWindowTokens.toLocaleString('en-US')} tokens each`,
+          `  text volume   : ~${plan.estimatedTerabytes.toFixed(3)} TB`,
+          `  one context   : ${plan.fitsInOneContext ? 'yes' : 'no'}`,
+          ``,
+          `  ${plan.verdict}`,
+        ];
+        process.stdout.write(lines.join('\n') + '\n');
       } catch (err) {
         console.error(`Error: ${err instanceof Error ? err.message : String(err)}`);
         process.exit(1);

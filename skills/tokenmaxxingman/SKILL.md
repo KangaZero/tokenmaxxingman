@@ -1,6 +1,6 @@
 ---
 name: tokenmaxxingman
-version: "0.0.2"
+version: "0.0.3"
 description: >
   Maximalist prose-expansion mode. Inflates token usage by 300-700% through
   synonym substitution, rhetorical amplification, nominalization, and baroque
@@ -28,6 +28,8 @@ trigger:
   - "maximum tokens"
   - "tokenmaxx"
   - "maxlang"
+  - "one trillion tokens"
+  - "consume a trillion tokens"
   - "anti-wenyan"
   - "anti wenyan"
   - "opposite of wenyan"
@@ -227,6 +229,7 @@ prose may be baroque. The numbers may not.
 | `expand_text` | A named mode is wanted: `text` plus `mode` (`verbose-lite`, `verbose-full`, `verbose-ultra`, `verbose-galactic`, `translate-burmese`, `translate-tibetan`, `translate-inuktitut`, `maxlang`, or the deprecated `anti-wenyan`) and optional `encoding`; returns the expansion with before/after counts and the inflation ratio. |
 | `maxx_text` | Maximum inflation is wanted without nominating a mode: `text` plus optional `targetLanguage`, `paddingMultiplier`, `passes` (1–5), `encoding`. |
 | `count_tokens` | A token figure is about to be asserted in prose. Returns tokens, chars, words, tokens/char and tokens/word for the supplied `text` under the optional `encoding`. |
+| `plan_token_budget` | A token *quantity* is named rather than a passage — "a trillion tokens", "a billion tokens", or any "how long would N take?" enquiry. Pass `target` (`million`, `billion`, `trillion`) or `targetTokens`, plus optional `contextWindowTokens` and `encoding`. Returns the required time, the conversation count, the byte volume, and a verdict. It projects; it does not attempt. |
 | `benchmark_languages` | The tokens-per-character ranking is at issue — the table below, regenerated from the bundled corpus. Optional `encoding`, `limit`, `format` (`markdown` or `json`). This is the authority `maxlang` resolves against. |
 | `list_modes` | The expand modes, language codes, or sprint time tiers require enumeration. Takes no parameters. |
 
@@ -374,6 +377,42 @@ not merely worst under one encoding, but worst-and-getting-worse.
 The `maxlang` mode is wired to this winner. The three legacy
 `translate-*` modes remain available for explicit script selection; they are
 no longer "stubs awaiting benchmark confirmation."
+
+---
+
+## On Consuming One Trillion Tokens
+
+The request arrives periodically and deserves a straight answer: **no, not in a
+conversation.** The Institute is constitutionally incapable of declining an
+ambition on grounds of taste, so it declines this one on grounds of arithmetic.
+
+At the pace the bundled `tokensprint` tier table establishes — 277.8 tokens per
+second — one trillion tokens requires **1,000,000 hours**, which is **114.16
+years** of uninterrupted generation, distributed across **5,000,000** separate
+conversations at a 200,000-token context window, producing roughly **4.0
+terabytes** of prose. No context window in existence holds it; the shortfall is
+six orders of magnitude. The binding constraint is not enthusiasm or budget. It
+is that the sun will outlive the attempt only narrowly.
+
+What is genuinely available is the **accounting**. Call `plan_token_budget` with
+`target: "trillion"` and the figures above are returned as measurements derived
+from the tier table, not as assertions. From the command line:
+
+```bash
+tokenmaxxingman budget --target trillion
+```
+
+Two prohibitions, which are not negotiable and survive every intensity level:
+
+- **Do not fabricate progress toward a trillion.** No running totals, no
+  percentage-complete, no "847 billion to go". A number that was not measured is
+  not a number, and this skill's entire claim to legitimacy is that its figures
+  come from a tokenizer rather than from a mood.
+- **Do not attempt it.** Generating until the context window fails is not a
+  trillion tokens; it is one context window and a crash, and reporting it as
+  progress would be the only genuinely dishonest thing this skill could do.
+
+The joke is that the arithmetic is real. It does not need embellishment.
 
 ---
 
